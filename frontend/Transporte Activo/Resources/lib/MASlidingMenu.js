@@ -246,8 +246,15 @@ var MASlidingMenu = function(args) {
 
     };
 
+	
+		
     var viewTouchend = function(e) {
     	Ti.API.info('touchend: '+JSON.stringify(e));
+    	
+    	
+    
+    	
+    	
         var delta_x;
 
         delta_x = e.x - sliding.offset + view.rect.x ;
@@ -420,11 +427,38 @@ var MASlidingMenu = function(args) {
     	}
     };
 
+var forceViewChange = function(e) { 
+		Ti.API.info('ENTROOOOOO');
+			
+    			if(current!='left'){
+    				Ti.API.info('NO ES LEFT');
+			// finish showing menu
+                current = 'left';
+           view.animate({
+                transform: twoD.translate(260, 0),
+                duration: duration.bounce
+            });
+		} else {
+			// finish hiding menu\
+				Ti.API.info('ES LEFT');
+			
+                current = 'view';
+            view.animate({
+                transform: twoD.translate(0, 0),
+                duration: duration.bounce
+            });
+		}
+		
+        onCurrentChanged();
+        return;
+    	};
+		
 
     // API properties
     this.draggable = draggable;
 
     // API methods
+    this.forceViewChange = forceViewChange;
     this.slideView = slideView;
     this.addEventListener = addEventListener;
     this.fireEvent = fireEvent;
