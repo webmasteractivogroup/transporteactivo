@@ -3,63 +3,177 @@ from django.contrib.gis.db import models
 
 
 class PlanVersions(models.Model):
-    PLANVERSIONID = models.IntegerField(primary_key=True, help_text=u'Identificador interno único, generado en SGCO')
-    ACTIVATIONDATE = models.DateField(help_text=u'Fecha que marca el inicio de la vigencia de la planeación')
-    CREATIONDATE = models.DateField(help_text=u'Fecha de creación de la nueva planeación.')
+    """
+        Registra la entidad "Plan", cada registro representa el cargue en SGCO de una nueva planeación
+    """
+
+    PLANVERSIONID = models.IntegerField(primary_key=True)
+    ACTIVATIONDATE = models.DateField()
+    CREATIONDATE = models.DateTimeField()
 
     class Meta:
         db_table = 'PLANVERSIONS'
 
 
+class Stops(models.Model):
+    """
+        Registra la entidad "Parada" y sus principales atributos, se guardan todas las paradas por cada planeación.
+    """
+    STOPID = models.IntegerField(primary_key=True)
+    PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
+    SHORTNAME = models.CharField(max_length=10)
+    LONGNAME = models.CharField(max_length=100)
+    GPS_X = models.IntegerField(null=True)
+    GPS_Y = models.IntegerField(null=True)
+    DECIMALLONGITUDE = models.FloatField(null=True)
+    DECIMALLATITUDE = models.FloatField(null=True)
+
+    class Meta:
+        db_table = 'STOPS'
+
+
 class Arcs(models.Model):
-    ARCID = models.IntegerField(primary_key=True, help_text=u'índice único por arco, generado en sequencia.')
-    PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID', help_text=u'índice foráneo que representa el número interno (SGCO) de la planeación, según su valor en la tabla PLANVERSIONS.')
-    STOPS_STOPID_START = models.IntegerField(help_text=u'Identificador de parada inicial, según las paradas de la tabla STOPS')
-    STOPS_STOPID_END = models.IntegerField(help_text=u'Indicador de la parada final, según las paradas de la tabla STOPS')
-    STARTPOINT = models.CharField(max_length=10, help_text=u'Descripción corta de la parada inicial')
-    ENDPOINT = models.CharField(max_length=10, help_text=u'Descripción corta de la parada final')
-    DESCRIPTION = models.CharField(max_length=100, help_text=u'Texto que une la descripción larga de las dos paradas con un guión en la mitad')
-    ARCLENGTH = models.IntegerField(null=True, blank=True, help_text=u'Distancia en metros entre el punto de inicio y fin del arco')
+    """
+        Registra la entidad "Arco", con abstracción sobre la programación de viajes. La información de la
+        tabla guarda todos los arcos para cada plananeación.
+    """
+    ARCID = models.IntegerField(primary_key=True)
+    PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
+    STOPS_STOPID_START = models.ForeignKey(Stops, db_column=u'STOPS_STOPID_START')
+    STOPS_STOPID_END = models.ForeignKey(Stops, db_column=u'STOPS_STOPID_END')
+    STARTPOINT = models.CharField(max_length=10)
+    ENDPOINT = models.CharField(max_length=10)
+    DESCRIPTION = models.CharField(max_length=100)
+    ARCLENGTH = models.IntegerField(null=True, blank=True)
 
     class Meta:
         db_table = 'ARCS'
 
 
 class BusTypes(models.Model):
-    BUSTYPEID = models.IntegerField(primary_key=True, help_text=u'Identificador interno del tipo de bus.')
-    SHORTNAME = models.DateField(help_text=u'Cadena corta que refiere el código del bus para reportes.')
-    LONGNAME = models.DateField(help_text=u'Cadena que define el tipo de bus.')
+    """
+        Registra la tipificación de los buses del sistema.
+    """
+
+    BUSTYPEID = models.IntegerField(primary_key=True)
+    SHORTNAME = models.DateField()
+    LONGNAME = models.DateField()
 
     class Meta:
         db_table = 'BUSTYPES'
 
 
 class Buses(models.Model):
-    BUSID = models.IntegerField(primary_key=True, help_text=u'Identificador de aplicación, usado en los procesos de descarga de datos, mantiene el valor original de la fuente, es único por planeación.')
-    BUSNUMBER = models.IntegerField(help_text=u'Identificador externo del vehículo según su valor en la fuente original, es único para cada planeación, el primer dígito representa el concesionario, el segundo el tipo de bus y el resto el consecutivo del vehículo, es el valor usado en los reportes.')
-    IDENTIFICATION = models.CharField(max_length=6, help_text=u'Texto que registra la placa del vehículo.')
-    BUSTYPEID = models.IntegerField(help_text=u'Identificador del tipo de bus, según su valor en la tabla BUSTYPES.')
-    PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID', help_text=u'Identificador interno de la planeación, según su valor en la tabla PLANVERSIONS.')
+    """
+        Registra la entidad "bus" ó "vehículo", con la información de todos los vehículos para cada planeación.
+    """
+
+    BUSID = models.IntegerField(primary_key=True)
+    BUSNUMBER = models.IntegerField()
+    IDENTIFICATION = models.CharField(max_length=6)
+    BUSTYPEID = models.ForeignKey(BusTypes, db_column=u'BUSTYPEID')
+    PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
 
     class Meta:
         db_table = 'BUSES'
 
 
 class ScheduleTypes(models.Model):
-    SCHEDULETYPEID = models.IntegerField(primary_key=True, help_text=u'')
-    PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID', help_text=u'')
-    SHORTNAME = models.CharField(max_length=10, help_text=u'')
-    DESCRIPTION = models.CharField(max_length=20, help_text=u'')
+    """
+        Registra la entidad "Dia Tipo", generada por cada planeación. Esta entidad es usada en
+        la definción de las tareas viajes que pueden ser ejecutadas o nó en un día
+    """
+
+    SCHEDULETYPEID = models.IntegerField(primary_key=True)
+    PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
+    SHORTNAME = models.CharField(max_length=10)
+    DESCRIPTION = models.CharField(max_length=20)
 
     class Meta:
         db_table = 'SCHEDULETYPES'
 
 
 class Calendar(models.Model):
-    SCHEDULETYPEID = models.IntegerField(primary_key=True, help_text=u'')
-    OPERATIONDAY = models.DateField(help_text=u'')
-    SCHEDULETYPEID = models.CharField(max_length=10, help_text=u'')
-    PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID', help_text=u'')
+    """
+        Registra la entidad "Calendario", que establece el "día tipo" y la planeación vigente en cada día calendario
+        de la operación del sistema, registrando los días calendario del año en curso.
+    """
+    SCHEDULETYPEID = models.IntegerField(primary_key=True)
+    OPERATIONDAY = models.DateField()
+    SCHEDULETYPEID = models.ForeignKey(ScheduleTypes, db_column=u'SCHEDULETYPEID')
+    PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
 
     class Meta:
         db_table = 'CALENDAR'
+
+
+class Lines(models.Model):
+    """
+        Registra la entidad "Línea", independiente a la programación de viajes. Se registran todas las líneas por planeación.
+    """
+    LINEID = models.IntegerField(primary_key=True)
+    PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
+    SHORTNAME = models.CharField(max_length=10)
+    DESCRIPTION = models.CharField(max_length=100)
+
+    class Meta:
+        db_table = 'LINES'
+
+
+class LinesArcs(models.Model):
+    """
+        Registra la relación entre las entidades Linea y Arco, presentando la secuencia de arcos que conforman una línea.
+        Esta tabla es independiente a la programación de viajes y presenta la información de todas las línea - arcos para cada planeación.
+    """
+    LINEARCID = models.IntegerField(primary_key=True)
+    LINEID = models.ForeignKey(Lines, db_column=u'LINEID')
+    ARCID = models.ForeignKey(Arcs, db_column=u'ARCID')
+    ARCSEQUENCE = models.IntegerField()
+    ORIENTATION = models.IntegerField(null=True)
+    PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
+    LINEVARIANT = models.SmallIntegerField(null=True)
+    REGISTERDATE = models.DateTimeField(null=True)
+
+    class Meta:
+        db_table = 'LINESARCS'
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
