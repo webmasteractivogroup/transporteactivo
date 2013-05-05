@@ -438,19 +438,9 @@ var forceViewChange = function(e) {
                 transform: twoD.translate(260, 0),
                 duration: duration.bounce
             });
-		} else {
-			// finish hiding menu\
-				Ti.API.info('ES LEFT');
-			
-                current = 'view';
-            view.animate({
-                transform: twoD.translate(0, 0),
-                duration: duration.bounce
-            });
 		}
 		
         onCurrentChanged();
-        return;
     	};
 		
 

@@ -1,8 +1,6 @@
-
 var MASlidingView = require('lib/MASlidingView');
 
-
-var HomeView = function(args){
+var BusquedaView = function(args){
     var self = new MASlidingView({
         backgroundColor:'white'
     });
@@ -16,10 +14,10 @@ var HomeView = function(args){
     
     var menuButton = Ti.UI.createButton({
     backgroundImage:'/images/menu.png',   
-    top:'10',
-    left:'10',
-    height: '20',
-    width:'20'
+    top:10,
+    left:10,
+    height: 20,
+    width:20
 });
 
 	
@@ -29,6 +27,8 @@ var HomeView = function(args){
 	});
 	
 	
+	
+ 
 	self.add(toolBarView);
 	toolBarView.add(menuButton);
 	
@@ -36,4 +36,4 @@ var HomeView = function(args){
     return self;
 };
 
-module.exports = HomeView;
+module.exports = BusquedaView;

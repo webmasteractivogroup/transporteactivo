@@ -1,19 +1,24 @@
 var MASlidingMenu = require('/lib/MASlidingMenu');
 var HomeView = require('/ui/HomeView');
-var SampleView = require('/ui/SampleView');
+var FavoritosView = require('/ui/FavoritosView');
+var PerfilView = require('/ui/PerfilView');
 var MenuView = require('/ui/MenuView');
+var BusquedaView = require('/ui/BusquedaView');
 
 var load = new HomeView();
 var home = new HomeView();
-var settings = new SampleView();
+var favoritos = new FavoritosView();
+var busqueda = new BusquedaView();
+var perfil = new PerfilView();
 
 // Each row with a view property when clicked will change to that view (any view works except tabgroups and windows)
 // If the row does not have a view property, but the switch event still fires
 var data = [
    { title:'Transporte Activo', view: load },
 	{ title:'Home', hasDetail:true, view: home },
-	{ title:'Sample', hasDetail:true, view: settings},
-	{ title:'Button' }
+	{ title:'Favoritos', hasDetail:true, view: favoritos},
+	{ title:'Busqueda', hasDetail:true, view: busqueda },
+	{ title:'Perfil', hasDetail:true, view: perfil }
 ];
 
 var menu = new MenuView({
@@ -47,7 +52,7 @@ slidingMenu.addEventListener('sliding', function(e) {
 	
 });
 
-this.slidingMenu = slidingMenu;
+
 //Expose / close the menu programaticly
 	//slidingMenu.slideView('left');
 	//slidingMenu.slideView('view');
