@@ -15,6 +15,17 @@ class PlanVersions(models.Model):
         db_table = 'PLANVERSIONS'
 
 
+class ScheduleProfiles(models.Model):
+    SCHEDULEPROFILEID = models.IntegerField(primary_key=True)
+    SHORTNAME = models.CharField(max_length=10)
+    DESCRIPTION = models.CharField(max_length=100)
+    PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
+    REGISTERDATE = models.DateTimeField(null=True)
+
+    class Meta:
+        db_table = 'SCHEDULEPROFILES'
+
+
 class Stops(models.Model):
     """
         Registra la entidad "Parada" y sus principales atributos, se guardan todas las paradas por cada planeación.
@@ -39,8 +50,8 @@ class Arcs(models.Model):
     """
     ARCID = models.IntegerField(primary_key=True)
     PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
-    STOPS_STOPID_START = models.ForeignKey(Stops, db_column=u'STOPS_STOPID_START')
-    STOPS_STOPID_END = models.ForeignKey(Stops, db_column=u'STOPS_STOPID_END')
+    STOPS_STOPID_START = models.IntegerField()
+    STOPS_STOPID_END = models.IntegerField()
     STARTPOINT = models.CharField(max_length=10)
     ENDPOINT = models.CharField(max_length=10)
     DESCRIPTION = models.CharField(max_length=100)
@@ -98,9 +109,9 @@ class Calendar(models.Model):
         Registra la entidad "Calendario", que establece el "día tipo" y la planeación vigente en cada día calendario
         de la operación del sistema, registrando los días calendario del año en curso.
     """
-    SCHEDULETYPEID = models.IntegerField(primary_key=True)
+    CALENDARID = models.IntegerField(primary_key=True)
     OPERATIONDAY = models.DateField()
-    SCHEDULETYPEID = models.ForeignKey(ScheduleTypes, db_column=u'SCHEDULETYPEID')
+    SCHEDULETYPEID = models.IntegerField()
     PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
 
     class Meta:
@@ -126,8 +137,8 @@ class LinesArcs(models.Model):
         Esta tabla es independiente a la programación de viajes y presenta la información de todas las línea - arcos para cada planeación.
     """
     LINEARCID = models.IntegerField(primary_key=True)
-    LINEID = models.ForeignKey(Lines, db_column=u'LINEID')
-    ARCID = models.ForeignKey(Arcs, db_column=u'ARCID')
+    LINEID = models.IntegerField()
+    ARCID = models.IntegerField()
     ARCSEQUENCE = models.IntegerField()
     ORIENTATION = models.IntegerField(null=True)
     PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
@@ -138,42 +149,96 @@ class LinesArcs(models.Model):
         db_table = 'LINESARCS'
 
 
+class TripTypes(models.Model):
+    """
+        Registra los tipos de viaje válidos en el sistema, no depende de la planeación
+    """
+    TRIPTYPEID = models.IntegerField(primary_key=True)
+    TRIPDESCRIPTION = models.CharField(max_length=35)
+
+    class Meta:
+        db_table = 'TRIPTYPES'
 
 
+class Tasks(models.Model):
+    """
+        Registra la entidad "Tarea", con una definición para cada planeación cargada al SGCO.
+    """
+    TASKID = models.IntegerField(primary_key=True)
+    SCHEDULETYPEID = models.IntegerField()
+    LINES_LINEID = models.IntegerField()
+    PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
+
+    class Meta:
+        db_table = 'TASKS'
 
 
+class LineStops(models.Model):
+    """
+        Registra la relación entre las entidades Linea y Parada, presentando la secuencia de paradas que conforman una línea.
+        Esta tabla es independiente a la programación de viajes y presenta la información de todas las líneas para cada planeación.
+    """
+    LINESTOPID = models.IntegerField(primary_key=True)
+    STOPSEQUENCE = models.IntegerField()
+    ORIENTATION = models.SmallIntegerField()
+    LINEID = models.IntegerField()
+    STOPID = models.IntegerField()
+    PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
+    LINEVARIANT = models.IntegerField(null=True)
+    REGISTERDATE = models.DateTimeField(null=True)
+    LINEVARIANTTYPE = models.IntegerField(null=True)
+
+    class Meta:
+        db_table = 'LINESTOPS'
 
 
+class Trips(models.Model):
+    """
+        Registra la entidad "Viaje", manteniendo los valores de la fuente original en donde cada
+        registro refiere un recorrido planeado para iniciar en un momento específico (hora).
+    """
+    TRIPID = models.IntegerField(primary_key=True)
+    PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
+    TRIPTYPEID = models.ForeignKey(TripTypes, db_column=u'TRIPTYPEID')
+    SCHEDULETYPEID = models.ForeignKey(ScheduleTypes, db_column=u'SCHEDULETYPEID')
+    TRIPSEQUENCE = models.IntegerField(null=True)
+    STARTTIME = models.CharField(max_length=6)
+    TASKID = models.ForeignKey(Tasks, db_column=u'TASKID')
+    LINEID = models.ForeignKey(Lines, db_column=u'LINEID')
+    STARTSTOPID = models.ForeignKey(Stops, db_column=u'STARTSTOPID', related_name='startstopid')
+    ENDSTOPID = models.ForeignKey(Stops, db_column=u'ENDSTOPID', related_name='endstopid')
+    DESCRIPTION = models.CharField(max_length=256, null=True)
+    ORIENTATION = models.IntegerField(null=True)
+    LINEVARIANT = models.IntegerField(null=True)
+    REGISTERDATE = models.DateTimeField(null=True)
+    SCHEDULEPROFILEID = models.IntegerField(null=True)
+
+    class Meta:
+        db_table = 'TRIPS'
 
 
+class DataPlan(models.Model):
+    """
+        Registra la entidad "Viaje", extendiendo la información de viajes comerciales y de posicionamiento de de la tabla TRIPS,
+        con totales (paradas, distancia) calculados de las tablas ARCS, LINEARCS y LINESTOPS.
+    """
 
+    DATAPLANID = models.IntegerField(primary_key=True)
+    LINESHORTNAME = models.CharField(max_length=5)
+    LINEID = models.IntegerField()
+    ORIENTATION = models.IntegerField()
+    TOTALSTOPS = models.IntegerField()
+    TRIPLENGTH = models.IntegerField(null=True)
+    TASKID = models.IntegerField()
+    TRIPID = models.IntegerField()
+    TRIPSTARTTIME = models.IntegerField(null=True)
+    SCHEDULETYPEID = models.ForeignKey(ScheduleTypes, db_column=u'SCHEDULETYPEID')
+    TRIPTYPEID = models.ForeignKey(TripTypes, db_column=u'TRIPTYPEID', null=True)
+    PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
+    TRANSPORTCONTRATIST = models.CharField(max_length=100)
+    REGISTERDATE = models.DateTimeField(null=True)
+    TRIPENDTIME = models.IntegerField(null=True)
+    TRIPTRANSITTIME = models.IntegerField(null=True)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    class Meta:
+        db_table = 'DATAPLAN'
