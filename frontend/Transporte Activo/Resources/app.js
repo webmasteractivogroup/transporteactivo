@@ -76,7 +76,7 @@ win.addEventListener('touchstart', function(e) {
 });
 win.addEventListener('touchmove', function(e) {
 	// Subtracting current position to starting horizontal position
-	var coordinates = parseInt(e.globalPoint.x) - e.source.axis;
+	var coordinates = parseInt(e.x) - e.source.axis;
 	// Detecting movement after a 20px shift
 	if (coordinates > 20 || coordinates < -20) {
 		e.source.moving = true;
