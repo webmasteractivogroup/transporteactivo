@@ -164,13 +164,14 @@ class Tasks(models.Model):
     """
         Registra la entidad "Tarea", con una definición para cada planeación cargada al SGCO.
     """
-    TASKID = models.IntegerField(primary_key=True)
+    TASKID = models.IntegerField()
     SCHEDULETYPEID = models.IntegerField()
     LINES_LINEID = models.IntegerField()
     PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
 
     class Meta:
         db_table = 'TASKS'
+        unique_together = ('TASKID', 'SCHEDULETYPEID', 'PLANVERSIONID')
 
 
 class LineStops(models.Model):
@@ -197,24 +198,25 @@ class Trips(models.Model):
         Registra la entidad "Viaje", manteniendo los valores de la fuente original en donde cada
         registro refiere un recorrido planeado para iniciar en un momento específico (hora).
     """
-    TRIPID = models.IntegerField(primary_key=True)
+    TRIPID = models.IntegerField()
     PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
     TRIPTYPEID = models.ForeignKey(TripTypes, db_column=u'TRIPTYPEID')
-    SCHEDULETYPEID = models.ForeignKey(ScheduleTypes, db_column=u'SCHEDULETYPEID')
+    SCHEDULETYPEID = models.IntegerField()
     TRIPSEQUENCE = models.IntegerField(null=True)
     STARTTIME = models.CharField(max_length=6)
-    TASKID = models.ForeignKey(Tasks, db_column=u'TASKID')
-    LINEID = models.ForeignKey(Lines, db_column=u'LINEID')
-    STARTSTOPID = models.ForeignKey(Stops, db_column=u'STARTSTOPID', related_name='startstopid')
-    ENDSTOPID = models.ForeignKey(Stops, db_column=u'ENDSTOPID', related_name='endstopid')
+    TASKID = models.IntegerField()
+    LINEID = models.IntegerField()
+    STARTSTOPID = models.IntegerField()
+    ENDSTOPID = models.IntegerField()
     DESCRIPTION = models.CharField(max_length=256, null=True)
     ORIENTATION = models.IntegerField(null=True)
     LINEVARIANT = models.IntegerField(null=True)
     REGISTERDATE = models.DateTimeField(null=True)
-    SCHEDULEPROFILEID = models.IntegerField(null=True)
+    SCHEDULEPROFILEID = models.ForeignKey(ScheduleProfiles, db_column=u'SCHEDULEPROFILEID')
 
     class Meta:
         db_table = 'TRIPS'
+        unique_together = ('TRIPID', 'PLANVERSIONID', 'SCHEDULETYPEID', 'TASKID', 'STARTTIME')
 
 
 class DataPlan(models.Model):
@@ -232,8 +234,8 @@ class DataPlan(models.Model):
     TASKID = models.IntegerField()
     TRIPID = models.IntegerField()
     TRIPSTARTTIME = models.IntegerField(null=True)
-    SCHEDULETYPEID = models.ForeignKey(ScheduleTypes, db_column=u'SCHEDULETYPEID')
-    TRIPTYPEID = models.ForeignKey(TripTypes, db_column=u'TRIPTYPEID', null=True)
+    SCHEDULETYPEID = models.IntegerField()
+    TRIPTYPEID = models.IntegerField(null=True)
     PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
     TRANSPORTCONTRATIST = models.CharField(max_length=100)
     REGISTERDATE = models.DateTimeField(null=True)
