@@ -5,6 +5,7 @@ import sys
 PROJECT_DIR = os.path.dirname(__file__)
 sys.path.insert(0, os.path.join(PROJECT_DIR, 'apps'))
 
+
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
 
