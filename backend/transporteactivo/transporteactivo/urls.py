@@ -1,10 +1,20 @@
+# -*- coding: utf-8 -*-
 from django.conf.urls import patterns, include, url
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
 
+
+from mio.views import MioStopsViewSet, LineStopsViewSet
+from rest_framework.routers import DefaultRouter
+
+router = DefaultRouter()
+router.register(r'api/v1/paradas', MioStopsViewSet)
+router.register(r'api/v1/rutas', LineStopsViewSet)
+
 urlpatterns = patterns('',
+    url(r'^', include(router.urls)),
     # Examples:
     # url(r'^$', 'transporteactivo.views.home', name='home'),
     # url(r'^transporteactivo/', include('transporteactivo.foo.urls')),
