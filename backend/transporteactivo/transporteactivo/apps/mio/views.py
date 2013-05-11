@@ -2,9 +2,9 @@
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
 
-from sgco.models import LineStops
+from sgco.models import LineStops, Arcs
 from mio.models import MioStops
-from mio.serializers import MioStopsSerializer, LinesStopsSerializer
+from mio.serializers import MioStopsSerializer, LinesStopsSerializer, ArcsSerializer
 from rest_framework import viewsets
 
 
@@ -19,7 +19,7 @@ class MioStopsViewSet(viewsets.ReadOnlyModelViewSet):
         if lat is not None and lng is not None:
             pnt = Point(float(lng), float(lat))
             distance = 800
-            queryset = MioStops.objects.filter(location__distance_lt=(pnt, D(m=distance))).order_by('LONGNAME')
+            queryset = MioStops.objects.filter(location__distance_lt=(pnt, D(m=distance))).order_by('LONGNAME', 'STOPID')
         return queryset
 
 
@@ -33,3 +33,19 @@ class LineStopsViewSet(viewsets.ReadOnlyModelViewSet):
         if parada_id is not None:
             queryset = LineStops.objects.filter(STOPID=parada_id).distinct('LINEID')
         return queryset
+
+
+class ArcsViewSet(viewsets.ReadOnlyModelViewSet):
+    model = Arcs
+    serializer_class = ArcsSerializer
+
+    def get_queryset(self):
+        queryset = []
+        ruta_id = self.request.QUERY_PARAMS.get('ruta_id', None)
+        orientacion = self.request.QUERY_PARAMS.get('orientacion', None)
+        if ruta_id is not None and orientacion is not None:
+            queryset = Arcs.objects.filter(arcs__LINEID=ruta_id, arcs__ORIENTATION=orientacion)
+        return queryset
+
+
+
