@@ -182,8 +182,8 @@ class LineStops(models.Model):
     LINESTOPID = models.IntegerField(primary_key=True)
     STOPSEQUENCE = models.IntegerField()
     ORIENTATION = models.SmallIntegerField()
-    LINEID = models.IntegerField()
-    STOPID = models.IntegerField()
+    LINEID = models.ForeignKey(Lines, db_column=u'LINEID')
+    STOPID = models.ForeignKey(Stops, db_column=u'STOPID')
     PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
     LINEVARIANT = models.IntegerField(null=True)
     REGISTERDATE = models.DateTimeField(null=True)
@@ -191,6 +191,10 @@ class LineStops(models.Model):
 
     class Meta:
         db_table = 'LINESTOPS'
+
+    def get_name_line(self):
+        line = Lines.objects.get(LINEID=self.LINEID)
+        return line.SHORTNAME
 
 
 class Trips(models.Model):

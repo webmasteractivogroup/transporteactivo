@@ -31,5 +31,5 @@ class LineStopsViewSet(viewsets.ReadOnlyModelViewSet):
         queryset = []
         parada_id = self.request.QUERY_PARAMS.get('parada_id', None)
         if parada_id is not None:
-            queryset = LineStops.objects.filter(STOPID=parada_id)
+            queryset = LineStops.objects.filter(STOPID=parada_id).distinct('LINEID')
         return queryset

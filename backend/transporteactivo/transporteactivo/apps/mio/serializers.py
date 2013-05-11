@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from sgco.models import Lines, LineStops
+from sgco.models import LineStops
 from mio.models import MioStops
 from rest_framework import serializers
 
@@ -16,18 +16,32 @@ class MioStopsSerializer(serializers.ModelSerializer):
         fields = ('id', 'nombre_corto', 'nombre_largo', 'lat', 'lng')
 
 
-# class LineNameSerializerField(serializers.Field):
+class LineNameSerializerField(serializers.Field):
 
-#     def to_native(self, obj):
-#         line = Lines.objects.get(LINEID=obj.LINEID)
-#         return line.SHORTNAME
+    def to_native(self, obj):
+        return obj.get_name_line()
 
 
 class LinesStopsSerializer(serializers.ModelSerializer):
-    # ruta = LineNameSerializerField()
-    ruta = serializers.Field(source='LINEID')
-    parada = serializers.Field(source='STOPID')
+    ruta = serializers.Field(source='LINEID.SHORTNAME')
+    parada = serializers.Field(source='STOPID.LONGNAME')
 
     class Meta:
         model = LineStops
         fields = ('parada', 'ruta')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
