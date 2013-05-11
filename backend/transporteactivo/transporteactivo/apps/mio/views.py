@@ -19,7 +19,7 @@ class MioStopsViewSet(viewsets.ReadOnlyModelViewSet):
         if lat is not None and lng is not None:
             pnt = Point(float(lng), float(lat))
             distance = 800
-            queryset = MioStops.objects.filter(location__distance_lt=(pnt, D(m=distance)))
+            queryset = MioStops.objects.filter(location__distance_lt=(pnt, D(m=distance))).order_by('LONGNAME')
         return queryset
 
 

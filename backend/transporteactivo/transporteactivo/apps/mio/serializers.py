@@ -16,19 +16,14 @@ class MioStopsSerializer(serializers.ModelSerializer):
         fields = ('id', 'nombre_corto', 'nombre_largo', 'lat', 'lng')
 
 
-class LineNameSerializerField(serializers.Field):
-
-    def to_native(self, obj):
-        return obj.get_name_line()
-
-
 class LinesStopsSerializer(serializers.ModelSerializer):
-    ruta = serializers.Field(source='LINEID.SHORTNAME')
-    parada = serializers.Field(source='STOPID.LONGNAME')
+    nombre_parada = serializers.Field(source='STOPID.LONGNAME')
+    nombre_ruta = serializers.Field(source='LINEID.SHORTNAME')
+    orientacion = serializers.Field(source='ORIENTATION')
 
     class Meta:
         model = LineStops
-        fields = ('parada', 'ruta')
+        fields = ('nombre_parada', 'nombre_ruta', 'orientacion')
 
 
 
