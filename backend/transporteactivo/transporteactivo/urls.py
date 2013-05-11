@@ -6,12 +6,13 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 
-from mio.views import MioStopsViewSet, LineStopsViewSet
+from mio.views import MioStopsViewSet, LineStopsViewSet, ArcsViewSet
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
 router.register(r'api/v1/paradas', MioStopsViewSet)
 router.register(r'api/v1/rutas', LineStopsViewSet)
+router.register(r'api/v1/paradas-por-ruta', ArcsViewSet)
 
 urlpatterns = patterns('',
     url(r'^', include(router.urls)),

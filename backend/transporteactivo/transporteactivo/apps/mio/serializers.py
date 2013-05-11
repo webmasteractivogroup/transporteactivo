@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from sgco.models import Lines, LineStops
+from sgco.models import LineStops, Arcs
 from mio.models import MioStops
 from rest_framework import serializers
 
@@ -16,18 +16,26 @@ class MioStopsSerializer(serializers.ModelSerializer):
         fields = ('id', 'nombre_corto', 'nombre_largo', 'lat', 'lng')
 
 
-# class LineNameSerializerField(serializers.Field):
-
-#     def to_native(self, obj):
-#         line = Lines.objects.get(LINEID=obj.LINEID)
-#         return line.SHORTNAME
-
-
 class LinesStopsSerializer(serializers.ModelSerializer):
-    # ruta = LineNameSerializerField()
-    ruta = serializers.Field(source='LINEID')
-    parada = serializers.Field(source='STOPID')
+    id_ruta = serializers.Field(source='LINEID.LINEID')
+    nombre_parada = serializers.Field(source='STOPID.LONGNAME')
+    nombre_ruta = serializers.Field(source='LINEID.SHORTNAME')
+    orientacion = serializers.Field(source='ORIENTATION')
 
     class Meta:
         model = LineStops
-        fields = ('parada', 'ruta')
+        fields = ('nombre_parada', 'nombre_ruta', 'id_ruta', 'orientacion')
+
+
+class StopsField(serializers.RelatedField):
+    def to_native(self, value):
+        return '%s' % value.STOPS_STOPID_END.LONGNAME
+
+
+class ArcsSerializer(serializers.ModelSerializer):
+    nombre_parada = serializers.Field(source='STOPS_STOPID_END.LONGNAME')
+
+    class Meta:
+        model = Arcs
+        fields = ('nombre_parada',)
+

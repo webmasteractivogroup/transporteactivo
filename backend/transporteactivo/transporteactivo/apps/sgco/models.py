@@ -50,8 +50,8 @@ class Arcs(models.Model):
     """
     ARCID = models.IntegerField(primary_key=True)
     PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
-    STOPS_STOPID_START = models.IntegerField()
-    STOPS_STOPID_END = models.IntegerField()
+    STOPS_STOPID_START = models.ForeignKey(Stops, db_column=u'STOPS_STOPID_START', related_name='stopid_start')
+    STOPS_STOPID_END = models.ForeignKey(Stops, db_column=u'STOPS_STOPID_END', related_name='stopid_stop')
     STARTPOINT = models.CharField(max_length=10)
     ENDPOINT = models.CharField(max_length=10)
     DESCRIPTION = models.CharField(max_length=100)
@@ -138,7 +138,7 @@ class LinesArcs(models.Model):
     """
     LINEARCID = models.IntegerField(primary_key=True)
     LINEID = models.IntegerField()
-    ARCID = models.IntegerField()
+    ARCID = models.ForeignKey(Arcs, db_column=u'ARCID', related_name='arcs')
     ARCSEQUENCE = models.IntegerField()
     ORIENTATION = models.IntegerField(null=True)
     PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
@@ -182,8 +182,8 @@ class LineStops(models.Model):
     LINESTOPID = models.IntegerField(primary_key=True)
     STOPSEQUENCE = models.IntegerField()
     ORIENTATION = models.SmallIntegerField()
-    LINEID = models.IntegerField()
-    STOPID = models.IntegerField()
+    LINEID = models.ForeignKey(Lines, db_column=u'LINEID')
+    STOPID = models.ForeignKey(Stops, db_column=u'STOPID')
     PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
     LINEVARIANT = models.IntegerField(null=True)
     REGISTERDATE = models.DateTimeField(null=True)
@@ -191,6 +191,10 @@ class LineStops(models.Model):
 
     class Meta:
         db_table = 'LINESTOPS'
+
+    def get_name_line(self):
+        line = Lines.objects.get(LINEID=self.LINEID)
+        return line.SHORTNAME
 
 
 class Trips(models.Model):
