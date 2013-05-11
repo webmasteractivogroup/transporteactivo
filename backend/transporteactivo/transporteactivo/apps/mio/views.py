@@ -4,13 +4,13 @@ from django.contrib.gis.measure import D
 
 from sgco.models import LineStops, Arcs
 from mio.models import MioStops
-from mio.serializers import MioStopsSerializer, LinesStopsSerializer, ArcsSerializer
+from mio.serializers import ParadasCercanasSerializer, RutasPorParadaSerializer, ParadasPorRutaSerializer
 from rest_framework import viewsets
 
 
-class MioStopsViewSet(viewsets.ReadOnlyModelViewSet):
+class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
     model = MioStops
-    serializer_class = MioStopsSerializer
+    serializer_class = ParadasCercanasSerializer
 
     def get_queryset(self):
         queryset = []
@@ -23,9 +23,9 @@ class MioStopsViewSet(viewsets.ReadOnlyModelViewSet):
         return queryset
 
 
-class LineStopsViewSet(viewsets.ReadOnlyModelViewSet):
+class RutasPoParadaViewSet(viewsets.ReadOnlyModelViewSet):
     model = LineStops
-    serializer_class = LinesStopsSerializer
+    serializer_class = RutasPorParadaSerializer
 
     def get_queryset(self):
         queryset = []
@@ -35,9 +35,9 @@ class LineStopsViewSet(viewsets.ReadOnlyModelViewSet):
         return queryset
 
 
-class ArcsViewSet(viewsets.ReadOnlyModelViewSet):
+class ParadasPorRutaViewSet(viewsets.ReadOnlyModelViewSet):
     model = Arcs
-    serializer_class = ArcsSerializer
+    serializer_class = ParadasPorRutaSerializer
 
     def get_queryset(self):
         queryset = []

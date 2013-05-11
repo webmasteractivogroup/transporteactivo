@@ -4,7 +4,7 @@ from mio.models import MioStops
 from rest_framework import serializers
 
 
-class MioStopsSerializer(serializers.ModelSerializer):
+class ParadasCercanasSerializer(serializers.ModelSerializer):
     id = serializers.Field(source='STOPID')
     nombre_corto = serializers.Field(source='SHORTNAME')
     nombre_largo = serializers.Field(source='LONGNAME')
@@ -16,7 +16,7 @@ class MioStopsSerializer(serializers.ModelSerializer):
         fields = ('id', 'nombre_corto', 'nombre_largo', 'lat', 'lng')
 
 
-class LinesStopsSerializer(serializers.ModelSerializer):
+class RutasPorParadaSerializer(serializers.ModelSerializer):
     id_ruta = serializers.Field(source='LINEID.LINEID')
     nombre_parada = serializers.Field(source='STOPID.LONGNAME')
     nombre_ruta = serializers.Field(source='LINEID.SHORTNAME')
@@ -27,13 +27,8 @@ class LinesStopsSerializer(serializers.ModelSerializer):
         fields = ('nombre_parada', 'nombre_ruta', 'id_ruta', 'orientacion')
 
 
-class StopsField(serializers.RelatedField):
-    def to_native(self, value):
-        return '%s' % value.STOPS_STOPID_END.LONGNAME
-
-
-class ArcsSerializer(serializers.ModelSerializer):
-    nombre_parada = serializers.Field(source='STOPS_STOPID_END.LONGNAME')
+class ParadasPorRutaSerializer(serializers.ModelSerializer):
+    nombre_parada = serializers.Field(source='STOPS_STOPID_START.LONGNAME')
 
     class Meta:
         model = Arcs
