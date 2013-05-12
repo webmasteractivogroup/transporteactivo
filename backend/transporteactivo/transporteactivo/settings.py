@@ -165,11 +165,7 @@ LOGGING = {
 
 CORS_ORIGIN_WHITELIST = (
     'localhost',
-    
 )
-
-
-
 try:
     from local_settings import *
 except ImportError:
