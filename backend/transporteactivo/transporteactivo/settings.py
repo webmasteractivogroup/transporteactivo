@@ -125,6 +125,7 @@ INSTALLED_APPS = (
     'sgco',
     'mio',
     'rest_framework',
+    'corsheaders',
     'django_extensions',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',
