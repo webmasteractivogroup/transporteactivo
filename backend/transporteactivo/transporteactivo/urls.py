@@ -6,16 +6,18 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 
-from mio.views import MioStopsViewSet, LineStopsViewSet, ArcsViewSet
+from mio.views import ParadasCercanasViewSet, RutasPoParadaViewSet, ParadasPorRutaViewSet, BusquedaView
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r'api/v1/paradas', MioStopsViewSet)
-router.register(r'api/v1/rutas', LineStopsViewSet)
-router.register(r'api/v1/paradas-por-ruta', ArcsViewSet)
+router.register(r'paradas-cercanas', ParadasCercanasViewSet)
+router.register(r'rutas-por-parada', RutasPoParadaViewSet)
+router.register(r'paradas-por-ruta', ParadasPorRutaViewSet)
+
 
 urlpatterns = patterns('',
-    url(r'^', include(router.urls)),
+    url(r'^api/v1/', include(router.urls)),
+    url(r'^api/v1/buscar/$', BusquedaView.as_view(), name='buscar'),
     # Examples:
     # url(r'^$', 'transporteactivo.views.home', name='home'),
     # url(r'^transporteactivo/', include('transporteactivo.foo.urls')),

@@ -60,6 +60,9 @@ class Arcs(models.Model):
     class Meta:
         db_table = 'ARCS'
 
+    def __unicode__(self):
+        return u'%s, %s' % (self.ARCID, self.DESCRIPTION)
+
 
 class BusTypes(models.Model):
     """
@@ -130,6 +133,9 @@ class Lines(models.Model):
     class Meta:
         db_table = 'LINES'
 
+    def __unicode__(self):
+        return u'%s, %s' % (self.LINEID, self.DESCRIPTION)
+
 
 class LinesArcs(models.Model):
     """
@@ -137,8 +143,8 @@ class LinesArcs(models.Model):
         Esta tabla es independiente a la programación de viajes y presenta la información de todas las línea - arcos para cada planeación.
     """
     LINEARCID = models.IntegerField(primary_key=True)
-    LINEID = models.IntegerField()
-    ARCID = models.ForeignKey(Arcs, db_column=u'ARCID', related_name='arcs')
+    LINEID = models.ForeignKey(Lines, db_column=u'LINEID')
+    ARCID = models.ForeignKey(Arcs, db_column=u'ARCID', related_name='linearcs')
     ARCSEQUENCE = models.IntegerField()
     ORIENTATION = models.IntegerField(null=True)
     PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
@@ -147,6 +153,9 @@ class LinesArcs(models.Model):
 
     class Meta:
         db_table = 'LINESARCS'
+
+    def __unicode__(self):
+        return u'%s, %s' % (self.LINEID.SHORTNAME, self.ARCID)
 
 
 class TripTypes(models.Model):
