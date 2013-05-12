@@ -123,6 +123,7 @@ INSTALLED_APPS = (
     # 'django.contrib.staticfiles',
     'sgco',
     'mio',
+    'rest_framework',
     'django_extensions',
     # Uncomment the next line to enable the admin:
     # 'django.contrib.admin',

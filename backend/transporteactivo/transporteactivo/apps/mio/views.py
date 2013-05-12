@@ -5,8 +5,7 @@ from django.contrib.gis.measure import D
 
 from sgco.models import LineStops, Arcs, Lines
 from mio.models import MioStops
-from mio.serializers import (ParadasCercanasSerializer, RutasPorParadaSerializer, ParadasPorRutaSerializer,
-                            BuscarParadaSeriralizer, BuscarRutaSeriralizer)
+from mio.serializers import ParadasCercanasSerializer, RutasPorParadaSerializer, ParadasPorRutaSerializer
 from rest_framework import viewsets
 
 
@@ -50,28 +49,28 @@ class ParadasPorRutaViewSet(viewsets.ReadOnlyModelViewSet):
         return queryset
 
 
-class BuscarParadaViewSet(viewsets.ReadOnlyModelViewSet):
-    model = Arcs
-    serializer_class = BuscarParadaSeriralizer
+# class BuscarParadaViewSet(viewsets.ReadOnlyModelViewSet):
+#     model = Arcs
+#     serializer_class = BuscarParadaSeriralizer
 
-    def get_queryset(self):
-        queryset = []
-        query = self.request.QUERY_PARAMS.get('query', None)
-        if query:
-            queryset = MioStops.objects.filter(LONGNAME__icontains=query)
-        return queryset
+#     def get_queryset(self):
+#         queryset = []
+#         query = self.request.QUERY_PARAMS.get('query', None)
+#         if query:
+#             queryset = MioStops.objects.filter(LONGNAME__icontains=query)
+#         return queryset
 
 
-class BuscarRutaViewSet(viewsets.ReadOnlyModelViewSet):
-    model = Lines
-    serializer_class = BuscarRutaSeriralizer
+# class BuscarRutaViewSet(viewsets.ReadOnlyModelViewSet):
+#     model = Lines
+#     serializer_class = BuscarRutaSeriralizer
 
-    def get_queryset(self):
-        queryset = []
-        query = self.request.QUERY_PARAMS.get('query', None)
-        if query:
-            queryset = MioStops.objects.filter(SHORTNAME__icontains=query)
-        return queryset
+#     def get_queryset(self):
+#         queryset = []
+#         query = self.request.QUERY_PARAMS.get('query', None)
+#         if query:
+#             queryset = MioStops.objects.filter(SHORTNAME__icontains=query)
+#         return queryset
 
 
 
