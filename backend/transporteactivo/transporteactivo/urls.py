@@ -6,7 +6,7 @@ from django.conf.urls import patterns, include, url
 # admin.autodiscover()
 
 
-from mio.views import ParadasCercanasViewSet, RutasPoParadaViewSet, ParadasPorRutaViewSet
+from mio.views import ParadasCercanasViewSet, RutasPoParadaViewSet, ParadasPorRutaViewSet, BusquedaView
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
@@ -17,6 +17,7 @@ router.register(r'paradas-por-ruta', ParadasPorRutaViewSet)
 
 urlpatterns = patterns('',
     url(r'^api/v1/', include(router.urls)),
+    url(r'^api/v1/buscar/$', BusquedaView.as_view(), name='buscar'),
     # Examples:
     # url(r'^$', 'transporteactivo.views.home', name='home'),
     # url(r'^transporteactivo/', include('transporteactivo.foo.urls')),

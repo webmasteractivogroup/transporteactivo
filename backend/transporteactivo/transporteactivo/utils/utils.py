@@ -284,27 +284,3 @@ def load_data_plan():
                                 REGISTERDATE=REGISTERDATE, TRIPENDTIME=TRIPENDTIME, TRIPTRANSITTIME=TRIPTRANSITTIME
                             )
     print(DataPlan.objects.count())
-
-
-def my_custom_sql(query):
-    from django.db import connection
-    cursor = connection.cursor()
-    cursor.execute('''
-        SELECT
-            "STOPS"."LONGNAME"
-        FROM "mio_miostops"
-        INNER JOIN
-            "STOPS" ON ("mio_miostops"."stops_ptr_id" = "STOPS"."STOPID")
-        WHERE
-            UPPER("STOPS"."LONGNAME"::text) LIKE UPPER(%s)
-        UNION
-        SELECT
-            "LINES"."SHORTNAME"
-        FROM
-            "LINES"
-        WHERE UPPER("LINES"."SHORTNAME"::text) LIKE UPPER(%s)
-    ''', [query, query])
-    row = cursor.fetchall()
-    return row
-
-

@@ -3,10 +3,13 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
 
 
-from sgco.models import LineStops, Arcs, Lines
+from sgco.models import LineStops, Arcs
 from mio.models import MioStops
 from mio.serializers import ParadasCercanasSerializer, RutasPorParadaSerializer, ParadasPorRutaSerializer
+from mio.utils import search_sql
 from rest_framework import viewsets
+from rest_framework.views import APIView
+from rest_framework.response import Response
 
 
 class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
@@ -47,6 +50,17 @@ class ParadasPorRutaViewSet(viewsets.ReadOnlyModelViewSet):
         if ruta_id is not None and orientacion is not None:
             queryset = Arcs.objects.filter(arcs__LINEID=ruta_id, arcs__ORIENTATION=orientacion)
         return queryset
+
+
+class BusquedaView(APIView):
+
+    def get(self, request, format=None):
+        queryset = []
+        query = self.request.QUERY_PARAMS.get('query', None)
+        if query:
+            queryset = search_sql(query)
+        return Response(queryset)
+
 
 
 # class BuscarParadaViewSet(viewsets.ReadOnlyModelViewSet):
