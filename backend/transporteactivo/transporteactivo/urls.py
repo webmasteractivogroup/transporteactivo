@@ -1,23 +1,23 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, include, url
 
+from rest_framework.routers import DefaultRouter
+
+from mio import views
+
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
 
-
-from mio.views import ParadasCercanasViewSet, RutasPoParadaViewSet, ParadasPorRutaViewSet, BusquedaView
-from rest_framework.routers import DefaultRouter
-
 router = DefaultRouter()
-router.register(r'paradas-cercanas', ParadasCercanasViewSet)
-router.register(r'rutas-por-parada', RutasPoParadaViewSet)
-router.register(r'paradas-por-ruta', ParadasPorRutaViewSet)
+router.register(r'paradas-cercanas', views.ParadasCercanasViewSet)
+router.register(r'rutas-por-parada', views.RutasPoParadaViewSet)
+router.register(r'paradas-por-ruta', views.ParadasPorRutaViewSet)
 
 
 urlpatterns = patterns('',
     url(r'^api/v1/', include(router.urls)),
-    url(r'^api/v1/buscar/$', BusquedaView.as_view(), name='buscar'),
+    url(r'^api/v1/buscar/$', views.BusquedaView.as_view(), name='buscar'),
     # Examples:
     # url(r'^$', 'transporteactivo.views.home', name='home'),
     # url(r'^transporteactivo/', include('transporteactivo.foo.urls')),

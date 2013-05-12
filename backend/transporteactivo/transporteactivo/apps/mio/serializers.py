@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
-from sgco.models import LineStops, Arcs
-from mio.models import MioStops
 from rest_framework import serializers
+
+from .models import MioStops
+from sgco.models import LineStops, Arcs
 
 
 class ParadasCercanasSerializer(serializers.ModelSerializer):
