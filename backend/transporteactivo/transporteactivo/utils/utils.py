@@ -1,13 +1,12 @@
 # -*- coding: utf-8 -*-
-from django.conf import settings
-from django.utils.timezone import utc
-from django.utils import timezone
-from sgco.models import *
-
 import os
 import csv
 from datetime import datetime
 
+from django.conf import settings
+from django.utils import timezone
+
+from sgco import models
 
 l_format = '%m/%d/%Y %I:%M:%S %p'
 s_format = '%m/%d/%Y'
@@ -28,17 +27,17 @@ def load_plan_versions():
     results = results[1:]
     for r in results:
         PLANVERSIONID = int(r[0])
-        ACTIVATIONDATE = datetime.strptime(r[1], s_format).replace(tzinfo=utc)
+        ACTIVATIONDATE = timezone.make_aware(datetime.strptime(r[1], s_format), tz)
         CREATIONDATE = datetime.now()
         try:
             CREATIONDATE = datetime.strptime(r[2], l_format)
         except ValueError:
             CREATIONDATE = datetime.strptime(r[2], s_format)
         CREATIONDATE = timezone.make_aware(CREATIONDATE, tz)
-        PlanVersions.objects.create(PLANVERSIONID=PLANVERSIONID, ACTIVATIONDATE=ACTIVATIONDATE.date(), CREATIONDATE=CREATIONDATE)
-    print(PlanVersions.objects.count())
+        models.PlanVersions.objects.create(PLANVERSIONID=PLANVERSIONID, ACTIVATIONDATE=ACTIVATIONDATE.date(), CREATIONDATE=CREATIONDATE)
+    print(models.PlanVersions.objects.count())
 ####################################################################################
-PLANVERSIONID = PlanVersions.objects.get(pk=40)
+PLANVERSIONID = models.PlanVersions.objects.get(pk=40)
 
 # SCHEDULEPROFILES
 
@@ -54,9 +53,9 @@ def load_schedule_profiles():
         SHORTNAME = r[1]
         DESCRIPTION = r[2]
         REGISTERDATE = timezone.make_aware(datetime.strptime(r[4], l_format), tz)
-        ScheduleProfiles.objects.create(SCHEDULEPROFILEID=SCHEDULEPROFILEID, SHORTNAME=SHORTNAME, DESCRIPTION=DESCRIPTION,
+        models.ScheduleProfiles.objects.create(SCHEDULEPROFILEID=SCHEDULEPROFILEID, SHORTNAME=SHORTNAME, DESCRIPTION=DESCRIPTION,
                                         PLANVERSIONID=PLANVERSIONID, REGISTERDATE=REGISTERDATE)
-    print(ScheduleProfiles.objects.count())
+    print(models.ScheduleProfiles.objects.count())
 ####################################################################################
 # STOPS
 
@@ -76,9 +75,9 @@ def load_stops():
         GPS_Y = int(r[5])
         DECIMALLONGITUDE = float(r[6])
         DECIMALLATITUDE = float(r[7])
-        Stops.objects.create(STOPID=STOPID, PLANVERSIONID=PLANVERSIONID, SHORTNAME=SHORTNAME, LONGNAME=LONGNAME,
-                             GPS_X=GPS_X, GPS_Y=GPS_Y, DECIMALLONGITUDE=DECIMALLONGITUDE, DECIMALLATITUDE=DECIMALLATITUDE)
-    print(Stops.objects.count())
+        models.Stops.objects.create(STOPID=STOPID, PLANVERSIONID=PLANVERSIONID, SHORTNAME=SHORTNAME, LONGNAME=LONGNAME,
+                                    GPS_X=GPS_X, GPS_Y=GPS_Y, DECIMALLONGITUDE=DECIMALLONGITUDE, DECIMALLATITUDE=DECIMALLATITUDE)
+    print(models.Stops.objects.count())
 ####################################################################################
 # ARCS
 
@@ -101,9 +100,9 @@ def load_arcs():
             ARCLENGTH = int(r[7])
         except ValueError:
             ARCLENGTH = 0
-        Arcs.objects.create(ARCID=ARCID, PLANVERSIONID=PLANVERSIONID, STOPS_STOPID_START=STOPS_STOPID_START, STOPS_STOPID_END=STOPS_STOPID_END,
+        models.Arcs.objects.create(ARCID=ARCID, PLANVERSIONID=PLANVERSIONID, STOPS_STOPID_START=STOPS_STOPID_START, STOPS_STOPID_END=STOPS_STOPID_END,
                             STARTPOINT=STARTPOINT, ENDPOINT=ENDPOINT, DESCRIPTION=DESCRIPTION, ARCLENGTH=ARCLENGTH)
-    print(Arcs.objects.count())
+    print(models.Arcs.objects.count())
 ####################################################################################
 # SCHEDULETYPES
 
@@ -119,8 +118,8 @@ def load_schedule_types():
         SCHEDULETYPEID = r[0]
         SHORTNAME = r[2]
         DESCRIPTION = r[3]
-        ScheduleTypes.objects.create(SCHEDULETYPEID=SCHEDULETYPEID, PLANVERSIONID=PLANVERSIONID, SHORTNAME=SHORTNAME, DESCRIPTION=DESCRIPTION)
-    print(ScheduleTypes.objects.count())
+        models.ScheduleTypes.objects.create(SCHEDULETYPEID=SCHEDULETYPEID, PLANVERSIONID=PLANVERSIONID, SHORTNAME=SHORTNAME, DESCRIPTION=DESCRIPTION)
+    print(models.ScheduleTypes.objects.count())
 ####################################################################################
 #  CALENDAR
 
@@ -136,8 +135,8 @@ def load_calendar():
         CALENDARID = int(r[0])
         OPERATIONDAY = timezone.make_aware(datetime.strptime(r[1], s_format), tz)
         SCHEDULETYPEID = r[2]
-        Calendar.objects.create(CALENDARID=CALENDARID, OPERATIONDAY=OPERATIONDAY, SCHEDULETYPEID=SCHEDULETYPEID, PLANVERSIONID=PLANVERSIONID)
-    print(Calendar.objects.count())
+        models.Calendar.objects.create(CALENDARID=CALENDARID, OPERATIONDAY=OPERATIONDAY, SCHEDULETYPEID=SCHEDULETYPEID, PLANVERSIONID=PLANVERSIONID)
+    print(models.Calendar.objects.count())
 ####################################################################################
 # LINES
 
@@ -153,8 +152,8 @@ def load_lines():
         LINEID = int(r[0])
         SHORTNAME = unicode(r[2], 'latin-1')
         DESCRIPTION = unicode(r[3], 'latin-1')
-        Lines.objects.create(LINEID=LINEID, SHORTNAME=SHORTNAME, DESCRIPTION=DESCRIPTION, PLANVERSIONID=PLANVERSIONID)
-    print(Lines.objects.count())
+        models.Lines.objects.create(LINEID=LINEID, SHORTNAME=SHORTNAME, DESCRIPTION=DESCRIPTION, PLANVERSIONID=PLANVERSIONID)
+    print(models.Lines.objects.count())
 ####################################################################################
 # LINESARCS
 
@@ -173,9 +172,9 @@ def load_line_arcs():
         ORIENTATION = int(r[4])
         LINEVARIANT = int(r[6])
         REGISTERDATE = timezone.make_aware(datetime.strptime(r[7], l_format), tz)
-        LinesArcs.objects.create(LINEARCID=LINEARCID, LINEID=LINEID, ARCID=ARCID, ARCSEQUENCE=ARCSEQUENCE, ORIENTATION=ORIENTATION,
+        models.LinesArcs.objects.create(LINEARCID=LINEARCID, LINEID=LINEID, ARCID=ARCID, ARCSEQUENCE=ARCSEQUENCE, ORIENTATION=ORIENTATION,
                                  LINEVARIANT=LINEVARIANT, REGISTERDATE=REGISTERDATE, PLANVERSIONID=PLANVERSIONID)
-    print(LinesArcs.objects.count())
+    print(models.LinesArcs.objects.count())
 ####################################################################################
 # TASKS
 
@@ -190,8 +189,8 @@ def load_tasks():
         TASKID = int(r[0])
         SCHEDULETYPEID = int(r[1])
         LINES_LINEID = int(r[2])
-        Tasks.objects.create(TASKID=TASKID, SCHEDULETYPEID=SCHEDULETYPEID, LINES_LINEID=LINES_LINEID, PLANVERSIONID=PLANVERSIONID)
-    print(Tasks.objects.count())
+        models.Tasks.objects.create(TASKID=TASKID, SCHEDULETYPEID=SCHEDULETYPEID, LINES_LINEID=LINES_LINEID, PLANVERSIONID=PLANVERSIONID)
+    print(models.Tasks.objects.count())
 ####################################################################################
 # LINESTOPS
 
@@ -211,10 +210,10 @@ def load_line_stops():
         LINEVARIANT = int(r[6])
         REGISTERDATE = timezone.make_aware(datetime.strptime(r[7], l_format), tz)
         LINEVARIANTTYPE = int(r[8])
-        LineStops.objects.create(LINESTOPID=LINESTOPID, STOPSEQUENCE=STOPSEQUENCE, ORIENTATION=ORIENTATION, PLANVERSIONID=PLANVERSIONID,
-                                 LINEID=LINEID, STOPID=STOPID, LINEVARIANT=LINEVARIANT, REGISTERDATE=REGISTERDATE, LINEVARIANTTYPE=LINEVARIANTTYPE
+        models.LineStops.objects.create(LINESTOPID=LINESTOPID, STOPSEQUENCE=STOPSEQUENCE, ORIENTATION=ORIENTATION, PLANVERSIONID=PLANVERSIONID,
+                                        LINEID=LINEID, STOPID=STOPID, LINEVARIANT=LINEVARIANT, REGISTERDATE=REGISTERDATE, LINEVARIANTTYPE=LINEVARIANTTYPE
                                 )
-    print(LineStops.objects.count())
+    print(models.LineStops.objects.count())
 ####################################################################################
 # TRIPS
 
@@ -227,7 +226,7 @@ def load_trips():
     results = results[1:]
     for r in results:
         TRIPID = int(r[0])
-        TRIPTYPEID = TripTypes.objects.get(pk=int(r[2]))
+        TRIPTYPEID = models.TripTypes.objects.get(pk=int(r[2]))
         SCHEDULETYPEID = int(r[3])
         TRIPSEQUENCE = int(r[4])
         STARTTIME = int(r[5])
@@ -239,13 +238,13 @@ def load_trips():
         ORIENTATION = int(r[11])
         LINEVARIANT = int(r[12])
         REGISTERDATE = timezone.make_aware(datetime.strptime(r[13], l_format), tz)
-        SCHEDULEPROFILEID = ScheduleProfiles.objects.get(pk=int(r[14]))
-        Trips.objects.create(TRIPID=TRIPID, PLANVERSIONID=PLANVERSIONID, TRIPTYPEID=TRIPTYPEID, SCHEDULETYPEID=SCHEDULETYPEID,
-                             TRIPSEQUENCE=TRIPSEQUENCE, STARTTIME=STARTTIME, TASKID=TASKID, LINEID=LINEID, STARTSTOPID=STARTSTOPID,
-                             ENDSTOPID=ENDSTOPID, DESCRIPTION=DESCRIPTION, ORIENTATION=ORIENTATION, LINEVARIANT=LINEVARIANT,
-                             REGISTERDATE=REGISTERDATE, SCHEDULEPROFILEID=SCHEDULEPROFILEID
-                            )
-    print(Trips.objects.count())
+        SCHEDULEPROFILEID = models.ScheduleProfiles.objects.get(pk=int(r[14]))
+        models.Trips.objects.create(TRIPID=TRIPID, PLANVERSIONID=PLANVERSIONID, TRIPTYPEID=TRIPTYPEID, SCHEDULETYPEID=SCHEDULETYPEID,
+                                    TRIPSEQUENCE=TRIPSEQUENCE, STARTTIME=STARTTIME, TASKID=TASKID, LINEID=LINEID, STARTSTOPID=STARTSTOPID,
+                                    ENDSTOPID=ENDSTOPID, DESCRIPTION=DESCRIPTION, ORIENTATION=ORIENTATION, LINEVARIANT=LINEVARIANT,
+                                    REGISTERDATE=REGISTERDATE, SCHEDULEPROFILEID=SCHEDULEPROFILEID
+                                )
+    print(models.Trips.objects.count())
 ####################################################################################
 # TRIPS
 
@@ -278,9 +277,9 @@ def load_data_plan():
             TRIPTRANSITTIME = int(r[15])
         except:
             TRIPTRANSITTIME = None
-        DataPlan.objects.create(DATAPLANID=DATAPLANID, PLANVERSIONID=PLANVERSIONID, LINESHORTNAME=LINESHORTNAME, LINEID=LINEID,
-                                ORIENTATION=ORIENTATION, TOTALSTOPS=TOTALSTOPS, TRIPLENGTH=TRIPLENGTH, TASKID=TASKID, TRIPID=TRIPID,
-                                TRIPSTARTTIME=TRIPSTARTTIME, SCHEDULETYPEID=SCHEDULETYPEID, TRIPTYPEID=TRIPTYPEID, TRANSPORTCONTRATIST=TRANSPORTCONTRATIST,
-                                REGISTERDATE=REGISTERDATE, TRIPENDTIME=TRIPENDTIME, TRIPTRANSITTIME=TRIPTRANSITTIME
-                            )
-    print(DataPlan.objects.count())
+        models.DataPlan.objects.create(DATAPLANID=DATAPLANID, PLANVERSIONID=PLANVERSIONID, LINESHORTNAME=LINESHORTNAME, LINEID=LINEID,
+                                       ORIENTATION=ORIENTATION, TOTALSTOPS=TOTALSTOPS, TRIPLENGTH=TRIPLENGTH, TASKID=TASKID, TRIPID=TRIPID,
+                                       TRIPSTARTTIME=TRIPSTARTTIME, SCHEDULETYPEID=SCHEDULETYPEID, TRIPTYPEID=TRIPTYPEID, TRANSPORTCONTRATIST=TRANSPORTCONTRATIST,
+                                       REGISTERDATE=REGISTERDATE, TRIPENDTIME=TRIPENDTIME, TRIPTRANSITTIME=TRIPTRANSITTIME
+                                    )
+    print(models.DataPlan.objects.count())
