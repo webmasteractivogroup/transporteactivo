@@ -42,32 +42,43 @@ window.ta = {
 	geoLocation: {
 		browserSupportFlag: new Boolean(),
 
-		findPosition: function() {
+		findLocation: function() {
 			if(navigator.geolocation) {
 				this.browserSupportFlag = true;
-				navigator.geolocation.getCurrentPosition(
-					function(position) { // success
-						ta.map.currentPosition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
-						ta.map.map.setCenter(ta.map.currentPosition);
-						ta.map.addPositionMarker(ta.map.currentPosition);
-						ta.map.loadNearbyStops(ta.map.currentPosition);
-					},
-					function() { // error
-						alert("Your browser doesn't support geolocation.");
-					}
-				);
+				navigator.geolocation.getCurrentPosition(this.locationFound, this.locationNotFound);
 			}
 			else { // browser doesn't support Geolocation
-				ta.geoLocation.browserSupportFlag = false;
+				this.browserSupportFlag = false;
 				alert("Geolocation service failed.");
 			}
 		},
+		locationFound: function(position){
+			// update the current position
+			ta.map.currentPosition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
+			// center the map
+			ta.map.map.setCenter(ta.map.currentPosition);
+			// add the blue point marker
+			ta.map.addPositionMarker(ta.map.currentPosition);
+			// load the nearby stops
+			// ta.map.loadNearbyStops(ta.map.currentPosition);
+		},
+		locationNotFound: function(err) {
+			if (err.code == 1) { //PERMISSION_DENIED
+				// user denied
+			} else if (err.code == 2) { //POSITION_UNAVAILABLE
+				// network not available/satellites could not be contacted
+			} else if (err.code == 3) { //TIMEOUT
+				// network took too long to calculate the user's position
+			} else {
+				//unexpected error
+			}
+		}
 	},
 
 	map: {
 		defaultPosition: new google.maps.LatLng(3.422556, -76.517222),
 		currentPosition: this.defaultPosition,
-
+		nearbyStopsMarkers: new Array(),
 		marker_icons: {
 			dot: {
 				url: 'img/marker_icon_dot.png',
@@ -76,20 +87,25 @@ window.ta = {
 			},
 			troncal: {
 				url: 'img/marker_icon_troncal.png',
-				anchor: new google.maps.Point(12,35),
+				anchor: new google.maps.Point(16,35),
 				// origin: new google.maps.Point(0,0), //used for sprites, offset
 				// size: new google.maps.Size(32,46), //used for sprites, display size
 				scaledSize: new google.maps.Size(24,35),
 			},
 			pretroncal: {
 				url: 'img/marker_icon_alimentadora.png',
-				anchor: new google.maps.Point(12,35),
+				anchor: new google.maps.Point(16,35),
 				scaledSize: new google.maps.Size(24,35),
 			},
 			alimentadora: {
 				url: 'img/marker_icon_alimentadora.png',
-				anchor: new google.maps.Point(12,35),
+				anchor: new google.maps.Point(16,35),
 				scaledSize: new google.maps.Size(24,35),
+			},
+			shadow: {
+				url: 'img/marker_icon_shadow.png',
+				anchor: new google.maps.Point(17,34),
+				scaledSize: new google.maps.Size(43,35),
 			}
 		},
 
@@ -114,7 +130,7 @@ window.ta = {
 		},
 
 		addPositionMarker: function(position) {
-			console.log(this.marker_icons["dot"]);
+			// console.log(this.marker_icons["dot"]);
 			var markerOptions = {
 				map: this.map,
 				title: "¡Estas aquí!",
@@ -123,6 +139,7 @@ window.ta = {
 				animation : google.maps.Animation.DROP
 			}
 			var marker = new google.maps.Marker(markerOptions);
+
 		},
 
 		addStopMarker: function(stop) {
@@ -130,15 +147,17 @@ window.ta = {
 				map: this.map,
 				title: stop.nombre,
 				// icon: this.marker_icons[stop.type],
-				icon: this.marker_icons["alimentadora"],
+				icon: this.marker_icons['alimentadora'],
+				shadow: this.marker_icons.shadow,
 				position: new google.maps.LatLng(stop.lat, stop.lng),
-				animation : google.maps.Animation.DROP
+				// animation : google.maps.Animation.DROP
 			}
 			var marker = new google.maps.Marker(markerOptions);
+			this.nearbyStopsMarkers.push(marker);
 
 			// //Asocio el click del marcador a la ventana con los detalle de la promoción 
 			// google.maps.event.addListener(marcador, "click", function() {
-			// 	trappt.general.obtenerPromocion(promocion.promoId, promocion.promoSedeId)
+			// 	ta.loadStop(stop.id)
 			// })
 		},
 
@@ -167,6 +186,10 @@ window.ta = {
 				// async: false,
 				success: function(data, textStatus, jqXHR) {
 					if (textStatus === "success") {
+						//remove the current markers from the map
+						for (i = 0; i < ta.map.nearbyStopsMarkers.length; ++i) {
+							ta.map.nearbyStopsMarkers[i].setMap(null);
+						}
 						ta.nearbyStops = data;
 						ta.map.addStopMarkers(ta.nearbyStops);
 					}
@@ -175,30 +198,38 @@ window.ta = {
 					console.log(jqXHR);
 					console.log(textStatus);
 					console.log(errorThrown);
-					//trappt.general.ocultarIndicadorAjax();
+					//ocultarIndicadorAjax();
 					alert("Error cargando las paradas cercanas"); //TODO: Agregar mensaje
 				}
 			})
 		},
 
 		addStopMarkers: function(stopsArray){
-			console.log(stopsArray);
+			// console.log(stopsArray);
 			for (i = 0; i < stopsArray.length; ++i) {
 				this.addStopMarker(stopsArray[i]);
 			}
 		}
 	},
 
-	init : function() {
+	init: function() {
 		this.map.init();
-		this.geoLocation.findPosition();
-		// ta.map.loadNearbyStops(ta.map.currentPosition);
-		// this.map.map.setCenter(this.map.currentPosition);
+		this.geoLocation.findLocation();
 	}
 };
 
 $(document).on('pageinit', '#plan-trip', function(event){
 	window.ta.init();
+	google.maps.event.addListenerOnce(ta.map.map, 'idle', function() {
+		// do something only the first time the map is loaded
+		ta.map.loadNearbyStops(ta.map.currentPosition);
+	});
+	google.maps.event.addListener(ta.map.map, 'dragend', function() {
+		// 0.5 seconds after the center of the map has changed, load new markers
+		window.setTimeout(function() {
+			ta.map.loadNearbyStops(ta.map.map.getCenter());
+		}, 500);
+	});
 });
 
 $(document).on('pageshow', '#mapa', function(event){

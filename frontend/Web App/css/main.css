@@ -116,7 +116,7 @@ img{-ms-interpolation-mode:bicubic;}
 img{vertical-align:middle;}
 fieldset{border:0;margin:0;padding:0;}
 textarea{resize:vertical;}
-div,span,ul,ol,li,input,textarea,article,section,aside,header,footer,.row{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;}
+div,span,ul,ol,li,input,textarea,article,section,aside,header,footer,.row{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;font-family:'Roboto',sans-serif !important;}
 .ui-page{position:relative !important;max-width:480px;min-height:720px !important;margin:0 auto !important;overflow:hidden !important;}
 .ui-btn-inner{white-space:initial;}
 .ui-btn-active{color:#fff !important;}
