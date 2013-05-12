@@ -2,9 +2,11 @@
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
 
-from sgco.models import LineStops, Arcs
+
+from sgco.models import LineStops, Arcs, Lines
 from mio.models import MioStops
-from mio.serializers import ParadasCercanasSerializer, RutasPorParadaSerializer, ParadasPorRutaSerializer
+from mio.serializers import (ParadasCercanasSerializer, RutasPorParadaSerializer, ParadasPorRutaSerializer,
+                            BuscarParadaSeriralizer, BuscarRutaSeriralizer)
 from rest_framework import viewsets
 
 
@@ -46,6 +48,82 @@ class ParadasPorRutaViewSet(viewsets.ReadOnlyModelViewSet):
         if ruta_id is not None and orientacion is not None:
             queryset = Arcs.objects.filter(arcs__LINEID=ruta_id, arcs__ORIENTATION=orientacion)
         return queryset
+
+
+class BuscarParadaViewSet(viewsets.ReadOnlyModelViewSet):
+    model = Arcs
+    serializer_class = BuscarParadaSeriralizer
+
+    def get_queryset(self):
+        queryset = []
+        query = self.request.QUERY_PARAMS.get('query', None)
+        if query:
+            queryset = MioStops.objects.filter(LONGNAME__icontains=query)
+        return queryset
+
+
+class BuscarRutaViewSet(viewsets.ReadOnlyModelViewSet):
+    model = Lines
+    serializer_class = BuscarRutaSeriralizer
+
+    def get_queryset(self):
+        queryset = []
+        query = self.request.QUERY_PARAMS.get('query', None)
+        if query:
+            queryset = MioStops.objects.filter(SHORTNAME__icontains=query)
+        return queryset
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

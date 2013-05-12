@@ -6,14 +6,13 @@ from rest_framework import serializers
 
 class ParadasCercanasSerializer(serializers.ModelSerializer):
     id = serializers.Field(source='STOPID')
-    nombre_corto = serializers.Field(source='SHORTNAME')
-    nombre_largo = serializers.Field(source='LONGNAME')
+    nombre = serializers.Field(source='LONGNAME')
     lat = serializers.Field(source='DECIMALLATITUDE')
     lng = serializers.Field(source='DECIMALLONGITUDE')
 
     class Meta:
         model = MioStops
-        fields = ('id', 'nombre_corto', 'nombre_largo', 'lat', 'lng')
+        fields = ('id', 'nombre', 'lat', 'lng')
 
 
 class RutasPorParadaSerializer(serializers.ModelSerializer):
@@ -33,4 +32,3 @@ class ParadasPorRutaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Arcs
         fields = ('nombre_parada',)
-

@@ -10,12 +10,13 @@ from mio.views import ParadasCercanasViewSet, RutasPoParadaViewSet, ParadasPorRu
 from rest_framework.routers import DefaultRouter
 
 router = DefaultRouter()
-router.register(r'api/v1/paradas-cercanas', ParadasCercanasViewSet)
-router.register(r'api/v1/rutas-por-parada', RutasPoParadaViewSet)
-router.register(r'api/v1/paradas-por-ruta', ParadasPorRutaViewSet)
+router.register(r'paradas-cercanas', ParadasCercanasViewSet)
+router.register(r'rutas-por-parada', RutasPoParadaViewSet)
+router.register(r'paradas-por-ruta', ParadasPorRutaViewSet)
+
 
 urlpatterns = patterns('',
-    url(r'^', include(router.urls)),
+    url(r'^api/v1/', include(router.urls)),
     # Examples:
     # url(r'^$', 'transporteactivo.views.home', name='home'),
     # url(r'^transporteactivo/', include('transporteactivo.foo.urls')),
