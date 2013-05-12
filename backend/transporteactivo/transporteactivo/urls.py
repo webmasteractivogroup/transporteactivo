@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, include, url
+# from django.views.generic import TemplateView
 
 from rest_framework.routers import DefaultRouter
 
@@ -16,8 +17,10 @@ router.register(r'paradas-por-ruta', views.ParadasPorRutaViewSet)
 
 
 urlpatterns = patterns('',
-    url(r'^api/v1/', include(router.urls)),
-    url(r'^api/v1/buscar/$', views.BusquedaView.as_view(), name='buscar'),
+
+    # url(r'^$', TemplateView.as_view(template_name='index.html')),
+    url(r'^v1/', include(router.urls)),
+    url(r'^v1/buscar/$', views.BusquedaView.as_view(), name='buscar'),
     # Examples:
     # url(r'^$', 'transporteactivo.views.home', name='home'),
     # url(r'^transporteactivo/', include('transporteactivo.foo.urls')),
