@@ -53,7 +53,7 @@ class ParadasPorRutaViewSet(viewsets.ReadOnlyModelViewSet):
         ruta_id = self.request.QUERY_PARAMS.get('ruta_id', None)
         orientacion = self.request.QUERY_PARAMS.get('orientacion', None)
         if ruta_id is not None and orientacion is not None:
-            queryset = Arcs.objects.filter(arcs__LINEID=ruta_id, arcs__ORIENTATION=orientacion)
+            queryset = Arcs.objects.filter(linearcs__LINEID=ruta_id, linearcs__ORIENTATION=orientacion)
         return queryset
 
 
