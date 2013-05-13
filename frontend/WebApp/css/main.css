@@ -134,7 +134,7 @@ a.control{display:none;z-index:1;position:relative;overflow:hidden;padding:3px 6
 a.control:hover{background:#ffffff;background:-moz-linear-gradient(top, #ffffff 0%, #e6e6e6 100%);background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #e6e6e6));background:-webkit-linear-gradient(top, #ffffff 0%, #e6e6e6 100%);background:-o-linear-gradient(top, #ffffff 0%, #e6e6e6 100%);background:-ms-linear-gradient(top, #ffffff 0%, #e6e6e6 100%);background:linear-gradient(top, #ffffff 0%, #e6e6e6 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='@color1', endColorstr='@color2', GradientType=0);}
 a.control:active{background:#fff;}
 a.control.visible{display:inline-block;}
-a.control.geolocalizar{margin:5px;}a.control.geolocalizar span{background:url('vendor/glyphish-icons/74-location.png');}
+a.control.geolocalizar{margin:5px;}a.control.geolocalizar span{background:url('vendor/glyphish-icons-dark/74-location.png');}
 .nocallout{-webkit-touch-callout:none;}
 .pressed{background-color:rgba(0, 0, 0, 0.7);}
 textarea[contenteditable]{-webkit-appearance:none;}
