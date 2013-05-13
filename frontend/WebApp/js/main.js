@@ -48,7 +48,7 @@ window.ta = {
 		findLocation: function() {
 			if(navigator.geolocation) {
 				this.browserSupportFlag = true;
-				$.mobile.loading('show', {text: 'Encontrando localización...'});
+				$.mobile.loading('show', {text: 'Buscando localización...'});
 				navigator.geolocation.getCurrentPosition(this.locationFound, this.locationNotFound);
 			}
 			else { // browser doesn't support Geolocation

@@ -119,7 +119,7 @@ textarea{resize:vertical;}
 html,body{height:100%;}
 .row{max-width:initial;}
 div,span,ul,ol,li,input,textarea,article,section,aside,header,footer,.row{-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;font-family:'Roboto',sans-serif !important;}
-.ui-page{position:relative !important;margin:0 auto !important;overflow:hidden !important;}
+.ui-page{position:relative !important;margin:0 auto !important;overflow:hidden !important;max-width:480px;}
 .ui-content{padding:10px;}
 .ui-btn-inner{text-overflow:initial;white-space:initial;line-height:13px;}
 .ui-btn-active{color:#fff !important;}
