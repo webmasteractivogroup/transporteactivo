@@ -3,13 +3,13 @@ from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
 
 from rest_framework import viewsets
-from rest_framework.views import APIView
-from rest_framework.response import Response
+# from rest_framework.views import APIView
+# from rest_framework.response import Response
 
 
-from .models import MioStops
-from .serializers import ParadasCercanasSerializer, RutasPorParadaSerializer, ParadasPorRutaSerializer
-from .utils import search_sql
+from .models import MioStops, Busqueda
+from .serializers import ParadasCercanasSerializer, RutasPorParadaSerializer, ParadasPorRutaSerializer, BusquedaSerializer
+# from .utils import search_sql
 from sgco.models import LineStops, Arcs
 
 
@@ -57,14 +57,25 @@ class ParadasPorRutaViewSet(viewsets.ReadOnlyModelViewSet):
         return queryset
 
 
-class BusquedaView(APIView):
+class BusquedaViewSet(viewsets.ReadOnlyModelViewSet):
+    model = Busqueda
+    serializer_class = BusquedaSerializer
 
-    def get(self, request, format=None):
+    def get_queryset(self):
         queryset = []
         query = self.request.QUERY_PARAMS.get('query', None)
         if query:
-            queryset = search_sql(query)
-        return Response(queryset)
+            queryset = Busqueda.objects.filter(nombre__icontains=query)
+        return queryset
+
+# class BusquedaView(APIView):
+
+#     def get(self, request, format=None):
+#         queryset = []
+#         query = self.request.QUERY_PARAMS.get('query', None)
+#         if query:
+#             queryset = search_sql(query)
+#         return Response(queryset)
 
 
 
