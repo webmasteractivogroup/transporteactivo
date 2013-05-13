@@ -5,6 +5,11 @@ from .models import MioStops
 from sgco.models import LineStops, Arcs
 
 
+class TipoParadaField(serializers.RelatedField):
+    def to_native(self, value):
+        return '%s' % value.STOPTYPE
+
+
 class ParadasCercanasSerializer(serializers.ModelSerializer):
     id = serializers.Field(source='STOPID')
     nombre = serializers.Field(source='LONGNAME')
@@ -13,7 +18,7 @@ class ParadasCercanasSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = MioStops
-        fields = ('id', 'nombre', 'lat', 'lng')
+        fields = ('id', 'nombre', 'lat', 'lng', 'tipo_parada')
 
 
 class RutasPorParadaSerializer(serializers.ModelSerializer):
@@ -29,7 +34,9 @@ class RutasPorParadaSerializer(serializers.ModelSerializer):
 
 class ParadasPorRutaSerializer(serializers.ModelSerializer):
     nombre_parada = serializers.Field(source='STOPS_STOPID_START.LONGNAME')
+    lat = serializers.Field(source='STOPS_STOPID_START.DECIMALLATITUDE')
+    lng = serializers.Field(source='STOPS_STOPID_START.DECIMALLONGITUDE')
 
     class Meta:
         model = Arcs
-        fields = ('nombre_parada',)
+        fields = ('nombre_parada', 'lat', 'lng')

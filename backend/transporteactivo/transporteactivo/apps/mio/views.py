@@ -28,7 +28,7 @@ class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
                 distance = int(distancia)
             else:
                 distance = 1000
-            queryset = MioStops.objects.filter(location__distance_lt=(pnt, D(m=distance))).order_by('LONGNAME', 'STOPID')
+            queryset = MioStops.objects.filter(location__distance_lt=(pnt, D(m=distance)))
         return queryset
 
 
@@ -53,7 +53,7 @@ class ParadasPorRutaViewSet(viewsets.ReadOnlyModelViewSet):
         ruta_id = self.request.QUERY_PARAMS.get('ruta_id', None)
         orientacion = self.request.QUERY_PARAMS.get('orientacion', None)
         if ruta_id is not None and orientacion is not None:
-            queryset = Arcs.objects.filter(linearcs__LINEID=ruta_id, linearcs__ORIENTATION=orientacion)
+            queryset = Arcs.objects.filter(linearcs__LINEID=ruta_id, linearcs__ORIENTATION=orientacion).reverse()
         return queryset
 
 
