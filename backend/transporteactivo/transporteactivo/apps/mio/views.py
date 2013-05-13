@@ -28,7 +28,7 @@ class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
                 distance = int(distancia)
             else:
                 distance = 1000
-            queryset = MioStops.objects.filter(location__distance_lt=(pnt, D(m=distance)))
+            queryset = MioStops.objects.filter(tipo_parada__isnull=False, location__distance_lt=(pnt, D(m=distance)))
         return queryset
 
 
