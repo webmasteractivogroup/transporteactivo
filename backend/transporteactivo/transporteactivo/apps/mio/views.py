@@ -22,6 +22,7 @@ class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
         lat = self.request.QUERY_PARAMS.get('lat', None)
         lng = self.request.QUERY_PARAMS.get('lng', None)
         distancia = self.request.QUERY_PARAMS.get('distancia', None)
+        tipo = self.request.QUERY_PARAMS.get('tipo', None)
         if lat is not None and lng is not None:
             pnt = Point(float(lng), float(lat))
             if distancia is not None:
@@ -29,6 +30,8 @@ class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
             else:
                 distance = 1000
             queryset = MioStops.objects.filter(tipo_parada__isnull=False, location__distance_lt=(pnt, D(m=distance)))
+            if tipo:
+                queryset = queryset.filter(tipo_parada=tipo)
         return queryset
 
 
