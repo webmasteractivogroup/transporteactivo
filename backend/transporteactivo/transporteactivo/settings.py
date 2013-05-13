@@ -1,10 +1,13 @@
+# -*- coding: utf-8 -*-
 import os
 import sys
-# import locale
 
-PROJECT_DIR = os.path.dirname(__file__)
-sys.path.insert(0, os.path.join(PROJECT_DIR, 'apps'))
+from unipath import Path
 
+PROJECT_DIR = Path(__file__).ancestor(1)
+APPS = PROJECT_DIR.child('apps')
+# sys.path.insert(0, os.path.join(PROJECT_DIR, 'apps'))
+sys.path.insert(0, APPS)
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
