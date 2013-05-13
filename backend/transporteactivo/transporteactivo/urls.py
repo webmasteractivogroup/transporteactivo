@@ -18,16 +18,8 @@ router.register(r'paradas-por-ruta', views.ParadasPorRutaViewSet)
 
 urlpatterns = patterns('',
 
-    # url(r'^$', TemplateView.as_view(template_name='index.html')),
     url(r'^v1/', include(router.urls)),
     url(r'^v1/buscar/$', views.BusquedaView.as_view(), name='buscar'),
-    # Examples:
-    # url(r'^$', 'transporteactivo.views.home', name='home'),
-    # url(r'^transporteactivo/', include('transporteactivo.foo.urls')),
 
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-
-    # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
 )
