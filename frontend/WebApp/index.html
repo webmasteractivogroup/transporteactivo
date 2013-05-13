@@ -45,60 +45,96 @@
 	<body>
 		<article data-role="page" id="plan-trip">
 			<header data-role="header">
+				<a href="#menu-panel" data-icon="bars" data-iconpos="notext">Menú</a>
 				<h1>Planear Viaje</h1>
+				<a href="#map-options-panel" data-icon="gear" data-iconpos="notext">Opciones</a>
 			</header>
 			<section data-role="content">
-				<form class="row clearfix">
-					<div class="nine columns">
+				<form class="row clearfix planear-viaje">
+					<div class="eight columns">
 						<input type="text" name="origen" placeholder="Parada inicial...">
 						<input type="text" name="destino" placeholder="Parada final...">
 					</div>
-					<div class="three columns">
-						<input type="submit" value="Planear Viaje" class="planear-viaje">
+					<div class="four columns">
+						<input type="submit" value="Planear Viaje">
 					</div>
 				</form>
 				<a class="control geolocalizar icon" title="Mostrar mi ubicación"><span></span>Localizarme</a>
 				<section class="map-canvas"></section>
 			</section>
 			<footer data-role="footer">
-				<div data-role="navbar" class="glyphish">
-					<ul>
-						<li><a href="#plan-trip" data-icon="custom" class="map ui-btn-active">Mapa</a></li>
+				<nav data-role="navbar">
+					<ul class="glyphish">
+						<li><a href="#plan-trip" data-icon="custom" class="map ui-btn-active ui-state-persist">Planear Viaje</a></li>
 						<li><a href="#search" data-icon="custom" class="magnify">Buscar</a></li>
 						<li><a href="#" data-icon="custom" class="star">Favoritos</a></li>
 						<li><a href="#" data-icon="custom" class="bullhorn">Noticias</a></li>
 					</ul>
-				</div><!-- /navbar -->
+				</nav>
 			</footer>
+			<aside data-role="panel" data-position="left" data-display="reveal" id="menu-panel">
+				<h2>Transporte Activo</h2>
+				<ul data-role="listview" data-icon="custom" class="glyphish">
+					<li class="map"><a href="#plan-trip" class="ui-btn-active ui-state-persist">Planear Viaje</a></li>
+					<li class="magnify"><a href="#search">Buscar</a></li>
+					<li class="star"><a href="#">Favoritos</a></li>
+					<li class="bullhorn"><a href="#">Noticias</a></li>
+				</ul>
+			</aside><!-- #menu-panel -->
+
+			<aside data-role="panel" data-position="right" data-display="reveal" id="map-options-panel">
+				<h2>Opciones del mapa</h2>
+				<form>
+					<fieldset data-role="controlgroup">
+						<legend>Mostrar:</legend>
+						<input type="checkbox" name="checkbox-v-2a" id="checkbox-v-2a">
+						<label for="checkbox-v-2a">Estaciones (Troncales)</label>
+						<input type="checkbox" name="checkbox-v-2b" id="checkbox-v-2b">
+						<label for="checkbox-v-2b">Paradas (Pretroncales)</label>
+						<input type="checkbox" name="checkbox-v-2c" id="checkbox-v-2c">
+						<label for="checkbox-v-2c">Paradas (Alimentadoras)</label>
+					</fieldset>
+				</form>
+			</aside><!-- #map-options-panel -->
 		</article><!-- #plan-trip -->
 
 		<article data-role="page" id="search">
 			<header data-role="header">
+				<a href="#menu-panel" data-icon="bars" data-iconpos="notext">Menú</a>
 				<h1>Buscar Paradas y Rutas</h1>
 			</header>
 			<section data-role="content">
 				<form class="row clearfix">
-					<div class="nine columns">
-						<input type="text" name="nombre">
-					</div><!-- .nine.rows -->
-					<div class="three columns">
+					<div class="eight columns">
+						<input type="text" name="nombre" placeholder="Ruta, estación o parada">
+					</div>
+					<div class="four columns">
 						<input type="submit" value="Buscar">
 					</div>
 				</form>
 			</section>
 			<footer data-role="footer">
-				<div data-role="navbar" class="glyphish">
-					<ul>
-						<li><a href="#plan-trip" data-icon="custom" class="map">Mapa</a></li>
-						<li><a href="#search" data-icon="custom" class="magnify ui-btn-active">Buscar</a></li>
+				<nav data-role="navbar">
+					<ul class="glyphish">
+						<li><a href="#plan-trip" data-icon="custom" class="map">Planear Viaje</a></li>
+						<li><a href="#search" data-icon="custom" class="magnify ui-btn-active ui-state-persist">Buscar</a></li>
 						<li><a href="#" data-icon="custom" class="star">Favoritos</a></li>
 						<li><a href="#" data-icon="custom" class="bullhorn">Noticias</a></li>
 					</ul>
-				</div><!-- /navbar -->
+				</nav>
 			</footer>
+			<aside data-role="panel" data-position="left" data-display="reveal" id="menu-panel">
+				<h2>Transporte Activo</h2>
+				<ul data-role="listview" data-icon="custom" class="glyphish">
+					<li class="map"><a href="#plan-trip">Planear Viaje</a></li>
+					<li class="magnify"><a href="#search" class="ui-btn-active ui-state-persist">Buscar</a></li>
+					<li class="star"><a href="#">Favoritos</a></li>
+					<li class="bullhorn"><a href="#">Noticias</a></li>
+				</ul>
+			</aside><!-- #menu-panel -->
 		</article><!-- #search -->
 
-		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBWdIbq64kbz8B83nx9TS3u5NqiIYFK9r0&sensor=true"></script>
+		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBWdIbq64kbz8B83nx9TS3u5NqiIYFK9r0&amp;sensor=true&amp;language=es-ES"></script>
 		<script src="js/vendor/jquery-1.9.1.min.js"></script>
 		<script src="js/helper.js"></script>
 		<script src="js/main.js"></script>

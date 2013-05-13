@@ -1,40 +1,42 @@
 // Nota: Este archivo debe ir incluido en el html ANTES de jQuery Mobile.
 // Ref: http://jquerymobile.com/test/docs/api/globalconfig.html
 
-// 
-	// $(document).bind("mobileinit", function () {
 
-	// 	// Navigation
-	// 	$.mobile.page.prototype.options.backBtnText = "Go back";
-	// 	$.mobile.page.prototype.options.addBackBtn      = true;
-	// 	$.mobile.page.prototype.options.backBtnTheme    = "d";
+// $(document).bind("mobileinit", function () {
 
-	// 	// Page
-	// 	$.mobile.page.prototype.options.headerTheme = "a";  // Page header only
-	// 	$.mobile.page.prototype.options.contentTheme    = "c";
-	// 	$.mobile.page.prototype.options.footerTheme = "a";
+// 	// Navigation
+// 	$.mobile.page.prototype.options.backBtnText = "Go back";
+// 	$.mobile.page.prototype.options.addBackBtn      = true;
+// 	$.mobile.page.prototype.options.backBtnTheme    = "d";
 
-	// 	// Listviews
-	// 	$.mobile.listview.prototype.options.headerTheme = "a";  // Header for nested lists
-	// 	$.mobile.listview.prototype.options.theme           = "c";  // List items / content
-	// 	$.mobile.listview.prototype.options.dividerTheme    = "d";  // List divider
+// 	// Page
+// 	$.mobile.page.prototype.options.headerTheme = "a";  // Page header only
+// 	$.mobile.page.prototype.options.contentTheme    = "c";
+// 	$.mobile.page.prototype.options.footerTheme = "a";
 
-	// 	$.mobile.listview.prototype.options.splitTheme   = "c";
-	// 	$.mobile.listview.prototype.options.countTheme   = "c";
-	// 	$.mobile.listview.prototype.options.filterTheme = "c";
-	// 	$.mobile.listview.prototype.options.filterPlaceholder = "Filter data...";
-	// });
+// 	// Listviews
+// 	$.mobile.listview.prototype.options.headerTheme = "a";  // Header for nested lists
+// 	$.mobile.listview.prototype.options.theme           = "c";  // List items / content
+// 	$.mobile.listview.prototype.options.dividerTheme    = "d";  // List divider
+
+// 	$.mobile.listview.prototype.options.splitTheme   = "c";
+// 	$.mobile.listview.prototype.options.countTheme   = "c";
+// 	$.mobile.listview.prototype.options.filterTheme = "c";
+// 	$.mobile.listview.prototype.options.filterPlaceholder = "Filter data...";
+// });
 
 // Configuracion global de jQuery Mobile
 $(document).on("mobileinit", function () {
 	$.mobile.defaultPageTransition = 'none';
-	// $.mobile.loadingMessageTextVisible = true;
-	// $.mobile.loadingMessage = 'Cargando';
+
+	$.mobile.loader.prototype.options.theme = "a";
+	$.mobile.loader.prototype.options.text = "Cargando...";
+	$.mobile.loader.prototype.options.textVisible = true;
 	
 	/* Necesario para Phonegap, aunque genera peligro potencial de XSS sin el Whitelist de Phonegap.
 	 * Ref: http://jquerymobile.com/test/docs/pages/phonegap.html
 	 * Nota: Mirar $.support.cors */
-	$.mobile.allowCrossDomainPages = true;
+	// $.mobile.allowCrossDomainPages = true;
 });
 
 // Transporte Activo
@@ -46,6 +48,7 @@ window.ta = {
 		findLocation: function() {
 			if(navigator.geolocation) {
 				this.browserSupportFlag = true;
+				$.mobile.loading('show', {text: 'Encontrando localización...'});
 				navigator.geolocation.getCurrentPosition(this.locationFound, this.locationNotFound);
 			}
 			else { // browser doesn't support Geolocation
@@ -54,6 +57,7 @@ window.ta = {
 			}
 		},
 		locationFound: function(position){
+			$.mobile.loading('hide');
 			// update the current position
 			ta.map.currentPosition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 			// center the map
@@ -64,6 +68,7 @@ window.ta = {
 			ta.map.setPositionMarker(ta.map.currentPosition);
 		},
 		locationNotFound: function(err) {
+			$.mobile.loading('hide');
 			if (err.code == 1) { //PERMISSION_DENIED
 				// user denied
 			} else if (err.code == 2) { //POSITION_UNAVAILABLE
@@ -125,7 +130,7 @@ window.ta = {
 			var mapOptions = {
 				zoom: 15,
 				maxZoom: 17,
-				minZoom: 10,
+				minZoom: 11,
 				center: this.defaultPosition,
 				mapTypeId: google.maps.MapTypeId.ROADMAP,
 				panControl: false,
@@ -145,6 +150,7 @@ window.ta = {
 					icon: this.marker_icons.dot,
 					shadow: this.marker_icons.dot_shadow,
 					position: new google.maps.LatLng(position.lat(), position.lng()),
+					zIndex: google.maps.Marker.MAX_ZINDEX
 					// animation : google.maps.Animation.DROP
 				}
 				this.currentPositionMarker = new google.maps.Marker(markerOptions);
@@ -173,12 +179,29 @@ window.ta = {
 		},
 
 		loadNearbyStops: function(position, type){
+			var data = {lat: position.lat(), lng: position.lng()}
+
+			var distancias = {11: 16000, 12: 8000, 13: 4000, 14: 2000, 15: 1000, 16: 500, 17: 250}
+			data.distancia = distancias[this.map.getZoom()];
+			// TODO: reemplazar el sistema de zoom y distancias con el uso de los boundaries del mapa
+
+			if (this.map.getZoom() <= 13){
+				data.tipo = 1;
+			}
+
+			// TODO: Idea: mostrar max 100 puntos, ordenados por tipo y cercania?
 			$.ajax({
 				url: "http://transporteactivo.com/api/v1/paradas-cercanas/",
 				type: "get",
-				data: {lat: position.lat(), lng: position.lng(), distancia: 1000},
+				data: data,
 				dataType: "JSON",
 				// async: false,
+				beforeSend: function(jqXHR, settings) {
+					$.mobile.loading('show', {text: 'Cargando estaciones cercanas...'});
+				},
+				complete: function(jqXHR, settings) {
+					$.mobile.loading('hide');
+				},
 				success: function(data, textStatus, jqXHR) {
 					if (textStatus === "success") {
 						//remove the current markers from the map
@@ -225,8 +248,8 @@ $(document).on('pageinit', '#plan-trip', function(event){
 		ta.map.loadNearbyStops(ta.map.map.getCenter());
 
 		// add the custom controls
-		$('a.control.geolocalizar').addClass('visible').click(function(){ta.geoLocation.findLocation();});
 		ta.map.map.controls[google.maps.ControlPosition.TOP_LEFT].push($('a.control.geolocalizar').get(0));
+		$('a.control.geolocalizar').addClass('visible').click(function(){ta.geoLocation.findLocation();});
 	});
 	// every time the map is moved/dragged or the zoom changed
 	google.maps.event.addListener(ta.map.map, 'bounds_changed', function() {
@@ -239,6 +262,17 @@ $(document).on('pageinit', '#plan-trip', function(event){
 	});
 });
 
-$(document).on('pageshow', '#mapa', function(event){
-	google.maps.event.trigger(window.ta.map, "resize");
+$(window).on('orientationchange resize pageshow', function(event) {
+	// fix the content height
+	fixgeometry();
+
+	switch($.mobile.activePage.attr('id')) {
+		case 'plan-trip':
+			// resize the map to fit the content, minus the search form
+			$('.map-canvas').height($(".ui-content:visible").height()-$(".planear-viaje").height());
+			google.maps.event.trigger(ta.map.map, "resize");
+			break;
+		case 'search':
+			break;
+	}
 });

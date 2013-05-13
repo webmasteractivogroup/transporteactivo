@@ -214,11 +214,14 @@
 			box-shadow: @arguments;
 		}
 
-
 	// General
-		// body {
+		html, body {
 		// 	font-family: 'Roboto', sans-serif !important;
-		// }
+			height: 100%;
+		}
+		.row {
+			max-width: initial;
+		}
 		div, span, ul, ol, li, input, textarea, article, section, aside, header, footer, .row {
 			.box-sizing(border-box);
 			font-family: 'Roboto', sans-serif !important;
@@ -227,29 +230,38 @@
 	// jQuery Mobile
 		.ui-page {
 			position: relative !important;
-			max-width: 480px;
-			min-height: 720px !important;
 			margin: 0 auto !important;
 			overflow: hidden !important;
-			// > footer {
-			// 	position: absolute;
-			// 	width: 100%;
-			// 	bottom: 0;
-			// }
+		}
+		.ui-content {
+			padding: 10px;
 		}
 		.ui-btn-inner {
-			// text-overflow: initial;
+			text-overflow: initial;
 			white-space: initial;
-			// line-height: 1.3;
+			line-height: 13px;
 		}
 		.ui-btn-active {
 			color: #fff !important;
 		}
 
+	// Specific pages layouts
+	#plan-trip {
+		.ui-content {
+			padding-top: 0;
+		}
+	}
+	#search {
+		.ui-content {
+			padding-top: 0;
+		}		
+	}
+
 	// Widgets and other stand-alone custom elements
 		.map-canvas {
 			width: 100%;
-			min-height: 480px;
+			// min-height: 320px;
+			height: 100%;
 		}
 		a.control {
 			display: none;
@@ -294,14 +306,13 @@
 				display: inline-block;
 			}
 			&.geolocalizar {
-				margin: 5px 0 0 -30px;
+				margin: 5px;
 				span {
 					background: url('vendor/glyphish-icons/74-location.png');
 				}
 				
 			}
 		}
-
 
 // Helper classes
 	// Prevent callout 
