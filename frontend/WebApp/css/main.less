@@ -184,7 +184,7 @@
 
 // Author's custom styles
 	// Mixins
-		//box sizing
+		// Box sizing
 		.content-box-sizing(){-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box;}
 		.padding-box-sizing(){-moz-box-sizing:padding-box;-webkit-box-sizing:padding-box;box-sizing:padding-box;}
 		.border-box-sizing(){-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;}
@@ -194,6 +194,26 @@
 		.box-sizing (border-box){.border-box-sizing;}
 		.box-sizing (content){.content-box-sizing;}
 		.box-sizing (content-box){.content-box-sizing;}
+
+		// Gradient
+		.gradient (@color1, @color2){
+			background: @color1;
+			background: -moz-linear-gradient(top,  @color1 0%, @color2 100%);
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,@color1), color-stop(100%,@color2));
+			background: -webkit-linear-gradient(top,  @color1 0%,@color2 100%);
+			background: -o-linear-gradient(top,  @color1 0%,@color2 100%);
+			background: -ms-linear-gradient(top,  @color1 0%,@color2 100%);
+			background: linear-gradient(top,  @color1 0%,@color2 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@color1', endColorstr='@color2',GradientType=0 );
+		}
+
+		// Shadow
+		.box-shadow (@shadow: 0 1px 3px fade(#000,25%)){
+			-webkit-box-shadow: @arguments;
+			-moz-box-shadow: @arguments;
+			box-shadow: @arguments;
+		}
+
 
 	// General
 		// body {
@@ -230,6 +250,56 @@
 		.map-canvas {
 			width: 100%;
 			min-height: 480px;
+		}
+		a.control {
+			display: none;
+			z-index: 1;
+			position: relative;
+			overflow: hidden;
+			padding: 3px 6px 4px;
+			border: 1px solid #717B87;
+			min-width: 34px;
+
+			color: #000 !important;
+			background-color: #fff;
+			background-position: initial initial;
+			background-repeat: initial initial;
+			.box-shadow(rgba(0, 0, 0, 0.4) 0px 2px 4px);
+
+			font-family: Arial, sans-serif;
+			font-size: 13px;
+			font-weight: bold;
+			text-align: center;
+			line-height: 13px;
+
+			cursor: pointer;
+			-webkit-user-select: none;
+			&.icon {
+				line-height: 20px;
+				span {
+					display: inline-block;
+					width: 20px;
+					height: 20px;
+					margin-right: 5px;
+					vertical-align: bottom;
+				}
+			}
+			&:hover {
+				.gradient(#fff, #E6E6E6);
+			}
+			&:active {
+				background: #fff;
+			}
+			&.visible {
+				display: inline-block;
+			}
+			&.geolocalizar {
+				margin: 5px 0 0 -30px;
+				span {
+					background: url('vendor/glyphish-icons/74-location.png');
+				}
+				
+			}
 		}
 
 
