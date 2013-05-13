@@ -1,3 +1,6 @@
+// Nota: Este archivo debe ir incluido en el html ANTES de jQuery Mobile.
+// Ref: http://jquerymobile.com/test/docs/api/globalconfig.html
+
 // 
 	// $(document).bind("mobileinit", function () {
 
@@ -22,9 +25,7 @@
 	// 	$.mobile.listview.prototype.options.filterPlaceholder = "Filter data...";
 	// });
 
-// Nota: Este archivo debe ir incluido en el html ANTES de jQuery Mobile.
-// Ref: http://jquerymobile.com/test/docs/api/globalconfig.html
-/* Configuracion global. */
+// Configuracion global de jQuery Mobile
 $(document).on("mobileinit", function () {
 	$.mobile.defaultPageTransition = 'none';
 	// $.mobile.loadingMessageTextVisible = true;
@@ -79,6 +80,7 @@ window.ta = {
 		defaultPosition: new google.maps.LatLng(3.422556, -76.517222),
 		currentPosition: this.defaultPosition,
 		nearbyStopsMarkers: new Array(),
+		ajaxTimeout: null,
 		marker_icons: {
 			dot: {
 				url: 'img/marker_icon_dot.png',
@@ -162,22 +164,6 @@ window.ta = {
 		},
 
 		loadNearbyStops: function(position, type){
-			// type: (troncal|pretroncal|alimentadora)
-			// ta.nearbyStops = new Array(
-			// 	{	id: 12345,
-			// 		nombre: "Universidades",
-			// 		lat: 3.367148,
-			// 		lng: -76.529257,
-			// 		type: 'troncal'
-			// 	},
-			// 	{	id: 12346,
-			// 		nombre: "Buitrera",
-			// 		lat: 3.372693,
-			// 		lng: -76.540195,
-			// 		type: 'troncal'
-			// 	}
-			// );
-			// console.log(position);
 			$.ajax({
 				url: "http://transporteactivo.com/api/v1/paradas-cercanas/",
 				type: "get",
@@ -222,13 +208,15 @@ $(document).on('pageinit', '#plan-trip', function(event){
 	window.ta.init();
 	google.maps.event.addListenerOnce(ta.map.map, 'idle', function() {
 		// do something only the first time the map is loaded
-		ta.map.loadNearbyStops(ta.map.currentPosition);
+		ta.map.loadNearbyStops(ta.map.map.getCenter());
 	});
-	google.maps.event.addListener(ta.map.map, 'dragend', function() {
-		// 0.5 seconds after the center of the map has changed, load new markers
-		window.setTimeout(function() {
+	google.maps.event.addListener(ta.map.map, 'bounds_changed', function() {
+		if (ta.map.ajaxTimeout) {
+			window.clearTimeout(ta.map.ajaxTimeout);
+		}
+		ta.map.ajaxTimeout = window.setTimeout(function() {
 			ta.map.loadNearbyStops(ta.map.map.getCenter());
-		}, 500);
+		}, 250);
 	});
 });
 
