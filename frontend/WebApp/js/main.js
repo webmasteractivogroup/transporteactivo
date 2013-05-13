@@ -57,11 +57,10 @@ window.ta = {
 			// update the current position
 			ta.map.currentPosition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 			// center the map
-			ta.map.map.setCenter(ta.map.currentPosition);
+			// ta.map.map.setCenter(ta.map.currentPosition);
+			ta.map.map.panTo(ta.map.currentPosition);
 			// add the blue point marker
-			ta.map.addPositionMarker(ta.map.currentPosition);
-			// load the nearby stops
-			// ta.map.loadNearbyStops(ta.map.currentPosition);
+			ta.map.setPositionMarker(ta.map.currentPosition);
 		},
 		locationNotFound: function(err) {
 			if (err.code == 1) { //PERMISSION_DENIED
@@ -79,6 +78,7 @@ window.ta = {
 	map: {
 		defaultPosition: new google.maps.LatLng(3.422556, -76.517222),
 		currentPosition: this.defaultPosition,
+		currentPositionMarker: null,
 		nearbyStopsMarkers: new Array(),
 		ajaxTimeout: null,
 		marker_icons: {
@@ -87,19 +87,19 @@ window.ta = {
 				anchor: new google.maps.Point(6,6),
 				scaledSize: new google.maps.Size(11,11),
 			},
-			troncal: {
+			1: {
 				url: 'img/marker_icon_troncal.png',
 				anchor: new google.maps.Point(16,35),
 				// origin: new google.maps.Point(0,0), //used for sprites, offset
 				// size: new google.maps.Size(32,46), //used for sprites, display size
 				scaledSize: new google.maps.Size(24,35),
 			},
-			pretroncal: {
-				url: 'img/marker_icon_alimentadora.png',
+			2: {
+				url: 'img/marker_icon_pretroncal.png',
 				anchor: new google.maps.Point(16,35),
 				scaledSize: new google.maps.Size(24,35),
 			},
-			alimentadora: {
+			3: {
 				url: 'img/marker_icon_alimentadora.png',
 				anchor: new google.maps.Point(16,35),
 				scaledSize: new google.maps.Size(24,35),
@@ -131,17 +131,19 @@ window.ta = {
 			this.map = new google.maps.Map($(".map-canvas").get(0), mapOptions);
 		},
 
-		addPositionMarker: function(position) {
-			// console.log(this.marker_icons["dot"]);
-			var markerOptions = {
-				map: this.map,
-				title: "¡Estas aquí!",
-				icon: this.marker_icons["dot"],
-				position: new google.maps.LatLng(position.lat(), position.lng()),
-				animation : google.maps.Animation.DROP
+		setPositionMarker: function(position) {
+			if (this.currentPositionMarker === null) {
+				var markerOptions = {
+					map: this.map,
+					title: "¡Estas aquí!",
+					icon: this.marker_icons["dot"],
+					position: new google.maps.LatLng(position.lat(), position.lng()),
+					animation : google.maps.Animation.DROP
+				}
+				this.currentPositionMarker = new google.maps.Marker(markerOptions);
+			} else {
+				ta.map.currentPositionMarker.setPosition(position);
 			}
-			var marker = new google.maps.Marker(markerOptions);
-
 		},
 
 		addStopMarker: function(stop) {
@@ -149,7 +151,7 @@ window.ta = {
 				map: this.map,
 				title: stop.nombre,
 				// icon: this.marker_icons[stop.type],
-				icon: this.marker_icons['alimentadora'],
+				icon: this.marker_icons[stop.tipo_parada],
 				shadow: this.marker_icons.shadow,
 				position: new google.maps.LatLng(stop.lat, stop.lng),
 				// animation : google.maps.Animation.DROP
@@ -158,9 +160,9 @@ window.ta = {
 			this.nearbyStopsMarkers.push(marker);
 
 			// //Asocio el click del marcador a la ventana con los detalle de la promoción 
-			// google.maps.event.addListener(marcador, "click", function() {
-			// 	ta.loadStop(stop.id)
-			// })
+			google.maps.event.addListener(marker, "click", function() {
+				// ta.map.map.panTo(marker.position);
+			})
 		},
 
 		loadNearbyStops: function(position, type){
@@ -206,10 +208,16 @@ window.ta = {
 
 $(document).on('pageinit', '#plan-trip', function(event){
 	window.ta.init();
+	// when the map finishes loading
 	google.maps.event.addListenerOnce(ta.map.map, 'idle', function() {
-		// do something only the first time the map is loaded
+		// load the stops nearby to the center of the map
 		ta.map.loadNearbyStops(ta.map.map.getCenter());
+
+		// add the custom controls
+		$('a.control.geolocalizar').addClass('visible').click(function(){ta.geoLocation.findLocation();});
+		ta.map.map.controls[google.maps.ControlPosition.TOP_LEFT].push($('a.control.geolocalizar').get(0));
 	});
+	// every time the map is moved/dragged or the zoom changed
 	google.maps.event.addListener(ta.map.map, 'bounds_changed', function() {
 		if (ta.map.ajaxTimeout) {
 			window.clearTimeout(ta.map.ajaxTimeout);
