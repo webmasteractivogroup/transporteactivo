@@ -3,14 +3,12 @@
  */
 
 (function(document) {
-
 	window.MBP = window.MBP || {};
 
 	/**
 	 * Fix for iPhone viewport scale bug
 	 * http://www.blog.highub.com/mobile-2/a-fix-for-iphone-viewport-scale-bug/
 	 */
-
 	MBP.viewportmeta = document.querySelector && document.querySelector('meta[name="viewport"]');
 	MBP.ua = navigator.userAgent;
 
@@ -94,7 +92,6 @@
 	 * Fast Buttons - read wiki below before using
 	 * https://github.com/h5bp/mobile-boilerplate/wiki/JavaScript-Helper
 	 */
-
 	MBP.fastButton = function(element, handler, pressedClass) {
 		this.handler = handler;
 		// styling of .pressed is defined in the project's CSS files
@@ -273,7 +270,6 @@
 	 * Autogrow
 	 * http://googlecode.blogspot.com/2009/07/gmail-for-mobile-html5-series.html
 	 */
-
 	MBP.autogrow = function(element, lh) {
 		function handler(e) {
 			var newHeight = this.scrollHeight;
@@ -296,7 +292,6 @@
 	 * Enable CSS active pseudo styles in Mobile Safari
 	 * http://alxgbsn.co.uk/2011/10/17/enable-css-active-pseudo-styles-in-mobile-safari/
 	 */
-
 	MBP.enableActive = function() {
 		document.addEventListener('touchstart', function() {}, false);
 	};
@@ -304,7 +299,6 @@
 	/**
 	 * Prevent default scrolling on document window
 	 */
-	 
 	MBP.preventScrolling = function() {
 		document.addEventListener('touchmove', function(e) {
 			if (e.target.type === 'range') { return; }
@@ -317,7 +311,6 @@
 	 * https://github.com/h5bp/mobile-boilerplate/pull/108
 	 * Adapted from original jQuery code here: http://nerd.vasilis.nl/prevent-ios-from-zooming-onfocus/
 	 */
-
 	MBP.preventZoom = function() {
 		var formFields = document.querySelectorAll('input, select, textarea');
 		var contentString = 'width=device-width,initial-scale=1,maximum-scale=';
@@ -336,7 +329,6 @@
 	/**
 	 * iOS Startup Image helper
 	 */
-
 	MBP.startupImage = function() {
 		var portrait;
 		var landscape;
@@ -383,3 +375,26 @@
 	};
 
 })(document);
+
+// resize the content to occupy the whole screen
+// based on: http://www.semicomplete.com/blog/geekery/jquery-mobile-full-height-content.html
+var fixgeometry = function() {
+	/* Some orientation changes leave the scroll position at something
+	 * that isn't 0,0. This is annoying for user experience. */
+	scroll(0, 0);
+
+	// Calculate the geometry that our content area should take 
+	var header = $.mobile.activePage.find(".ui-header");
+	var footer = $.mobile.activePage.find(".ui-footer");
+	var content = $.mobile.activePage.find(".ui-content");
+	var panels = $.mobile.activePage.find(".ui-panel");
+
+	var viewport_height = $(window).height();
+	var panels_height = ((panels.length > 0) ? 2 : 0); //if there are panels, it takes 2px height
+
+	var content_height = viewport_height - header.outerHeight() - footer.outerHeight() - panels_height;
+
+	// Trim margin/border/padding height 
+	content_height -= (content.outerHeight() - content.height());
+	content.height(content_height);
+};

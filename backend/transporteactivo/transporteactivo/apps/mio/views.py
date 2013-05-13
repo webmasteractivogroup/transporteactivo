@@ -2,14 +2,15 @@
 from django.contrib.gis.geos import Point
 from django.contrib.gis.measure import D
 
-
-from sgco.models import LineStops, Arcs
-from mio.models import MioStops
-from mio.serializers import ParadasCercanasSerializer, RutasPorParadaSerializer, ParadasPorRutaSerializer
-from mio.utils import search_sql
 from rest_framework import viewsets
-from rest_framework.views import APIView
-from rest_framework.response import Response
+# from rest_framework.views import APIView
+# from rest_framework.response import Response
+
+
+from .models import MioStops, Busqueda
+from .serializers import ParadasCercanasSerializer, RutasPorParadaSerializer, ParadasPorRutaSerializer, BusquedaSerializer
+# from .utils import search_sql
+from sgco.models import LineStops, Arcs
 
 
 class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
@@ -21,13 +22,16 @@ class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
         lat = self.request.QUERY_PARAMS.get('lat', None)
         lng = self.request.QUERY_PARAMS.get('lng', None)
         distancia = self.request.QUERY_PARAMS.get('distancia', None)
+        tipo = self.request.QUERY_PARAMS.get('tipo', None)
         if lat is not None and lng is not None:
             pnt = Point(float(lng), float(lat))
             if distancia is not None:
                 distance = int(distancia)
             else:
                 distance = 1000
-            queryset = MioStops.objects.filter(location__distance_lt=(pnt, D(m=distance))).order_by('LONGNAME', 'STOPID')
+            queryset = MioStops.objects.filter(tipo_parada__isnull=False, location__distance_lt=(pnt, D(m=distance)))
+            if tipo:
+                queryset = queryset.filter(tipo_parada=tipo)
         return queryset
 
 
@@ -52,18 +56,29 @@ class ParadasPorRutaViewSet(viewsets.ReadOnlyModelViewSet):
         ruta_id = self.request.QUERY_PARAMS.get('ruta_id', None)
         orientacion = self.request.QUERY_PARAMS.get('orientacion', None)
         if ruta_id is not None and orientacion is not None:
-            queryset = Arcs.objects.filter(arcs__LINEID=ruta_id, arcs__ORIENTATION=orientacion)
+            queryset = Arcs.objects.filter(linearcs__LINEID=ruta_id, linearcs__ORIENTATION=orientacion).reverse()
         return queryset
 
 
-class BusquedaView(APIView):
+class BusquedaViewSet(viewsets.ReadOnlyModelViewSet):
+    model = Busqueda
+    serializer_class = BusquedaSerializer
 
-    def get(self, request, format=None):
+    def get_queryset(self):
         queryset = []
         query = self.request.QUERY_PARAMS.get('query', None)
         if query:
-            queryset = search_sql(query)
-        return Response(queryset)
+            queryset = Busqueda.objects.filter(nombre__icontains=query)
+        return queryset
+
+# class BusquedaView(APIView):
+
+#     def get(self, request, format=None):
+#         queryset = []
+#         query = self.request.QUERY_PARAMS.get('query', None)
+#         if query:
+#             queryset = search_sql(query)
+#         return Response(queryset)
 
 
 

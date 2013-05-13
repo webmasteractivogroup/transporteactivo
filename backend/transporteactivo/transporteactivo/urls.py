@@ -1,30 +1,25 @@
 # -*- coding: utf-8 -*-
 from django.conf.urls import patterns, include, url
+# from django.views.generic import TemplateView
+
+from rest_framework.routers import DefaultRouter
+
+from mio import views
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
 
-
-from mio.views import ParadasCercanasViewSet, RutasPoParadaViewSet, ParadasPorRutaViewSet, BusquedaView
-from rest_framework.routers import DefaultRouter
-
 router = DefaultRouter()
-router.register(r'paradas-cercanas', ParadasCercanasViewSet)
-router.register(r'rutas-por-parada', RutasPoParadaViewSet)
-router.register(r'paradas-por-ruta', ParadasPorRutaViewSet)
-
+router.register(r'paradas-cercanas', views.ParadasCercanasViewSet)
+router.register(r'rutas-por-parada', views.RutasPoParadaViewSet)
+router.register(r'paradas-por-ruta', views.ParadasPorRutaViewSet)
+router.register(r'buscar', views.BusquedaViewSet)
 
 urlpatterns = patterns('',
-    url(r'^api/v1/', include(router.urls)),
-    url(r'^api/v1/buscar/$', BusquedaView.as_view(), name='buscar'),
-    # Examples:
-    # url(r'^$', 'transporteactivo.views.home', name='home'),
-    # url(r'^transporteactivo/', include('transporteactivo.foo.urls')),
 
-    # Uncomment the admin/doc line below to enable admin documentation:
-    # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
+    url(r'^v1/', include(router.urls)),
+    # url(r'^v1/buscar/$', views.BusquedaView.as_view(), name='buscar'),
 
-    # Uncomment the next line to enable the admin:
     # url(r'^admin/', include(admin.site.urls)),
 )

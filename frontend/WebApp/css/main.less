@@ -1,0 +1,440 @@
+// Gumby Framework Grid
+	/*.container { padding: 0px $gutter-in-px;
+	}*/
+	.row { width: 100%; max-width: 940px; min-width: 320px; margin: 0 auto; }
+	@media only screen and (max-width: 960px) { .row { padding: 0 20px; } }
+	.row .row { min-width: 0px; }
+	@media only screen and (max-width: 960px) { .row .row { padding: 0; } }
+
+	/* To fix the grid into a different size, set max-width to your desired width */
+	.column, .columns { margin-left: 2.12766%; float: left; min-height: 1px; position: relative; -webkit-box-sizing: border-box; -moz-box-sizing: border-box; box-sizing: border-box; }
+
+	.column:first-child, .columns:first-child, .alpha { margin-left: 0px; }
+
+	.column.omega, .columns.omega { float: right; }
+
+	/* Column Classes */
+	.row .one.column, .row .one.columns, .sixteen.colgrid .row .one.columns { width: 6.38298%; }
+	.row .two.columns { width: 14.89362%; }
+	.row .three.columns { width: 23.40426%; }
+	.row .four.columns { width: 31.91489%; }
+	.row .five.columns { width: 40.42553%; }
+	.row .six.columns { width: 48.93617%; }
+	.row .seven.columns { width: 57.44681%; }
+	.row .eight.columns { width: 65.95745%; }
+	.row .nine.columns { width: 74.46809%; }
+	.row .ten.columns { width: 82.97872%; }
+	.row .eleven.columns { width: 91.48936%; }
+	.row .twelve.columns { width: 100%; }
+
+	/* Push Classes */
+	.row .push_one { margin-left: 10.6383%; }
+	.row .push_one:first-child { margin-left: 8.51064%; }
+	.row .push_two { margin-left: 19.14894%; }
+	.row .push_two:first-child { margin-left: 17.02128%; }
+	.row .push_three { margin-left: 27.65957%; }
+	.row .push_three:first-child { margin-left: 25.53191%; }
+	.row .push_four { margin-left: 36.17021%; }
+	.row .push_four:first-child { margin-left: 34.04255%; }
+	.row .push_five { margin-left: 44.68085%; }
+	.row .push_five:first-child { margin-left: 42.55319%; }
+	.row .push_six { margin-left: 53.19149%; }
+	.row .push_six:first-child { margin-left: 51.06383%; }
+	.row .push_seven { margin-left: 61.70213%; }
+	.row .push_seven:first-child { margin-left: 59.57447%; }
+	.row .push_eight { margin-left: 70.21277%; }
+	.row .push_eight:first-child { margin-left: 68.08511%; }
+	.row .push_nine { margin-left: 78.7234%; }
+	.row .push_nine:first-child { margin-left: 76.59574%; }
+	.row .push_ten { margin-left: 87.23404%; }
+	.row .push_ten:first-child { margin-left: 85.10638%; }
+	.row .push_eleven { margin-left: 95.74468%; }
+	.row .push_eleven:first-child { margin-left: 93.61702%; }
+
+	/* Centered Classes */
+	.row .one.centered { margin-left: 46.80851%; }
+	.row .two.centered { margin-left: 42.55319%; }
+	.row .three.centered { margin-left: 38.29787%; }
+	.row .four.centered { margin-left: 34.04255%; }
+	.row .five.centered { margin-left: 29.78723%; }
+	.row .six.centered { margin-left: 25.53191%; }
+	.row .seven.centered { margin-left: 21.2766%; }
+	.row .eight.centered { margin-left: 17.02128%; }
+	.row .nine.centered { margin-left: 12.76596%; }
+	.row .ten.centered { margin-left: 8.51064%; }
+	.row .eleven.centered { margin-left: 4.25532%; }
+
+	/* Hybrid Grid Columns */
+	.sixteen.colgrid .row .one.column, .sixteen.colgrid .row .one.columns { width: 4.25532%; }
+	.sixteen.colgrid .row .two.columns { width: 10.6383%; }
+	.sixteen.colgrid .row .three.columns { width: 17.02128%; }
+	.sixteen.colgrid .row .four.columns { width: 23.40426%; }
+	.sixteen.colgrid .row .five.columns { width: 29.78723%; }
+	.sixteen.colgrid .row .six.columns { width: 36.17021%; }
+	.sixteen.colgrid .row .seven.columns { width: 42.55319%; }
+	.sixteen.colgrid .row .eight.columns { width: 48.93617%; }
+	.sixteen.colgrid .row .nine.columns { width: 55.31915%; }
+	.sixteen.colgrid .row .ten.columns { width: 61.70213%; }
+	.sixteen.colgrid .row .eleven.columns { width: 68.08511%; }
+	.sixteen.colgrid .row .twelve.columns { width: 74.46809%; }
+	.sixteen.colgrid .row .thirteen.columns { width: 80.85106%; }
+	.sixteen.colgrid .row .fourteen.columns { width: 87.23404%; }
+	.sixteen.colgrid .row .fifteen.columns { width: 93.61702%; }
+	.sixteen.colgrid .row .sixteen.columns { width: 100%; }
+
+	/* Hybrid Push Classes */
+	.sixteen.colgrid .row .push_one { margin-left: 8.51064%; }
+	.sixteen.colgrid .row .push_one:first-child { margin-left: 6.38298%; }
+	.sixteen.colgrid .row .push_two { margin-left: 14.89362%; }
+	.sixteen.colgrid .row .push_two:first-child { margin-left: 12.76596%; }
+	.sixteen.colgrid .row .push_three { margin-left: 21.2766%; }
+	.sixteen.colgrid .row .push_three:first-child { margin-left: 19.14894%; }
+	.sixteen.colgrid .row .push_four { margin-left: 27.65957%; }
+	.sixteen.colgrid .row .push_four:first-child { margin-left: 25.53191%; }
+	.sixteen.colgrid .row .push_five { margin-left: 34.04255%; }
+	.sixteen.colgrid .row .push_five:first-child { margin-left: 31.91489%; }
+	.sixteen.colgrid .row .push_six { margin-left: 40.42553%; }
+	.sixteen.colgrid .row .push_six:first-child { margin-left: 38.29787%; }
+	.sixteen.colgrid .row .push_seven { margin-left: 46.80851%; }
+	.sixteen.colgrid .row .push_seven:first-child { margin-left: 44.68085%; }
+	.sixteen.colgrid .row .push_eight { margin-left: 53.19149%; }
+	.sixteen.colgrid .row .push_eight:first-child { margin-left: 51.06383%; }
+	.sixteen.colgrid .row .push_nine { margin-left: 59.57447%; }
+	.sixteen.colgrid .row .push_nine:first-child { margin-left: 57.44681%; }
+	.sixteen.colgrid .row .push_ten { margin-left: 65.95745%; }
+	.sixteen.colgrid .row .push_ten:first-child { margin-left: 63.82979%; }
+	.sixteen.colgrid .row .push_eleven { margin-left: 72.34043%; }
+	.sixteen.colgrid .row .push_eleven:first-child { margin-left: 70.21277%; }
+	.sixteen.colgrid .row .push_twelve { margin-left: 78.7234%; }
+	.sixteen.colgrid .row .push_twelve:first-child { margin-left: 76.59574%; }
+	.sixteen.colgrid .row .push_thirteen { margin-left: 85.10638%; }
+	.sixteen.colgrid .row .push_thirteen:first-child { margin-left: 82.97872%; }
+	.sixteen.colgrid .row .push_fourteen { margin-left: 91.48936%; }
+	.sixteen.colgrid .row .push_fourteen:first-child { margin-left: 89.3617%; }
+	.sixteen.colgrid .row .push_fifteen { margin-left: 97.87234%; }
+	.sixteen.colgrid .row .push_fifteen:first-child { margin-left: 95.74468%; }
+
+	/* Hybrid Centered Classes */
+	.sixteen.colgrid .row .one.centered { margin-left: 47.87234%; }
+	.sixteen.colgrid .row .two.centered { margin-left: 44.68085%; }
+	.sixteen.colgrid .row .three.centered { margin-left: 41.48936%; }
+	.sixteen.colgrid .row .four.centered { margin-left: 38.29787%; }
+	.sixteen.colgrid .row .five.centered { margin-left: 35.10638%; }
+	.sixteen.colgrid .row .six.centered { margin-left: 31.91489%; }
+	.sixteen.colgrid .row .seven.centered { margin-left: 28.7234%; }
+	.sixteen.colgrid .row .eight.centered { margin-left: 25.53191%; }
+	.sixteen.colgrid .row .nine.centered { margin-left: 22.34043%; }
+	.sixteen.colgrid .row .ten.centered { margin-left: 19.14894%; }
+	.sixteen.colgrid .row .eleven.centered { margin-left: 15.95745%; }
+	.sixteen.colgrid .row .twelve.centered { margin-left: 12.76596%; }
+	.sixteen.colgrid .row .thirteen.centered { margin-left: 9.57447%; }
+	.sixteen.colgrid .row .fourteen.centered { margin-left: 6.38298%; }
+	.sixteen.colgrid .row .fifteen.centered { margin-left: 3.19149%; }
+
+	.pull_right { float: right; }
+
+	.pull_left { float: left; }
+
+	img, object, embed { max-width: 100%; height: auto; }
+
+	img { -ms-interpolation-mode: bicubic; }
+
+// Base styles: opinionated defaults
+	// html,
+	// button,
+	// input,
+	// select,
+	// textarea {
+	// 	color: #222;
+	// }
+
+	// body {
+	// 	font-size: 1em;
+	// 	line-height: 1.4;
+	// }
+
+	// a {
+	// 	color: #00e;
+	// }
+
+	// a:visited {
+	// 	color: #551a8b;
+	// }
+
+	// a:hover {
+	// 	color: #06e;
+	// }
+
+	// Remove the gap between images and the bottom of their containers: h5bp.com/i/440
+	img {
+		vertical-align: middle;
+	}
+
+	// Remove default fieldset styles.
+	fieldset {
+		border: 0;
+		margin: 0;
+		padding: 0;
+	}
+
+	// Allow only vertical resizing of textareas.
+	textarea {
+		resize: vertical;
+	}
+
+// Author's custom styles
+	// Mixins
+		// Box sizing
+		.content-box-sizing(){-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box;}
+		.padding-box-sizing(){-moz-box-sizing:padding-box;-webkit-box-sizing:padding-box;box-sizing:padding-box;}
+		.border-box-sizing(){-moz-box-sizing:border-box;-webkit-box-sizing:border-box;box-sizing:border-box;}
+		.box-sizing (padding) {.padding-box-sizing;}
+		.box-sizing (padding-box){.padding-box-sizing;}
+		.box-sizing (border){.border-box-sizing;}
+		.box-sizing (border-box){.border-box-sizing;}
+		.box-sizing (content){.content-box-sizing;}
+		.box-sizing (content-box){.content-box-sizing;}
+
+		// Gradient
+		.gradient (@color1, @color2){
+			background: @color1;
+			background: -moz-linear-gradient(top,  @color1 0%, @color2 100%);
+			background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,@color1), color-stop(100%,@color2));
+			background: -webkit-linear-gradient(top,  @color1 0%,@color2 100%);
+			background: -o-linear-gradient(top,  @color1 0%,@color2 100%);
+			background: -ms-linear-gradient(top,  @color1 0%,@color2 100%);
+			background: linear-gradient(top,  @color1 0%,@color2 100%);
+			filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='@color1', endColorstr='@color2',GradientType=0 );
+		}
+
+		// Shadow
+		.box-shadow (@shadow: 0 1px 3px fade(#000,25%)){
+			-webkit-box-shadow: @arguments;
+			-moz-box-shadow: @arguments;
+			box-shadow: @arguments;
+		}
+
+	// General
+		html, body {
+		// 	font-family: 'Roboto', sans-serif !important;
+			height: 100%;
+		}
+		.row {
+			max-width: initial;
+		}
+		div, span, ul, ol, li, input, textarea, article, section, aside, header, footer, .row {
+			.box-sizing(border-box);
+			font-family: 'Roboto', sans-serif !important;
+		}
+
+	// jQuery Mobile
+		.ui-page {
+			position: relative !important;
+			margin: 0 auto !important;
+			overflow: hidden !important;
+		}
+		.ui-content {
+			padding: 10px;
+		}
+		.ui-btn-inner {
+			text-overflow: initial;
+			white-space: initial;
+			line-height: 13px;
+		}
+		.ui-btn-active {
+			color: #fff !important;
+		}
+		.ui-header {
+			position: relative !important;
+			.ui-btn {
+				height: 100%;
+				width: auto;
+				margin-top: -2px;
+				top: 0;
+			}
+			.ui-btn-icon-notext {
+				.ui-btn-inner {
+					padding: 10px 13px;
+					.ui-icon {
+						margin: 0;
+					}
+				}
+			}
+			.ui-btn-left {
+				margin-left: -1px;
+				left: 0;
+			}
+			.ui-btn-right {
+				margin-right: -1px;
+				right: 0;
+			}
+		}
+
+	// Specific pages layouts
+	#plan-trip {
+		.ui-content {
+			padding-top: 0;
+		}
+	}
+	#search {
+		.ui-content {
+			padding-top: 0;
+		}		
+	}
+
+	// Widgets and other stand-alone custom elements
+		.map-canvas {
+			width: 100%;
+			// min-height: 320px;
+			height: 100%;
+		}
+		a.control {
+			display: none;
+			z-index: 1;
+			position: relative;
+			overflow: hidden;
+			padding: 3px 6px 4px;
+			border: 1px solid #717B87;
+			min-width: 34px;
+
+			color: #000 !important;
+			background-color: #fff;
+			background-position: initial initial;
+			background-repeat: initial initial;
+			.box-shadow(rgba(0, 0, 0, 0.4) 0px 2px 4px);
+
+			font-family: Arial, sans-serif;
+			font-size: 13px;
+			font-weight: bold;
+			text-align: center;
+			line-height: 13px;
+
+			cursor: pointer;
+			-webkit-user-select: none;
+			&.icon {
+				line-height: 20px;
+				span {
+					display: inline-block;
+					width: 20px;
+					height: 20px;
+					margin-right: 5px;
+					vertical-align: bottom;
+				}
+			}
+			&:hover {
+				.gradient(#fff, #E6E6E6);
+			}
+			&:active {
+				background: #fff;
+			}
+			&.visible {
+				display: inline-block;
+			}
+			&.geolocalizar {
+				margin: 5px;
+				span {
+					background: url('vendor/glyphish-icons-dark/74-location.png');
+				}
+				
+			}
+		}
+
+// Helper classes
+	// Prevent callout 
+	.nocallout {
+		-webkit-touch-callout: none;
+	}
+	.pressed {
+		background-color: rgba(0, 0, 0, 0.7);
+	}
+
+	// A hack for HTML5 contenteditable attribute on mobile 
+	textarea[contenteditable] {
+		-webkit-appearance: none;
+	}
+
+	// A workaround for S60 3.x and 5.0 devices which do not animated gif images if they have been set as display: none 
+	.gifhidden {
+		position: absolute;
+		left: -100%;
+	}
+
+	// Image replacement
+	.ir {
+		background-color: transparent;
+		background-repeat: no-repeat;
+		border: 0;
+		direction: ltr;
+		display: block;
+		overflow: hidden;
+		text-align: left;
+		text-indent: -999em;
+	}
+	.ir br {
+		display: none;
+	}
+
+	// Hide from both screenreaders and browsers: h5bp.com/u
+	.hidden {
+		display: none !important;
+		visibility: hidden;
+	}
+
+	// Hide only visually, but have it available for screenreaders: h5bp.com/v
+	.visuallyhidden {
+		border: 0;
+		clip: rect(0 0 0 0);
+		height: 1px;
+		margin: -1px;
+		overflow: hidden;
+		padding: 0;
+		position: absolute;
+		width: 1px;
+	}
+
+	// Extends the .visuallyhidden class to allow the element to be focusable when navigated to via the keyboard: h5bp.com/p
+	.visuallyhidden.focusable:active,
+	.visuallyhidden.focusable:focus {
+		clip: auto;
+		height: auto;
+		margin: 0;
+		overflow: visible;
+		position: static;
+		width: auto;
+	}
+
+	// Hide visually and from screenreaders, but maintain layout
+	.invisible {
+		visibility: hidden;
+	}
+
+	// Clearfix helper. Used to contain floats: h5bp.com/q
+	.clearfix:before,
+	.clearfix:after {
+		content: "";
+		display: table;
+	}
+	.clearfix:after {
+		clear: both;
+	}
+
+	// For IE 6/7 only. Include this rule to trigger hasLayout and contain floats.
+	.clearfix {
+		*zoom: 1;
+	}
+
+
+/* ==========================================================================
+	 EXAMPLE Media Queries for Responsive Design.
+	 Theses examples override the primary ('mobile first') styles.
+	 Modify as content requires.
+	 ========================================================================== */
+
+@media only screen and (min-width: 800px) {
+	/* Style adjustments for viewports that meet the condition */
+}
+
+@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+		 only screen and (min-resolution: 144dpi) {
+	/* Style adjustments for viewports that meet the condition */
+}
