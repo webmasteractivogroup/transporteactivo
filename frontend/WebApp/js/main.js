@@ -57,8 +57,9 @@ window.ta = {
 			// update the current position
 			ta.map.currentPosition = new google.maps.LatLng(position.coords.latitude, position.coords.longitude);
 			// center the map
-			// ta.map.map.setCenter(ta.map.currentPosition);
 			ta.map.map.panTo(ta.map.currentPosition);
+			// resets the zoom
+			ta.map.resetZoom();
 			// add the blue point marker
 			ta.map.setPositionMarker(ta.map.currentPosition);
 		},
@@ -83,9 +84,14 @@ window.ta = {
 		ajaxTimeout: null,
 		marker_icons: {
 			dot: {
-				url: 'img/marker_icon_dot.png',
-				anchor: new google.maps.Point(6,6),
-				scaledSize: new google.maps.Size(11,11),
+				url: 'img/marker_dot.png',
+				anchor: new google.maps.Point(16.5,16.5),
+				scaledSize: new google.maps.Size(22,22),
+			},
+			dot_shadow: {
+				url: 'img/marker_dot_shadow.png',
+				anchor: new google.maps.Point(22,22),
+				scaledSize: new google.maps.Size(33,33),
 			},
 			1: {
 				url: 'img/marker_icon_troncal.png',
@@ -136,9 +142,10 @@ window.ta = {
 				var markerOptions = {
 					map: this.map,
 					title: "¡Estas aquí!",
-					icon: this.marker_icons["dot"],
+					icon: this.marker_icons.dot,
+					shadow: this.marker_icons.dot_shadow,
 					position: new google.maps.LatLng(position.lat(), position.lng()),
-					animation : google.maps.Animation.DROP
+					// animation : google.maps.Animation.DROP
 				}
 				this.currentPositionMarker = new google.maps.Marker(markerOptions);
 			} else {
@@ -197,6 +204,10 @@ window.ta = {
 			for (i = 0; i < stopsArray.length; ++i) {
 				this.addStopMarker(stopsArray[i]);
 			}
+		},
+
+		resetZoom: function() {
+			this.map.setZoom(15);
 		}
 	},
 
