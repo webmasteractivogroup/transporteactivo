@@ -56,6 +56,7 @@ window.ta = {
 				alert("Geolocation service failed.");
 			}
 		},
+
 		locationFound: function(position){
 			$.mobile.loading('hide');
 			// update the current position
@@ -67,6 +68,7 @@ window.ta = {
 			// add the blue point marker
 			ta.map.setPositionMarker(ta.map.currentPosition);
 		},
+
 		locationNotFound: function(err) {
 			$.mobile.loading('hide');
 			if (err.code == 1) { //PERMISSION_DENIED
@@ -87,6 +89,7 @@ window.ta = {
 		currentPositionMarker: null,
 		nearbyStopsMarkers: new Array(),
 		ajaxTimeout: null,
+		infoWindow: new google.maps.InfoWindow(),
 		marker_icons: {
 			dot: {
 				url: 'img/marker_dot.png',
@@ -170,10 +173,51 @@ window.ta = {
 				// animation : google.maps.Animation.DROP
 			}
 			var marker = new google.maps.Marker(markerOptions);
+			marker.stop = stop;
 			this.nearbyStopsMarkers.push(marker);
 
 			// //Asocio el click del marcador a la ventana con los detalle de la promoción 
 			google.maps.event.addListener(marker, "click", function() {
+				// console.log(ta.map.infoWindow);
+				$infoWindow = $('#plan-trip .info-window');
+
+				$.ajax({
+					url: "http://transporteactivo.com/api/v1/rutas-por-parada/",
+					type: "get",
+					data: {parada_id: marker.stop.id},
+					dataType: "JSON",
+					beforeSend: function(jqXHR, settings) {
+						$.mobile.loading('show', {text: 'Cargando paradas de la estación...'});
+					},
+					complete: function(jqXHR, settings) {
+						$.mobile.loading('hide');
+					},
+					success: function(data, textStatus, jqXHR) {
+						if (textStatus === "success") {
+							var html = '<div data-role="controlgroup" data-type="horizontal"><legend>Rutas:</legend>';
+							for (i = 0; i < data.length; ++i) {
+								html+= '<a href="'+data[i].id_ruta+'" data-role="button" data-mini="true" class="'+data[i].nombre_ruta.substring(0, 1)+'">'+data[i].nombre_ruta+'</a>';
+							}
+							html += '</div>';
+
+							$infoWindow
+								.find('h2').text(marker.getTitle()).end()
+								.find('.routes').html(html).trigger('create').end()
+								.find('.ver-mas').attr('href', "#"+marker.stop.id).end()
+								.show();
+
+							var infoWindowOptions = {
+								content: $infoWindow.get(0),
+								position: marker.getPosition(),
+								// disableAutoPan: true,
+								maxWidth: 320,
+								pixelOffset: new google.maps.Size(-5,0)
+							}
+							ta.map.infoWindow.setOptions(infoWindowOptions);
+							ta.map.infoWindow.open(ta.map.map);
+						}
+					},
+				});
 				// ta.map.map.panTo(marker.position);
 			})
 		},
@@ -204,9 +248,10 @@ window.ta = {
 				},
 				success: function(data, textStatus, jqXHR) {
 					if (textStatus === "success") {
-						//remove the current markers from the map
+						//remove the current markers from the map and their reference to the stop
 						for (i = 0; i < ta.map.nearbyStopsMarkers.length; ++i) {
 							ta.map.nearbyStopsMarkers[i].setMap(null);
+							ta.map.nearbyStopsMarkers[i].stop = null;
 						}
 						ta.nearbyStops = data;
 						ta.map.addStopMarkers(ta.nearbyStops);
