@@ -44,10 +44,10 @@
 	</head>
 	<body>
 		<article data-role="page" id="plan-trip">
-			<header data-role="header">
-				<a href="#menu-panel" data-icon="bars" data-iconpos="notext">Menú</a>
+			<header data-role="header" class="glyphish">
+				<a href="#menu-panel" data-icon="custom" data-iconpos="notext" class="receipt">Menú</a>
 				<h1>Planear Viaje</h1>
-				<a href="#map-options-panel" data-icon="gear" data-iconpos="notext">Opciones</a>
+				<a href="#map-options-panel" data-icon="custom" data-iconpos="notext" class="gear">Opciones del mapa</a>
 			</header>
 			<section data-role="content">
 				<form class="row clearfix planear-viaje">
@@ -74,7 +74,7 @@
 			</footer>
 			<aside data-role="panel" data-position="left" data-display="reveal" id="menu-panel">
 				<h2>Transporte Activo</h2>
-				<ul data-role="listview" data-icon="custom" class="glyphish">
+				<ul data-role="listview" data-icon="custom" class="glyphish dark">
 					<li class="map"><a href="#plan-trip" class="ui-btn-active ui-state-persist">Planear Viaje</a></li>
 					<li class="magnify"><a href="#search">Buscar</a></li>
 					<li class="star"><a href="#">Favoritos</a></li>
@@ -99,14 +99,14 @@
 		</article><!-- #plan-trip -->
 
 		<article data-role="page" id="search">
-			<header data-role="header">
-				<a href="#menu-panel" data-icon="bars" data-iconpos="notext">Menú</a>
-				<h1>Buscar Paradas y Rutas</h1>
+			<header data-role="header" class="glyphish">
+				<a href="#menu-panel" data-icon="custom" data-iconpos="notext" class="receipt">Menú</a>
+				<h1>Buscar por Nombre</h1>
 			</header>
 			<section data-role="content">
 				<form class="row clearfix">
 					<div class="eight columns">
-						<input type="text" name="nombre" placeholder="Ruta, estación o parada">
+						<input type="text" name="nombre" placeholder="Ruta, estación o parada...">
 					</div>
 					<div class="four columns">
 						<input type="submit" value="Buscar">
@@ -125,7 +125,7 @@
 			</footer>
 			<aside data-role="panel" data-position="left" data-display="reveal" id="menu-panel">
 				<h2>Transporte Activo</h2>
-				<ul data-role="listview" data-icon="custom" class="glyphish">
+				<ul data-role="listview" data-icon="custom" class="glyphish dark">
 					<li class="map"><a href="#plan-trip">Planear Viaje</a></li>
 					<li class="magnify"><a href="#search" class="ui-btn-active ui-state-persist">Buscar</a></li>
 					<li class="star"><a href="#">Favoritos</a></li>
