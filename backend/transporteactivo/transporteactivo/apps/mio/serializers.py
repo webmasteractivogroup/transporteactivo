@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
 
-from .models import MioStops
+from .models import MioStops, Busqueda
 from sgco.models import LineStops, Arcs
 
 
@@ -40,3 +40,10 @@ class ParadasPorRutaSerializer(serializers.ModelSerializer):
     class Meta:
         model = Arcs
         fields = ('nombre_parada', 'lat', 'lng')
+
+
+class BusquedaSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Busqueda
+        fields = ('nombre', 'id')

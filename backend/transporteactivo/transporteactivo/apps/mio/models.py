@@ -28,3 +28,15 @@ class TipoParada(models.Model):
 
     def __unicode__(self):
         return u'%s, %s' % (self.STOPID, self.STOPTYPE)
+
+
+class Busqueda(models.Model):
+    nombre = models.IntegerField(primary_key=True)
+    id = models.IntegerField()
+
+    class Meta:
+        db_table = 'search'
+        managed = False
+
+    def __unicode__(self):
+        return u'%s, %s' % (self.nombre, self.id)
