@@ -89,7 +89,7 @@ window.ta = {
 		currentPositionMarker: null,
 		nearbyStopsMarkers: new Array(),
 		ajaxTimeout: null,
-		infoWindow: new google.maps.InfoWindow(),
+		$infoPopup: $('#info-popup'),
 		marker_icons: {
 			dot: {
 				url: 'img/marker_dot.png',
@@ -166,7 +166,6 @@ window.ta = {
 			var markerOptions = {
 				map: this.map,
 				title: stop.nombre,
-				// icon: this.marker_icons[stop.type],
 				icon: this.marker_icons[stop.tipo_parada],
 				shadow: this.marker_icons.shadow,
 				position: new google.maps.LatLng(stop.lat, stop.lng),
@@ -176,49 +175,31 @@ window.ta = {
 			marker.stop = stop;
 			this.nearbyStopsMarkers.push(marker);
 
-			// //Asocio el click del marcador a la ventana con los detalle de la promoción 
+			// //Asocio el click del marcador a la ventana con los detalle de la promoción
 			google.maps.event.addListener(marker, "click", function() {
-				// console.log(ta.map.infoWindow);
-				$infoWindow = $('#plan-trip .info-window');
+				ta.map.$infoPopup
+					.find('h2').text(marker.getTitle()).end()
+					.find('.routes').html('').end()
+					.find('.ver-mas').attr('href', "#"+marker.stop.id).end()
+					.popup('open');
 
 				$.ajax({
 					url: "http://transporteactivo.com/api/v1/rutas-por-parada/",
 					type: "get",
 					data: {parada_id: marker.stop.id},
 					dataType: "JSON",
-					beforeSend: function(jqXHR, settings) {
-						$.mobile.loading('show', {text: 'Cargando paradas de la estación...'});
-					},
-					complete: function(jqXHR, settings) {
-						$.mobile.loading('hide');
-					},
 					success: function(data, textStatus, jqXHR) {
 						if (textStatus === "success") {
-							var html = '<div data-role="controlgroup" data-type="horizontal"><legend>Rutas:</legend>';
+							var html = '<div data-role="controlgroup" data-type="horizontal">';
 							for (i = 0; i < data.length; ++i) {
 								html+= '<a href="'+data[i].id_ruta+'" data-role="button" data-mini="true" class="'+data[i].nombre_ruta.substring(0, 1)+'">'+data[i].nombre_ruta+'</a>';
 							}
 							html += '</div>';
 
-							$infoWindow
-								.find('h2').text(marker.getTitle()).end()
-								.find('.routes').html(html).trigger('create').end()
-								.find('.ver-mas').attr('href', "#"+marker.stop.id).end()
-								.show();
-
-							var infoWindowOptions = {
-								content: $infoWindow.get(0),
-								position: marker.getPosition(),
-								// disableAutoPan: true,
-								maxWidth: 320,
-								pixelOffset: new google.maps.Size(-5,0)
-							}
-							ta.map.infoWindow.setOptions(infoWindowOptions);
-							ta.map.infoWindow.open(ta.map.map);
+							ta.map.$infoPopup.find('.routes').html(html).trigger('create');
 						}
 					},
 				});
-				// ta.map.map.panTo(marker.position);
 			})
 		},
 
@@ -228,11 +209,7 @@ window.ta = {
 				ne: bounds.getNorthEast().lat()+','+bounds.getNorthEast().lng(),
 				sw: bounds.getSouthWest().lat()+','+bounds.getSouthWest().lng()
 			}
-			if (this.map.getZoom() <= 13){
-				data.tipo = 1;
-			}
-
-			console.log(data)
+			if (this.map.getZoom() <= 13){ data.tipo = 1; }
 
 			// TODO: Idea: mostrar max 100 puntos, ordenados por tipo y cercania?
 			$.ajax({
@@ -288,6 +265,7 @@ window.ta = {
 
 $(document).on('pageinit', '#plan-trip', function(event){
 	window.ta.init();
+
 	// when the map finishes loading
 	google.maps.event.addListenerOnce(ta.map.map, 'idle', function() {
 		// load the stops nearby to the center of the map
@@ -297,6 +275,7 @@ $(document).on('pageinit', '#plan-trip', function(event){
 		ta.map.map.controls[google.maps.ControlPosition.TOP_LEFT].push($('a.control.geolocalizar').get(0));
 		$('a.control.geolocalizar').addClass('visible').click(function(){ta.geoLocation.findLocation();});
 	});
+
 	// every time the map is moved/dragged or the zoom changed
 	google.maps.event.addListener(ta.map.map, 'bounds_changed', function() {
 		if (ta.map.ajaxTimeout) {

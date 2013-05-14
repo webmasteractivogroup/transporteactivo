@@ -255,7 +255,7 @@
 			.ui-btn {
 				height: 100%;
 				width: auto;
-				margin-top: -2px;
+				margin-top: -1px;
 				top: 0;
 			}
 			.ui-btn-icon-notext {
@@ -297,18 +297,15 @@
 				max-width: initial; // fixes broken infowindow layout
 			}
 		}
-		.info-window {
-			display: none;
-			position: relative;
+		#info-popup {
 			h2 {
-				margin: 10px auto;
+				margin-right: auto;
+				margin-left: auto;
+				padding: 0 45px;
 			}
-			.actions {
-				a {
-					&:first-child {
-						margin-left: 0;
-					}
-				}
+			.ui-content {
+				height: auto !important;
+				max-width: 320px;
 			}
 		}
 		.routes {
