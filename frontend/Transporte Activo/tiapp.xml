@@ -28,11 +28,10 @@
             <orientation>Ti.UI.LANDSCAPE_RIGHT</orientation>
         </orientations>
     </iphone>
-   <android xmlns:android="http://schemas.android.com/apk/res/android">
+    <android xmlns:android="http://schemas.android.com/apk/res/android">
         <manifest>
             <supports-screens android:anyDensity="false"/>
-            
-             <uses-permission android:name="android.permission.INTERNET"/>
+            <uses-permission android:name="android.permission.INTERNET"/>
             <!-- Allows the API to cache data -->
             <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
             <!-- Use GPS for device location -->
@@ -45,14 +44,13 @@
             <uses-feature android:glEsVersion="0x00020000" android:required="true"/>
             <!-- Replace com.domain.appid with your application ID -->
             <uses-permission android:name="com.ciudsactivos.transporteactivo.permission.MAPS_RECEIVE"/>
-            <permission android:name="com.ciudsactivos.transporteactivo.permission.MAPS_RECEIVE"
-                android:protectionLevel="signature"/>
+            <permission
+                android:name="com.ciudsactivos.transporteactivo.permission.MAPS_RECEIVE" android:protectionLevel="signature"/>
             <application>
                 <!-- Replace "PASTE YOUR GOOGLE MAPS API KEY HERE" with the Google API key you obtained -->
-                <meta-data android:name="com.google.android.maps.v2.API_KEY"
-                    android:value="AIzaSyDwY5ev4XBzJMC8taSlTtAiZ7G5qLrY8rc"/>
+                <meta-data
+                    android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyDwY5ev4XBzJMC8taSlTtAiZ7G5qLrY8rc"/>
             </application>
-            
         </manifest>
     </android>
     <mobileweb>
@@ -65,7 +63,6 @@
     </mobileweb>
     <modules>
         <module platform="android">ti.draggable</module>
-        <module platform="android">ti.map</module>
     </modules>
     <deployment-targets>
         <target device="blackberry">false</target>
