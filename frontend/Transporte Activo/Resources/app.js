@@ -1,113 +1,61 @@
-var menuWindow = Ti.UI.createWindow({
-	top : 0,
-	left : 0,
-	width : 150
-});
-menuWindow.open();
-//// ---- Menu Table
-// Menu Titles
-var menuTitles = [{
-	title : 'Menu 1'
-}, {
-	title : 'Menu 2'
-}, {
-	title : 'Menu 3'
-}, {
-	title : 'Menu 4'
-}, {
-	title : 'Menu 5'
-}, {
-	title : 'Menu 6'
-}];
-// Tableview
-var tableView = Ti.UI.createTableView({
-	data : menuTitles
-});
-menuWindow.add(tableView);
+var MASlidingMenu = require('/lib/MASlidingMenu');
+var HomeView = require('/ui/HomeView');
+var FavoritosView = require('/ui/FavoritosView');
+var PerfilView = require('/ui/PerfilView');
+var MenuView = require('/ui/MenuView');
+var BusquedaView = require('/ui/BusquedaView');
 
-//// ---- Window with navigationGroup
-var navWindow = Ti.UI.createWindow({
-	width : 320 // Set the width of the sliding window to avoid cut out from animation
-});
-navWindow.open();
-// Main window
-var win = Ti.UI.createWindow({
-	title : 'Main Window',
-	backgroundColor : '#28292c',
-	barColor : '#28292c',
-	moving : false, // Custom property for movement
-	axis : 0 // Custom property for X axis
-});
-// NavigationGroup
-var navGroup = Ti.UI.iPhone.createNavigationGroup({
-	window : win
-});
-navWindow.add(navGroup);
-// Top left button
-var menuButton = Ti.UI.createButton({
-	title : 'Menu',
-	toggle : false // Custom property for menu toggle
-});
-win.setLeftNavButton(menuButton);
+var load = new HomeView();
+var home = new HomeView();
+var favoritos = new FavoritosView();
+var busqueda = new BusquedaView();
+var perfil = new PerfilView();
 
-menuButton.addEventListener('click', function(e) {
-	// If the menu is opened
-	if (e.source.toggle == true) {
-		navWindow.animate({
-			left : 0,
-			duration : 400,
-			curve : Ti.UI.ANIMATION_CURVE_EASE_IN_OUT
-		});
-		e.source.toggle = false;
-	}
-	// If the menu isn't opened
-	else {
-		navWindow.animate({
-			left : 150,
-			duration : 400,
-			curve : Ti.UI.ANIMATION_CURVE_EASE_IN_OUT
-		});
-		e.source.toggle = true;
+// Each row with a view property when clicked will change to that view (any view works except tabgroups and windows)
+// If the row does not have a view property, but the switch event still fires
+var data = [
+   { title:'Transporte Activo', view: load },
+	{ title:'Home', hasDetail:true, view: home },
+	{ title:'Favoritos', hasDetail:true, view: favoritos},
+	{ title:'Busqueda', hasDetail:true, view: busqueda },
+	{ title:'Perfil', hasDetail:true, view: perfil }
+];
+
+var menu = new MenuView({
+	rowData: data
+});
+
+var slidingMenu = new MASlidingMenu({
+	left: menu, // the menu... only accepts a tableview
+	draggable: true // set false to only use the API to open / close
+});
+slidingMenu.open();
+
+// event fired when user selects a view from the nav
+slidingMenu.addEventListener('buttonclick', function(e) {
+	if (e.index === 3) {
+		alert('You clicked on Button');
 	}
 });
-win.addEventListener('touchstart', function(e) {
-	// Get starting horizontal position
-	e.source.axis = parseInt(e.x);
+
+// event fired when user selects a view from the nav
+slidingMenu.addEventListener('switch', function(e) {
+	
+	//alert(e.menuRow);
+	//alert(e.index);
+	//alert(e.view); // This is the new view your switching to
 });
-win.addEventListener('touchmove', function(e) {
-	// Subtracting current position to starting horizontal position
-	var coordinates = parseInt(e.x) - e.source.axis;
-	// Detecting movement after a 20px shift
-	if (coordinates > 20 || coordinates < -20) {
-		e.source.moving = true;
-	}
-	// Locks the window so it doesn't move further than allowed
-	if (e.source.moving == true && coordinates <= 150 && coordinates >= 0) {
-		// This will smooth the animation and make it less jumpy
-		navWindow.animate({
-			left : coordinates,
-			duration : 20
-		});
-		// Defining coordinates as the final left position
-		navWindow.left = coordinates;
-	}
+
+// event fired while user is dragging the view to expose the menu
+slidingMenu.addEventListener('sliding', function(e) {
+	//alert(e.distance);
+	
 });
-win.addEventListener('touchend', function(e) {
-	// No longer moving the window
-	e.source.moving = false;
-	if (navWindow.left >= 75 && navWindow.left < 150) {
-		// Repositioning the window to the right
-		navWindow.animate({
-			left : 150,
-			duration : 300
-		});
-		menuButton.toggle = true;
-	} else {
-		// Repositioning the window to the left
-		navWindow.animate({
-			left : 0,
-			duration : 300
-		});
-		menuButton.toggle = false;
-	}
-}); 
+
+
+//Expose / close the menu programaticly
+	//slidingMenu.slideView('left');
+	//slidingMenu.slideView('view');
+
+// Access the currently displayed view
+	//slidingMenu.activeView();

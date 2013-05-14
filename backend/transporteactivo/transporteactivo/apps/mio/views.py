@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from django.contrib.gis.geos import Point
+from django.contrib.gis.geos import Point, Polygon
 from django.contrib.gis.measure import D
 
 from rest_framework import viewsets
@@ -19,17 +19,23 @@ class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         queryset = []
-        lat = self.request.QUERY_PARAMS.get('lat', None)
-        lng = self.request.QUERY_PARAMS.get('lng', None)
-        distancia = self.request.QUERY_PARAMS.get('distancia', None)
+        south_west_query_string = self.request.QUERY_PARAMS.get('sw', None)
+        north_east_query_string = self.request.QUERY_PARAMS.get('ne', None)
         tipo = self.request.QUERY_PARAMS.get('tipo', None)
-        if lat is not None and lng is not None:
-            pnt = Point(float(lng), float(lat))
-            if distancia is not None:
-                distance = int(distancia)
-            else:
-                distance = 1000
-            queryset = MioStops.objects.filter(tipo_parada__isnull=False, location__distance_lt=(pnt, D(m=distance)))
+        if south_west_query_string is not None and north_east_query_string is not None:
+            south_west_lat = float(south_west_query_string.split(',')[0])
+            south_west_lng = float(south_west_query_string.split(',')[1])
+            north_east_lat = float(north_east_query_string.split(',')[0])
+            north_east_lng = float(north_east_query_string.split(',')[1])
+
+            south_west = Point(south_west_lng, south_west_lat)
+            north_west = Point(south_west_lng, north_east_lat)
+
+            north_east = Point(north_east_lng, north_east_lat)
+            south_east = Point(north_east_lng, south_west_lat)
+
+            poly = Polygon((south_west, north_west, north_east, south_east, south_west))
+            queryset = MioStops.objects.filter(tipo_parada__isnull=False, location__contained=poly)
             if tipo:
                 queryset = queryset.filter(tipo_parada=tipo)
         return queryset
