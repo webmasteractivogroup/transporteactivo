@@ -214,6 +214,11 @@
 			box-shadow: @arguments;
 		}
 
+	// Constants
+		@troncal-color: #2E2482;
+		@pretroncal-color: #E4004F;
+		@alimentadora-color: #BBBB00;
+
 	// General
 		html, body {
 		// 	font-family: 'Roboto', sans-serif !important;
@@ -232,6 +237,7 @@
 			position: relative !important;
 			margin: 0 auto !important;
 			overflow: hidden !important;
+			max-width: 480px;
 		}
 		.ui-content {
 			padding: 10px;
@@ -271,22 +277,48 @@
 		}
 
 	// Specific pages layouts
-	#plan-trip {
-		.ui-content {
-			padding-top: 0;
+		#plan-trip {
+			.ui-content {
+				padding-top: 0;
+			}
 		}
-	}
-	#search {
-		.ui-content {
-			padding-top: 0;
-		}		
-	}
+		#search {
+			.ui-content {
+				padding-top: 0;
+			}		
+		}
 
 	// Widgets and other stand-alone custom elements
 		.map-canvas {
 			width: 100%;
 			// min-height: 320px;
 			height: 100%;
+			img {
+				max-width: initial; // fixes broken infowindow layout
+			}
+		}
+		.info-window {
+			display: none;
+			position: relative;
+			h2 {
+				margin: 10px auto;
+			}
+			.actions {
+				a {
+					&:first-child {
+						margin-left: 0;
+					}
+				}
+			}
+		}
+		.routes {
+			.ui-btn {
+				color: #fff;
+				&.E { background: @troncal-color; }
+				&.T { background: @troncal-color; }
+				&.P { background: @pretroncal-color; }
+				&.A { background: @alimentadora-color; }
+			}
 		}
 		a.control {
 			display: none;
