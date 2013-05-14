@@ -222,16 +222,17 @@ window.ta = {
 			})
 		},
 
-		loadNearbyStops: function(position, type){
-			var data = {lat: position.lat(), lng: position.lng()}
-
-			var distancias = {11: 16000, 12: 8000, 13: 4000, 14: 2000, 15: 1000, 16: 500, 17: 250}
-			data.distancia = distancias[this.map.getZoom()];
-			// TODO: reemplazar el sistema de zoom y distancias con el uso de los boundaries del mapa
-
+		loadVisibleStops: function(type){
+			var bounds= this.map.getBounds();
+			var data = {
+				ne: bounds.getNorthEast().lat()+','+bounds.getNorthEast().lng(),
+				sw: bounds.getSouthWest().lat()+','+bounds.getSouthWest().lng()
+			}
 			if (this.map.getZoom() <= 13){
 				data.tipo = 1;
 			}
+
+			console.log(data)
 
 			// TODO: Idea: mostrar max 100 puntos, ordenados por tipo y cercania?
 			$.ajax({
@@ -290,7 +291,7 @@ $(document).on('pageinit', '#plan-trip', function(event){
 	// when the map finishes loading
 	google.maps.event.addListenerOnce(ta.map.map, 'idle', function() {
 		// load the stops nearby to the center of the map
-		ta.map.loadNearbyStops(ta.map.map.getCenter());
+		ta.map.loadVisibleStops();
 
 		// add the custom controls
 		ta.map.map.controls[google.maps.ControlPosition.TOP_LEFT].push($('a.control.geolocalizar').get(0));
@@ -302,7 +303,7 @@ $(document).on('pageinit', '#plan-trip', function(event){
 			window.clearTimeout(ta.map.ajaxTimeout);
 		}
 		ta.map.ajaxTimeout = window.setTimeout(function() {
-			ta.map.loadNearbyStops(ta.map.map.getCenter());
+			ta.map.loadVisibleStops();
 		}, 250);
 	});
 });
