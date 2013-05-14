@@ -1,15 +1,11 @@
 # -*- coding: utf-8 -*-
 from django.contrib.gis.geos import Point, Polygon
-from django.contrib.gis.measure import D
 
 from rest_framework import viewsets
-# from rest_framework.views import APIView
-# from rest_framework.response import Response
-
 
 from .models import MioStops, Busqueda
 from .serializers import ParadasCercanasSerializer, RutasPorParadaSerializer, ParadasPorRutaSerializer, BusquedaSerializer
-# from .utils import search_sql
+
 from sgco.models import LineStops, Arcs
 
 
