@@ -2,12 +2,7 @@
 from rest_framework import serializers
 
 from .models import MioStops, Busqueda
-from sgco.models import LineStops, Arcs, Stops
-
-
-class TipoParadaField(serializers.RelatedField):
-    def to_native(self, value):
-        return '%s' % value.STOPTYPE
+from sgco.models import LineStops, Arcs
 
 
 class ParadasCercanasSerializer(serializers.ModelSerializer):

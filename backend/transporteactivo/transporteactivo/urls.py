@@ -19,7 +19,5 @@ router.register(r'buscar', views.BusquedaViewSet)
 urlpatterns = patterns('',
 
     url(r'^v1/', include(router.urls)),
-    # url(r'^v1/buscar/$', views.BusquedaView.as_view(), name='buscar'),
-
     # url(r'^admin/', include(admin.site.urls)),
 )

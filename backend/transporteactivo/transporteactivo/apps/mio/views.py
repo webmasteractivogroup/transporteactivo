@@ -73,40 +73,6 @@ class BusquedaViewSet(viewsets.ReadOnlyModelViewSet):
             queryset = Busqueda.objects.filter(nombre__icontains=query)
         return queryset
 
-# class BusquedaView(APIView):
-
-#     def get(self, request, format=None):
-#         queryset = []
-#         query = self.request.QUERY_PARAMS.get('query', None)
-#         if query:
-#             queryset = search_sql(query)
-#         return Response(queryset)
-
-
-
-# class BuscarParadaViewSet(viewsets.ReadOnlyModelViewSet):
-#     model = Arcs
-#     serializer_class = BuscarParadaSeriralizer
-
-#     def get_queryset(self):
-#         queryset = []
-#         query = self.request.QUERY_PARAMS.get('query', None)
-#         if query:
-#             queryset = MioStops.objects.filter(LONGNAME__icontains=query)
-#         return queryset
-
-
-# class BuscarRutaViewSet(viewsets.ReadOnlyModelViewSet):
-#     model = Lines
-#     serializer_class = BuscarRutaSeriralizer
-
-#     def get_queryset(self):
-#         queryset = []
-#         query = self.request.QUERY_PARAMS.get('query', None)
-#         if query:
-#             queryset = MioStops.objects.filter(SHORTNAME__icontains=query)
-#         return queryset
-
 
 
 

@@ -94,34 +94,34 @@ window.ta = {
 			dot: {
 				url: 'img/marker_dot.png',
 				anchor: new google.maps.Point(16.5,16.5),
-				scaledSize: new google.maps.Size(22,22),
+				scaledSize: new google.maps.Size(22,22)
 			},
 			dot_shadow: {
 				url: 'img/marker_dot_shadow.png',
 				anchor: new google.maps.Point(22,22),
-				scaledSize: new google.maps.Size(33,33),
+				scaledSize: new google.maps.Size(33,33)
 			},
 			1: {
 				url: 'img/marker_icon_troncal.png',
 				anchor: new google.maps.Point(16,35),
 				// origin: new google.maps.Point(0,0), //used for sprites, offset
 				// size: new google.maps.Size(32,46), //used for sprites, display size
-				scaledSize: new google.maps.Size(24,35),
+				scaledSize: new google.maps.Size(24,35)
 			},
 			2: {
 				url: 'img/marker_icon_pretroncal.png',
 				anchor: new google.maps.Point(16,35),
-				scaledSize: new google.maps.Size(24,35),
+				scaledSize: new google.maps.Size(24,35)
 			},
 			3: {
 				url: 'img/marker_icon_alimentadora.png',
 				anchor: new google.maps.Point(16,35),
-				scaledSize: new google.maps.Size(24,35),
+				scaledSize: new google.maps.Size(24,35)
 			},
 			shadow: {
 				url: 'img/marker_icon_shadow.png',
 				anchor: new google.maps.Point(17,34),
-				scaledSize: new google.maps.Size(43,35),
+				scaledSize: new google.maps.Size(43,35)
 			}
 		},
 
@@ -141,8 +141,8 @@ window.ta = {
 				zoomControl: true,
 				zoomControlOptions: {
 					style: google.maps.ZoomControlStyle.SMALL
-				},
-			}
+				}
+			};
 			this.map = new google.maps.Map($(".map-canvas").get(0), mapOptions);
 		},
 
@@ -156,7 +156,7 @@ window.ta = {
 					position: new google.maps.LatLng(position.lat(), position.lng()),
 					zIndex: google.maps.Marker.MAX_ZINDEX
 					// animation : google.maps.Animation.DROP
-				}
+				};
 				this.currentPositionMarker = new google.maps.Marker(markerOptions);
 			} else {
 				ta.map.currentPositionMarker.setPosition(position);
@@ -172,7 +172,7 @@ window.ta = {
 				position: new google.maps.LatLng(stop.lat, stop.lng),
 				zIndex: google.maps.Marker.MAX_ZINDEX - stop.tipo_parada
 				// animation : google.maps.Animation.DROP
-			}
+			};
 			var marker = new google.maps.Marker(markerOptions);
 			marker.stop = stop;
 			this.nearbyStopsMarkers.push(marker);
@@ -200,9 +200,9 @@ window.ta = {
 
 							ta.map.$infoPopup.find('.routes').html(html).trigger('create');
 						}
-					},
+					}
 				});
-			})
+			});
 		},
 
 		loadVisibleStops: function(type){
@@ -210,7 +210,7 @@ window.ta = {
 			var data = {
 				ne: bounds.getNorthEast().lat()+','+bounds.getNorthEast().lng(),
 				sw: bounds.getSouthWest().lat()+','+bounds.getSouthWest().lng()
-			}
+			};
 			if (this.map.getZoom() <= 13){ data.tipo = 1; }
 
 			// TODO: Idea: mostrar max 100 puntos, ordenados por tipo y cercania?
@@ -244,7 +244,7 @@ window.ta = {
 					//ocultarIndicadorAjax();
 					alert("Error cargando las paradas cercanas"); //TODO: Agregar mensaje
 				}
-			})
+			});
 		},
 
 		addStopMarkers: function(stopsArray){
