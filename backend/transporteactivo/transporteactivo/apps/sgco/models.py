@@ -42,6 +42,9 @@ class Stops(models.Model):
     class Meta:
         db_table = 'STOPS'
 
+    def __unicode__(self):
+        return u'%s, %s' % (self.STOPID, self.LONGNAME)
+
 
 class Arcs(models.Model):
     """
@@ -192,7 +195,7 @@ class LineStops(models.Model):
     STOPSEQUENCE = models.IntegerField()
     ORIENTATION = models.SmallIntegerField()
     LINEID = models.ForeignKey(Lines, db_column=u'LINEID')
-    STOPID = models.ForeignKey(Stops, db_column=u'STOPID')
+    STOPID = models.ForeignKey(Stops, db_column=u'STOPID', related_name='rutas')
     PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
     LINEVARIANT = models.IntegerField(null=True)
     REGISTERDATE = models.DateTimeField(null=True)

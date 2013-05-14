@@ -2,7 +2,7 @@
 from rest_framework import serializers
 
 from .models import MioStops, Busqueda
-from sgco.models import LineStops, Arcs
+from sgco.models import LineStops, Arcs, Stops
 
 
 class TipoParadaField(serializers.RelatedField):
@@ -11,6 +11,10 @@ class TipoParadaField(serializers.RelatedField):
 
 
 class ParadasCercanasSerializer(serializers.ModelSerializer):
+    """
+        Este serializer define las paradas cercanas dados unos puntos de geolocalizacion
+    """
+
     id = serializers.Field(source='STOPID')
     nombre = serializers.Field(source='LONGNAME')
     lat = serializers.Field(source='DECIMALLATITUDE')
@@ -22,6 +26,9 @@ class ParadasCercanasSerializer(serializers.ModelSerializer):
 
 
 class RutasPorParadaSerializer(serializers.ModelSerializer):
+    """
+        Este serializer define las rutas que pasan por una parada especifica
+    """
     id_ruta = serializers.Field(source='LINEID.LINEID')
     nombre_parada = serializers.Field(source='STOPID.LONGNAME')
     nombre_ruta = serializers.Field(source='LINEID.SHORTNAME')
@@ -33,6 +40,10 @@ class RutasPorParadaSerializer(serializers.ModelSerializer):
 
 
 class ParadasPorRutaSerializer(serializers.ModelSerializer):
+    """
+        Este serializer define las paradas que tiene una ruta especifica
+    """
+
     nombre_parada = serializers.Field(source='STOPS_STOPID_START.LONGNAME')
     lat = serializers.Field(source='STOPS_STOPID_START.DECIMALLATITUDE')
     lng = serializers.Field(source='STOPS_STOPID_START.DECIMALLONGITUDE')
