@@ -137,6 +137,7 @@ window.ta = {
 				center: this.defaultPosition,
 				mapTypeId: google.maps.MapTypeId.ROADMAP,
 				panControl: false,
+				streetViewControl: false,
 				zoomControl: true,
 				zoomControlOptions: {
 					style: google.maps.ZoomControlStyle.SMALL
@@ -169,6 +170,7 @@ window.ta = {
 				icon: this.marker_icons[stop.tipo_parada],
 				shadow: this.marker_icons.shadow,
 				position: new google.maps.LatLng(stop.lat, stop.lng),
+				zIndex: google.maps.Marker.MAX_ZINDEX - stop.tipo_parada
 				// animation : google.maps.Animation.DROP
 			}
 			var marker = new google.maps.Marker(markerOptions);
