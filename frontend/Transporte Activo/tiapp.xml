@@ -61,9 +61,7 @@
         </splash>
         <theme>default</theme>
     </mobileweb>
-    <modules>
-        <module platform="android">ti.draggable</module>
-    </modules>
+    <modules/>
     <deployment-targets>
         <target device="blackberry">false</target>
         <target device="android">true</target>
