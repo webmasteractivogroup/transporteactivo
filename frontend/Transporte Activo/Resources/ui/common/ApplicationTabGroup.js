@@ -3,34 +3,34 @@ function ApplicationTabGroup(Window) {
 	var self = Ti.UI.createTabGroup();
 	
 	//create app tabs
-	var win1 = new Window(L('Planear Viaje')),
-		win2 = new Window(L('Buscar')), 
-		win3 = new Window(L('Favoritos')),
-		win4 = new Window(L('Noticias'));
+	var win1 = new Window('Planear Viaje'),
+		win2 = new Window('Buscar'), 
+		win3 = new Window('Favoritos'),
+		win4 = new Window('Noticias');
 	
 	var tab1 = Ti.UI.createTab({
 		title: L('Planear Viaje'),
-		icon: '/images/KS_nav_ui.png',
+		icon: '/images/map.png',
 		window: win1
 	});
 	
 	
 	var tab2 = Ti.UI.createTab({
 		title: L('Buscar'),
-		icon: '/images/KS_nav_views.png',
+		icon: '/images/search.png',
 		window: win2
 	});
 	
 	var tab3 = Ti.UI.createTab({
 		title: L('Favoritos'),
-		icon: '/images/KS_nav_ui.png',
+		icon: '/images/favoritos.png',
 		window: win3
 	});
 	
 	
 	var tab4 = Ti.UI.createTab({
 		title: L('Noticias'),
-		icon: '/images/KS_nav_views.png',
+		icon: '/images/news.png',
 		window: win4
 	});
 	
