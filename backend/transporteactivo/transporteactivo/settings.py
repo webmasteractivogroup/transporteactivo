@@ -177,7 +177,7 @@ LOGGING = {
 
 CORS_ORIGIN_WHITELIST = (
     'localhost',
-    'localhost:8020',
+    '127.0.0.1:8020',
 )
 try:
     from local_settings import *
