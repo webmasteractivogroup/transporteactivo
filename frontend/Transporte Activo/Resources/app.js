@@ -1,61 +1,40 @@
-var MASlidingMenu = require('/lib/MASlidingMenu');
-var HomeView = require('/ui/HomeView');
-var FavoritosView = require('/ui/FavoritosView');
-var PerfilView = require('/ui/PerfilView');
-var MenuView = require('/ui/MenuView');
-var BusquedaView = require('/ui/BusquedaView');
+/*
+ * A tabbed application, consisting of multiple stacks of windows associated with tabs in a tab group.  
+ * A starting point for tab-based application with multiple top-level windows. 
+ * Requires Titanium Mobile SDK 1.8.0+.
+ * 
+ * In app.js, we generally take care of a few things:
+ * - Bootstrap the application with any data we need
+ * - Check for dependencies like device type, platform version or network connection
+ * - Require and open our top-level UI component
+ *  
+ */
 
-var load = new HomeView();
-var home = new HomeView();
-var favoritos = new FavoritosView();
-var busqueda = new BusquedaView();
-var perfil = new PerfilView();
+//bootstrap and check dependencies
+if (Ti.version < 1.8 ) {
+	alert('Sorry - this application template requires Titanium Mobile SDK 1.8 or later');
+}
 
-// Each row with a view property when clicked will change to that view (any view works except tabgroups and windows)
-// If the row does not have a view property, but the switch event still fires
-var data = [
-   { title:'Transporte Activo', view: load },
-	{ title:'Home', hasDetail:true, view: home },
-	{ title:'Favoritos', hasDetail:true, view: favoritos},
-	{ title:'Busqueda', hasDetail:true, view: busqueda },
-	{ title:'Perfil', hasDetail:true, view: perfil }
-];
-
-var menu = new MenuView({
-	rowData: data
-});
-
-var slidingMenu = new MASlidingMenu({
-	left: menu, // the menu... only accepts a tableview
-	draggable: true // set false to only use the API to open / close
-});
-slidingMenu.open();
-
-// event fired when user selects a view from the nav
-slidingMenu.addEventListener('buttonclick', function(e) {
-	if (e.index === 3) {
-		alert('You clicked on Button');
+// This is a single context application with mutliple windows in a stack
+(function() {
+	//determine platform and form factor and render approproate components
+	var osname = Ti.Platform.osname,
+		version = Ti.Platform.version,
+		height = Ti.Platform.displayCaps.platformHeight,
+		width = Ti.Platform.displayCaps.platformWidth;
+	
+	//considering tablet to have one dimension over 900px - this is imperfect, so you should feel free to decide
+	//yourself what you consider a tablet form factor for android
+	var isTablet = osname === 'ipad' || (osname === 'android' && (width > 899 || height > 899));
+	
+	var Window;
+	if (isTablet) {
+		Window = require('ui/tablet/ApplicationWindow');
 	}
-});
+	else {
+		Window = require('ui/handheld/ApplicationWindow');
+	}
 
-// event fired when user selects a view from the nav
-slidingMenu.addEventListener('switch', function(e) {
-	
-	//alert(e.menuRow);
-	//alert(e.index);
-	//alert(e.view); // This is the new view your switching to
-});
-
-// event fired while user is dragging the view to expose the menu
-slidingMenu.addEventListener('sliding', function(e) {
-	//alert(e.distance);
-	
-});
-
-
-//Expose / close the menu programaticly
-	//slidingMenu.slideView('left');
-	//slidingMenu.slideView('view');
-
-// Access the currently displayed view
-	//slidingMenu.activeView();
+	var ApplicationTabGroup = require('ui/common/ApplicationTabGroup');
+	new ApplicationTabGroup(Window).open();
+})();
