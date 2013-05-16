@@ -68,7 +68,7 @@ class BusquedaViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         queryset = []
-        query = self.request.QUERY_PARAMS.get('query', None)
+        query = self.request.QUERY_PARAMS.get('q', None)
         if query:
             queryset = Busqueda.objects.filter(nombre__icontains=query)
         return queryset
