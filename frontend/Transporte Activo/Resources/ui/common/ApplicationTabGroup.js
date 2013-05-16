@@ -1,6 +1,6 @@
 function ApplicationTabGroup(Window) {
 	//create module instance
-	var self = Ti.UI.createTabGroup();
+	var self = Ti.UI.createTabGroup({navBarHidden:true});
 	
 	//create app tabs
 	var win1 = new Window('Planear Viaje'),
@@ -9,27 +9,27 @@ function ApplicationTabGroup(Window) {
 		win4 = new Window('Noticias');
 	
 	var tab1 = Ti.UI.createTab({
-		title: L('Planear Viaje'),
+		title: 'Planear Viaje',
 		icon: '/images/map.png',
 		window: win1
 	});
 	
 	
 	var tab2 = Ti.UI.createTab({
-		title: L('Buscar'),
+		title: 'Buscar',
 		icon: '/images/search.png',
 		window: win2
 	});
 	
 	var tab3 = Ti.UI.createTab({
-		title: L('Favoritos'),
+		title: 'Favoritos',
 		icon: '/images/favoritos.png',
 		window: win3
 	});
 	
 	
 	var tab4 = Ti.UI.createTab({
-		title: L('Noticias'),
+		title: 'Noticias',
 		icon: '/images/news.png',
 		window: win4
 	});
