@@ -43,9 +43,21 @@ Ti.API.log('CREANDO MAPA ');
 	var goToMe = Titanium.UI.createButton({
     backgroundImage:'/images/userloc.png',
     top:10,
-    right:10,
+    right:25,
     width: 40,
     height: 40
+
+});
+	var goToMeLabel = Titanium.UI.createLabel({
+		color:'black',
+		font:{
+        fontWeight:'bold',
+   },
+	text:'ubicame',
+    top:50,
+    right:6,
+    width: 70,
+    height: 20
 
 });
 
@@ -65,6 +77,7 @@ Ti.API.log('CREANDO MAPA ');
 	
 	viewContenedora.add(mapview);
 	viewContenedora.add(goToMe);
+	viewContenedora.add(goToMeLabel);
 
 	return viewContenedora;
 };
