@@ -33,7 +33,8 @@ class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
             poly = Polygon((south_west, north_west, north_east, south_east, south_west))
             queryset = MioStops.objects.filter(tipo_parada__isnull=False, location__contained=poly)
             if tipo:
-                queryset = queryset.filter(tipo_parada=tipo)
+                tipo = tipo.split(',')
+                queryset = queryset.filter(tipo_parada__in=tipo)
         return queryset
 
 
