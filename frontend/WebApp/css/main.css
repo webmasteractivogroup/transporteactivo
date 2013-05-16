@@ -128,7 +128,7 @@ div,span,ul,ol,li,input,textarea,article,section,aside,header,footer,.row{-moz-b
 .ui-header .ui-btn-left{margin-left:-1px;left:0;}
 .ui-header .ui-btn-right{margin-right:-1px;right:0;}
 #plan-trip .ui-content{padding-top:0;}
-#search .ui-content{padding-top:0;}
+#search .ui-listview-filter{margin-top:0;}
 .map-canvas{width:100%;height:100%;}.map-canvas img{max-width:initial;}
 #info-popup h2{margin-right:auto;margin-left:auto;padding:0 45px;}
 #info-popup .ui-content{height:auto !important;max-width:320px;}
