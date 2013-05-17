@@ -1,6 +1,6 @@
 function ApplicationTabGroup(Window) {
 	//create module instance
-	var self = Ti.UI.createTabGroup({navBarHidden:true});
+	var self = Ti.UI.createTabGroup({navBarHidden:true,barColor: '#0000'});
 	
 	//create app tabs
 	var win1 = new Window('Planear Viaje'),
