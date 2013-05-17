@@ -30,8 +30,8 @@ $(document).on("mobileinit", function () {
 	$.mobile.defaultPageTransition = 'none';
 
 	$.mobile.loader.prototype.options.theme = "a";
-	$.mobile.loader.prototype.options.text = "Cargando...";
-	$.mobile.loader.prototype.options.textVisible = true;
+	// $.mobile.loader.prototype.options.text = "Cargando...";
+	// $.mobile.loader.prototype.options.textVisible = true;
 	
 	/* Necesario para Phonegap, aunque genera peligro potencial de XSS sin el Whitelist de Phonegap.
 	 * Ref: http://jquerymobile.com/test/docs/pages/phonegap.html
@@ -41,7 +41,7 @@ $(document).on("mobileinit", function () {
 
 // Transporte Activo
 window.ta = {
-	nearbyStops: new Array(),
+	nearbyStops: [],
 	geoLocation: {
 		browserSupportFlag: new Boolean(),
 
@@ -87,7 +87,7 @@ window.ta = {
 		defaultPosition: new google.maps.LatLng(3.422556, -76.517222),
 		currentPosition: this.defaultPosition,
 		currentPositionMarker: null,
-		nearbyStopsMarkers: new Array(),
+		nearbyStopsMarkers: [],
 		ajaxTimeout: null,
 		$infoPopup: $('#info-popup'),
 		marker_icons: {
@@ -101,28 +101,54 @@ window.ta = {
 				anchor: new google.maps.Point(22,22),
 				scaledSize: new google.maps.Size(33,33)
 			},
-			1: {
-				url: 'img/marker_icon_troncal.png',
-				anchor: new google.maps.Point(16,35),
-				// origin: new google.maps.Point(0,0), //used for sprites, offset
-				// size: new google.maps.Size(32,46), //used for sprites, display size
-				scaledSize: new google.maps.Size(24,35)
-			},
-			2: {
-				url: 'img/marker_icon_pretroncal.png',
-				anchor: new google.maps.Point(16,35),
-				scaledSize: new google.maps.Size(24,35)
-			},
-			3: {
-				url: 'img/marker_icon_alimentadora.png',
-				anchor: new google.maps.Point(16,35),
-				scaledSize: new google.maps.Size(24,35)
-			},
+			// 1: {
+			// 	url: 'img/marker_icon_troncal.png',
+			// 	anchor: new google.maps.Point(16,35),
+			// 	// origin: new google.maps.Point(0,0), //used for sprites, offset
+			// 	// size: new google.maps.Size(32,46), //used for sprites, display size
+			// 	scaledSize: new google.maps.Size(24,35)
+			// },
+			// 2: {
+			// 	url: 'img/marker_icon_pretroncal.png',
+			// 	anchor: new google.maps.Point(16,35),
+			// 	scaledSize: new google.maps.Size(24,35)
+			// },
+			// 3: {
+			// 	url: 'img/marker_icon_alimentadora.png',
+			// 	anchor: new google.maps.Point(16,35),
+			// 	scaledSize: new google.maps.Size(24,35)
+			// },
 			shadow: {
 				url: 'img/marker_icon_shadow.png',
 				anchor: new google.maps.Point(17,34),
 				scaledSize: new google.maps.Size(43,35)
+			},
+			1: {
+				url: 'img/stop_troncal.png',
+			},
+			2: {
+				url: 'img/stop_pretroncal.png',
+			},
+			3: {
+				url: 'img/stop_alimentadora.png',
 			}
+			// 1: {
+			// 	url: 'img/stops_sprite_small.png',
+			// 	origin: new google.maps.Point(0,0), //used for sprites, offset
+			// 	size: new google.maps.Size(20,35), //used for sprites, display size
+			// 	// anchor: new google.maps.Point(10,35),
+			// 	// scaledSize: new google.maps.Size(20,35)
+			// },
+			// 2: {
+			// 	url: 'img/stops_sprite_small.png',
+			// 	origin: new google.maps.Point(20,0), //used for sprites, offset
+			// 	size: new google.maps.Size(20,35), //used for sprites, display size
+			// },
+			// 3: {
+			// 	url: 'img/stops_sprite_small.png',
+			// 	origin: new google.maps.Point(40,0), //used for sprites, offset
+			// 	size: new google.maps.Size(20,35), //used for sprites, display size
+			// }
 		},
 
 		init: function() {
@@ -168,7 +194,7 @@ window.ta = {
 				map: this.map,
 				title: stop.nombre,
 				icon: this.marker_icons[stop.tipo_parada],
-				shadow: this.marker_icons.shadow,
+				// shadow: this.marker_icons.shadow,
 				position: new google.maps.LatLng(stop.lat, stop.lng),
 				zIndex: google.maps.Marker.MAX_ZINDEX - stop.tipo_parada
 				// animation : google.maps.Animation.DROP
@@ -211,7 +237,13 @@ window.ta = {
 				ne: bounds.getNorthEast().lat()+','+bounds.getNorthEast().lng(),
 				sw: bounds.getSouthWest().lat()+','+bounds.getSouthWest().lng()
 			};
-			if (this.map.getZoom() <= 13){ data.tipo = 1; }
+
+			if (this.map.getZoom() == 14){
+				data.tipo = '1,2';
+			}
+			else if (this.map.getZoom() <= 13){
+				data.tipo = 1;
+			}
 
 			// TODO: Idea: mostrar max 100 puntos, ordenados por tipo y cercania?
 			$.ajax({
@@ -220,12 +252,12 @@ window.ta = {
 				data: data,
 				dataType: "JSON",
 				// async: false,
-				beforeSend: function(jqXHR, settings) {
-					$.mobile.loading('show', {text: 'Cargando estaciones cercanas...'});
-				},
-				complete: function(jqXHR, settings) {
-					$.mobile.loading('hide');
-				},
+				// beforeSend: function(jqXHR, settings) {
+				// 	$.mobile.loading('show', {text: 'Cargando estaciones cercanas...'});
+				// },
+				// complete: function(jqXHR, settings) {
+				// 	$.mobile.loading('hide');
+				// },
 				success: function(data, textStatus, jqXHR) {
 					if (textStatus === "success") {
 						//remove the current markers from the map and their reference to the stop
@@ -259,6 +291,10 @@ window.ta = {
 		}
 	},
 
+	search: {
+
+	},
+
 	init: function() {
 		this.map.init();
 		this.geoLocation.findLocation();
@@ -286,6 +322,36 @@ $(document).on('pageinit', '#plan-trip', function(event){
 		ta.map.ajaxTimeout = window.setTimeout(function() {
 			ta.map.loadVisibleStops();
 		}, 250);
+	});
+});
+
+$(document).on("pageinit", "#search", function(event) {
+	$("#autocomplete").on("listviewbeforefilter", function (e, data) {
+		var $ul = $(this),
+			$input = $(data.input),
+			value = $input.val(),
+			html = "";
+		$ul.html("");
+		if (value && value.length > 2) {
+			$ul.html("<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>");
+			$ul.listview("refresh");
+			$.ajax({
+				url: "http://transporteactivo.com/api/v1/buscar/",
+				dataType: "json",
+				crossDomain: true,
+				data: {
+					q: $input.val()
+				}
+			})
+			.then(function (response) {
+				$.each(response, function (i, val) {
+					html += "<li data-id='"+val.id+"'>" + val.nombre + "</li>";
+				});
+				$ul.html(html);
+				$ul.listview("refresh");
+				$ul.trigger("updatelayout");
+			});
+		}
 	});
 });
 
