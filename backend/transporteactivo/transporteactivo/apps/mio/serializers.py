@@ -25,13 +25,12 @@ class RutasPorParadaSerializer(serializers.ModelSerializer):
         Este serializer define las rutas que pasan por una parada especifica
     """
     id_ruta = serializers.Field(source='LINEID.LINEID')
-    nombre_parada = serializers.Field(source='STOPID.LONGNAME')
     nombre_ruta = serializers.Field(source='LINEID.SHORTNAME')
     orientacion = serializers.Field(source='ORIENTATION')
 
     class Meta:
         model = LineStops
-        fields = ('nombre_parada', 'nombre_ruta', 'id_ruta', 'orientacion')
+        fields = ('nombre_ruta', 'id_ruta', 'orientacion')
 
 
 class ParadasPorRutaSerializer(serializers.ModelSerializer):
