@@ -6,6 +6,7 @@ from sgco.models import Stops
 
 
 class MioStops(Stops):
+    """Parada que extiende el modelo de parada entregado por metrocali"""
     location = models.PointField(null=True)
     tipo_parada = models.IntegerField(null=True)
     objects = models.GeoManager()
@@ -19,12 +20,13 @@ class MioStops(Stops):
 
 
 class TipoParada(models.Model):
+    """Modelo de la vista sql que define el tipo de parada para cada parada"""
     STOPID = models.IntegerField(primary_key=True,)
     STOPTYPE = models.IntegerField()
 
     class Meta:
-        db_table = 'stop_types'
-        managed = False
+        db_table = 'stop_types' #nombre de la tabla en la bd
+        managed = False #tabla creada por fuera de django, no administrar
 
     def __unicode__(self):
         return u'%s, %s' % (self.STOPID, self.STOPTYPE)
