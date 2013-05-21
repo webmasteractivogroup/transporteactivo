@@ -238,12 +238,11 @@ window.ta = {
 				sw: bounds.getSouthWest().lat()+','+bounds.getSouthWest().lng()
 			};
 
-			if (this.map.getZoom() == 14){
-				data.tipo = '1,2';
-			}
-			else if (this.map.getZoom() <= 13){
-				data.tipo = 1;
-			}
+			data.tipo = [];
+			if ($('#ver-troncales').is(":checked")) data.tipo.push(1);
+			if ($('#ver-pretroncales').is(":checked")) data.tipo.push(2);
+			if ($('#ver-alimentadoras').is(":checked")) data.tipo.push(3);
+			console.log(data);
 
 			// TODO: Idea: mostrar max 100 puntos, ordenados por tipo y cercania?
 			$.ajax({
@@ -320,6 +319,20 @@ $(document).on('pageinit', '#plan-trip', function(event){
 			window.clearTimeout(ta.map.ajaxTimeout);
 		}
 		ta.map.ajaxTimeout = window.setTimeout(function() {
+			// uncheck and disable some stop types in order to avoid showing too many markers
+			if (ta.map.map.getZoom() <= 13){
+				$('#ver-alimentadoras').prop("checked", false).prop("disabled", true).checkboxradio( "refresh" );
+				$('#ver-pretroncales').prop("checked", false).prop("disabled", true).checkboxradio( "refresh" );
+			}
+			else if (ta.map.map.getZoom() == 14){
+				$('#ver-alimentadoras').prop("checked", false).prop("disabled", true).checkboxradio( "refresh" );
+				$('#ver-pretroncales').prop("disabled", false).checkboxradio( "refresh" );
+			}
+			else {
+				$('#ver-alimentadoras').prop("disabled", false).checkboxradio( "refresh" );
+				$('#ver-pretroncales').prop("disabled", false).checkboxradio( "refresh" );
+			}
+
 			ta.map.loadVisibleStops();
 		}, 250);
 	});
