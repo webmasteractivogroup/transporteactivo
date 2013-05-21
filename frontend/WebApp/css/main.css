@@ -131,6 +131,8 @@ div,span,ul,ol,li,input,textarea,article,section,aside,header,footer,.row{-moz-b
 #search .ui-listview-filter{margin-top:0;}
 .map-canvas{width:100%;height:100%;}.map-canvas img{max-width:initial;}
 #info-popup h2{margin-right:auto;margin-left:auto;padding:0 45px;}
+#info-popup h3{margin:0;padding:0;}
+#info-popup h4{margin:0;padding:0;}
 #info-popup .ui-content{height:auto !important;max-width:320px;}
 .routes .ui-btn{color:#fff;}.routes .ui-btn.E{background:#2e2482;}
 .routes .ui-btn.T{background:#2e2482;}
