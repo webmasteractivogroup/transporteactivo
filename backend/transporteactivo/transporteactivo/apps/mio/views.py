@@ -15,11 +15,11 @@ class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
 
     def get_queryset(self):
         queryset = []
-        
+
         south_west_query_string = self.request.QUERY_PARAMS.get('sw', None)
         north_east_query_string = self.request.QUERY_PARAMS.get('ne', None)
         tipo_query_string = self.request.QUERY_PARAMS.getlist('tipo[]', [])
-        
+
         if south_west_query_string and north_east_query_string:
             # si recibimos dos puntos, enviamos las paradas filtradas dentro de esos 2 puntos
 
@@ -35,13 +35,13 @@ class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
             poly = Polygon((south_west, north_west, north_east, south_east, south_west))
 
             if tipo_query_string:
-                queryset = MioStops.objects.filter(tipo_parada__in=tipo, location__contained=poly)
+                queryset = MioStops.objects.filter(tipo_parada__in=tipo_query_string, location__contained=poly)
             else:
                 queryset = MioStops.objects.filter(tipo_parada__isnull=False, location__contained=poly)
         else:
             # si no recibimos un punto, enviamos TODAS las paradas
             if tipo_query_string:
-                queryset = MioStops.objects.filter(tipo_parada__in=tipo)
+                queryset = MioStops.objects.filter(tipo_parada__in=tipo_query_string)
             else:
                 queryset = MioStops.objects.filter(tipo_parada__isnull=False)
 
@@ -58,7 +58,7 @@ class RutasPorParadaViewSet(viewsets.ReadOnlyModelViewSet):
 
         if parada_id is not None:
             queryset = LineStops.objects.filter(STOPID=parada_id).distinct('LINEID')
-        
+
         return queryset
 
 
@@ -70,10 +70,10 @@ class ParadasPorRutaViewSet(viewsets.ReadOnlyModelViewSet):
         queryset = []
         ruta_id = self.request.QUERY_PARAMS.get('ruta_id', None)
         orientacion = self.request.QUERY_PARAMS.get('orientacion', None)
-        
+
         if ruta_id is not None and orientacion is not None:
             queryset = Arcs.objects.filter(linearcs__LINEID=ruta_id, linearcs__ORIENTATION=orientacion).reverse()
-        
+
         return queryset
 
 
@@ -84,11 +84,11 @@ class BusquedaViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         queryset = []
         q = self.request.QUERY_PARAMS.get('q', None)
-        
+
         if q:
             query = r'(^|.*\s)%s.*' % q
             queryset = Busqueda.objects.filter(nombre__iregex=query)
-        
+
         return queryset
 
 
