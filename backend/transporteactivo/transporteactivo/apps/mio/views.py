@@ -18,7 +18,7 @@ class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
         
         south_west_query_string = self.request.QUERY_PARAMS.get('sw', None)
         north_east_query_string = self.request.QUERY_PARAMS.get('ne', None)
-        tipo_query_string = self.request.QUERY_PARAMS.get('tipo', None)
+        tipo_query_string = self.request.QUERY_PARAMS.getlist('tipo[]', [])
         
         if south_west_query_string and north_east_query_string:
             # si recibimos dos puntos, enviamos las paradas filtradas dentro de esos 2 puntos
@@ -35,14 +35,12 @@ class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
             poly = Polygon((south_west, north_west, north_east, south_east, south_west))
 
             if tipo_query_string:
-                tipo_query_string = tipo_query_string.split(',')
                 queryset = MioStops.objects.filter(tipo_parada__in=tipo, location__contained=poly)
             else:
                 queryset = MioStops.objects.filter(tipo_parada__isnull=False, location__contained=poly)
         else:
             # si no recibimos un punto, enviamos TODAS las paradas
             if tipo_query_string:
-                tipo_query_string = tipo_query_string.split(',')
                 queryset = MioStops.objects.filter(tipo_parada__in=tipo)
             else:
                 queryset = MioStops.objects.filter(tipo_parada__isnull=False)
@@ -50,7 +48,7 @@ class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
         return queryset
 
 
-class RutasPoParadaViewSet(viewsets.ReadOnlyModelViewSet):
+class RutasPorParadaViewSet(viewsets.ReadOnlyModelViewSet):
     model = LineStops
     serializer_class = RutasPorParadaSerializer
 
