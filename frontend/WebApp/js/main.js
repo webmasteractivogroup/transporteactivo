@@ -4,25 +4,25 @@
 
 // $(document).bind("mobileinit", function () {
 
-// 	// Navigation
-// 	$.mobile.page.prototype.options.backBtnText = "Go back";
-// 	$.mobile.page.prototype.options.addBackBtn      = true;
-// 	$.mobile.page.prototype.options.backBtnTheme    = "d";
+	// 	// Navigation
+	// 	$.mobile.page.prototype.options.backBtnText = "Go back";
+	// 	$.mobile.page.prototype.options.addBackBtn      = true;
+	// 	$.mobile.page.prototype.options.backBtnTheme    = "d";
 
-// 	// Page
-// 	$.mobile.page.prototype.options.headerTheme = "a";  // Page header only
-// 	$.mobile.page.prototype.options.contentTheme    = "c";
-// 	$.mobile.page.prototype.options.footerTheme = "a";
+	// 	// Page
+	// 	$.mobile.page.prototype.options.headerTheme = "a";  // Page header only
+	// 	$.mobile.page.prototype.options.contentTheme    = "c";
+	// 	$.mobile.page.prototype.options.footerTheme = "a";
 
-// 	// Listviews
-// 	$.mobile.listview.prototype.options.headerTheme = "a";  // Header for nested lists
-// 	$.mobile.listview.prototype.options.theme           = "c";  // List items / content
-// 	$.mobile.listview.prototype.options.dividerTheme    = "d";  // List divider
+	// 	// Listviews
+	// 	$.mobile.listview.prototype.options.headerTheme = "a";  // Header for nested lists
+	// 	$.mobile.listview.prototype.options.theme           = "c";  // List items / content
+	// 	$.mobile.listview.prototype.options.dividerTheme    = "d";  // List divider
 
-// 	$.mobile.listview.prototype.options.splitTheme   = "c";
-// 	$.mobile.listview.prototype.options.countTheme   = "c";
-// 	$.mobile.listview.prototype.options.filterTheme = "c";
-// 	$.mobile.listview.prototype.options.filterPlaceholder = "Filter data...";
+	// 	$.mobile.listview.prototype.options.splitTheme   = "c";
+	// 	$.mobile.listview.prototype.options.countTheme   = "c";
+	// 	$.mobile.listview.prototype.options.filterTheme = "c";
+	// 	$.mobile.listview.prototype.options.filterPlaceholder = "Filter data...";
 // });
 
 // Configuracion global de jQuery Mobile
@@ -32,7 +32,7 @@ $(document).on("mobileinit", function () {
 	$.mobile.loader.prototype.options.theme = "a";
 	// $.mobile.loader.prototype.options.text = "Cargando...";
 	// $.mobile.loader.prototype.options.textVisible = true;
-	
+
 	/* Necesario para Phonegap, aunque genera peligro potencial de XSS sin el Whitelist de Phonegap.
 	 * Ref: http://jquerymobile.com/test/docs/pages/phonegap.html
 	 * Nota: Mirar $.support.cors */
@@ -41,6 +41,7 @@ $(document).on("mobileinit", function () {
 
 // Transporte Activo
 window.ta = {
+	BASE_URL: (location.hostname == 'localhost') ? 'localhost:8000' : 'transporteactivo.com/api',
 	nearbyStops: [],
 	geoLocation: {
 		browserSupportFlag: new Boolean(),
@@ -212,7 +213,7 @@ window.ta = {
 					.popup('open');
 
 				$.ajax({
-					url: "http://transporteactivo.com/api/v1/rutas-por-parada/",
+					url: "http://"+ta.BASE_URL+"/v1/rutas-por-parada/",
 					type: "get",
 					data: {parada_id: marker.stop.id},
 					dataType: "JSON",
@@ -234,19 +235,19 @@ window.ta = {
 		loadVisibleStops: function(type){
 			var bounds= this.map.getBounds();
 			var data = {
-				ne: bounds.getNorthEast().lat()+','+bounds.getNorthEast().lng(),
-				sw: bounds.getSouthWest().lat()+','+bounds.getSouthWest().lng()
+				ne: [bounds.getNorthEast().lat(), bounds.getNorthEast().lng()],
+				sw: [bounds.getSouthWest().lat(), bounds.getSouthWest().lng()]
 			};
 
 			data.tipo = [];
 			if ($('#ver-troncales').is(":checked")) data.tipo.push(1);
 			if ($('#ver-pretroncales').is(":checked")) data.tipo.push(2);
 			if ($('#ver-alimentadoras').is(":checked")) data.tipo.push(3);
-			console.log(data);
+			// console.log(data);
 
 			// TODO: Idea: mostrar max 100 puntos, ordenados por tipo y cercania?
 			$.ajax({
-				url: "http://transporteactivo.com/api/v1/paradas-cercanas/",
+				url: "http://"+ta.BASE_URL+"/v1/paradas-cercanas/",
 				type: "get",
 				data: data,
 				dataType: "JSON",
@@ -349,7 +350,7 @@ $(document).on("pageinit", "#search", function(event) {
 			$ul.html("<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>");
 			$ul.listview("refresh");
 			$.ajax({
-				url: "http://transporteactivo.com/api/v1/buscar/",
+				url: "http://"+ta.BASE_URL+"/v1/buscar/",
 				dataType: "json",
 				crossDomain: true,
 				data: {
