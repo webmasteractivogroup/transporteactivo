@@ -60,6 +60,7 @@ class RutasPorParadaViewSet(viewsets.ReadOnlyModelViewSet):
 
 		if parada_id:
 			queryset = LineStops.objects.filter(STOPID=parada_id).distinct('LINEID')
+			# TODO: Evaluar la necesidad del distinct
 
 		return queryset
 
