@@ -204,7 +204,7 @@ window.ta = {
 			marker.stop = stop;
 			this.nearbyStopsMarkers.push(marker);
 
-			// //Asocio el click del marcador a la ventana con los detalle de la promoción
+			// Asocio el click del marcador a la ventana con los detalle de la parada
 			google.maps.event.addListener(marker, "click", function() {
 				ta.map.$infoPopup
 					.find('h2').text(marker.getTitle()).end()
@@ -219,12 +219,19 @@ window.ta = {
 					dataType: "JSON",
 					success: function(data, textStatus, jqXHR) {
 						if (textStatus === "success") {
-							var html = '<div data-role="controlgroup" data-type="horizontal">';
+							var orientaciones = {0: "Norte-Sur", 1: "Sur-Norte"};
+							var html_list = {};
+							// construct the html for each list, grouped by orientation
 							for (i = 0; i < data.length; ++i) {
-								html+= '<a href="'+data[i].id_ruta+'" data-role="button" data-mini="true" class="'+data[i].nombre_ruta.substring(0, 1)+'">'+data[i].nombre_ruta+'</a>';
+								html_list[data[i].orientacion] = html_list[data[i].orientacion] || '';
+								html_list[data[i].orientacion] += '<a href="'+data[i].id_ruta+'" data-role="button" data-mini="true" class="'+data[i].nombre_ruta.substring(0, 1)+'">'+data[i].nombre_ruta+'</a>';
 							}
-							html += '</div>';
-
+							var html = '';
+							// add opening and closing tags for the lists
+							for (var k in html_list) {
+								html += '<h4>Sentido '+orientaciones[k]+'</h4><div data-role="controlgroup" data-type="horizontal">' + html_list[k] + '</div>';
+							}
+							console.log(html_list);
 							ta.map.$infoPopup.find('.routes').html(html).trigger('create');
 						}
 					}
@@ -240,9 +247,9 @@ window.ta = {
 			};
 
 			data.tipo = [];
-			if ($('#ver-troncales').is(":checked")) data.tipo.push(1);
-			if ($('#ver-pretroncales').is(":checked")) data.tipo.push(2);
-			if ($('#ver-alimentadoras').is(":checked")) data.tipo.push(3);
+			if ($('#ver-troncales').is(":enabled:checked")) data.tipo.push(1);
+			if ($('#ver-pretroncales').is(":enabled:checked")) data.tipo.push(2);
+			if ($('#ver-alimentadoras').is(":enabled:checked")) data.tipo.push(3);
 			// console.log(data);
 
 			// TODO: Idea: mostrar max 100 puntos, ordenados por tipo y cercania?
@@ -322,11 +329,11 @@ $(document).on('pageinit', '#plan-trip', function(event){
 		ta.map.ajaxTimeout = window.setTimeout(function() {
 			// uncheck and disable some stop types in order to avoid showing too many markers
 			if (ta.map.map.getZoom() <= 13){
-				$('#ver-alimentadoras').prop("checked", false).prop("disabled", true).checkboxradio( "refresh" );
-				$('#ver-pretroncales').prop("checked", false).prop("disabled", true).checkboxradio( "refresh" );
+				$('#ver-alimentadoras').prop("disabled", true).checkboxradio( "refresh" );
+				$('#ver-pretroncales').prop("disabled", true).checkboxradio( "refresh" );
 			}
 			else if (ta.map.map.getZoom() == 14){
-				$('#ver-alimentadoras').prop("checked", false).prop("disabled", true).checkboxradio( "refresh" );
+				$('#ver-alimentadoras').prop("disabled", true).checkboxradio( "refresh" );
 				$('#ver-pretroncales').prop("disabled", false).checkboxradio( "refresh" );
 			}
 			else {
