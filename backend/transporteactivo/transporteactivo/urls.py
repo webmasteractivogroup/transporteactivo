@@ -15,6 +15,7 @@ router.register(r'paradas-cercanas', views.ParadasCercanasViewSet)
 router.register(r'rutas-por-parada', views.RutasPorParadaViewSet)
 router.register(r'paradas-por-ruta', views.ParadasPorRutaViewSet)
 router.register(r'buscar', views.BusquedaViewSet)
+router.register(r'buscar-parada', views.BusquedaParadasViewSet)
 
 urlpatterns = patterns('',
 

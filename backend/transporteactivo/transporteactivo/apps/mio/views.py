@@ -2,16 +2,17 @@
 from django.contrib.gis.geos import Point, Polygon
 
 from rest_framework import viewsets
+from unidecode import unidecode
 
 from .models import MioStops, Busqueda
-from .serializers import ParadasCercanasSerializer, RutasPorParadaSerializer, ParadasPorRutaSerializer, BusquedaSerializer
+from .serializers import ParadasSerializer, RutasPorParadaSerializer, ParadasPorRutaSerializer, BusquedaSerializer
 
 from sgco.models import LineStops, Arcs
 
 
 class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
 	model = MioStops
-	serializer_class = ParadasCercanasSerializer
+	serializer_class = ParadasSerializer
 
 	def get_queryset(self):
 		queryset = []
@@ -91,60 +92,25 @@ class BusquedaViewSet(viewsets.ReadOnlyModelViewSet):
 		if q:
 			query = r'(^|.*\s)%s.*' % q
 			queryset = Busqueda.objects.filter(nombre__iregex=query)
+			# query = r'(^|.*\s)%s.*' % unidecode(q)
+			# querystring = """	SELECT s.*
+			# 					FROM search s
+			# 					WHERE unaccent(s.nombre) ~* %s"""
+			# queryset = Busqueda.objects.raw(querystring, [query])
 
 		return queryset
 
 
+class BusquedaParadasViewSet(viewsets.ReadOnlyModelViewSet):
+	model = MioStops
+	serializer_class = ParadasSerializer
 
+	def get_queryset(self):
+		queryset = []
+		q = self.request.QUERY_PARAMS.get('q', None)
 
+		if q:
+			query = r'(^|.*\s)%s.*' % q
+			queryset = MioStops.objects.filter(nombre__iregex=query)
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+		return queryset

@@ -3,13 +3,21 @@
 
 # TEAM
 
-    <name> -- <role> -- <twitter>
+    Bobby Gordon -- PM -- @BobbyHSG
+    Daniel Garcia -- Frontend, UI/UX -- @zlapper
+    Guillermo Alvarez -- Backend -- @guialante
+    Matheo Fiebiger -- Mobile (Native)
 
 # THANKS
 
-    <name>
+    Co-Crea Colombia -- http://co-creacolombia.co/
+    Metrocali -- http://www.metrocali.gov.co/
 
 # TECHNOLOGY COLOPHON
 
-    HTML5, CSS3
+    HTML5, CSS3, LESS CSS
     jQuery, Modernizr
+    jQuery Mobile
+    Python, Django
+    Django-REST, GeoDjango
+    PosgreSQL, PostGis

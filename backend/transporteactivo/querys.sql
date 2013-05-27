@@ -1,5 +1,5 @@
-﻿--Query que crea la vista con los stoptype generados.
---CREATE VIEW stop_types AS
+﻿-- Query que crea la vista con los stoptype generados.
+-- CREATE OR REPLACE VIEW stop_types AS
 SELECT	distinct(ls."STOPID"),
 	min(case substring(l."SHORTNAME" from 1 for 1)
 		when 'E' then 1
@@ -13,8 +13,17 @@ JOIN "STOPS" s ON ls."STOPID" = s."STOPID"
 WHERE l."SHORTNAME" NOT LIKE 'R%'
 GROUP BY ls."STOPID";
 
+-- Query que crea la vista para el autocompletado
+-- CREATE OR REPLACE VIEW search AS
+SELECT s."STOPID" AS id, s."LONGNAME" AS nombre, 'p' as tipo
+FROM "STOPS" s
+JOIN mio_miostops ms ON ms.stops_ptr_id = s."STOPID"
+UNION
+SELECT l."LINEID" AS id, (l."SHORTNAME" || '(' || l."DESCRIPTION" || ')') AS nombre, 'r' as tipo
+FROM "LINES" l;
 
---Query inicial que podría ayudar para crear las paradas compuestas
+
+-- Query inicial que podría ayudar para crear las paradas compuestas
 SELECT	s."STOPID",
 	s."LONGNAME",
 	substring (s."LONGNAME" from '^(.*) [ABCDabcd][0-9]$') as NAME,
