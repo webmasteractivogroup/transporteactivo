@@ -1,0 +1,13 @@
+.ui-btn .ui-icon-custom{width:26px !important;height:26px !important;margin-left:-13px !important;-moz-box-shadow:none!important;-webkit-box-shadow:none!important;box-shadow:none!important;-webkit-border-radius:0 !important;border-radius:0 !important;background-color:transparent;background-image:url(../img/icons_sprite-light.png);background-repeat:no-repeat;}
+.ui-btn.ui-btn-icon-top .ui-btn-inner{padding:35px 3px 5px !important;}
+.ui-btn.ui-btn-icon-right .ui-icon-custom{margin-top:-13px !important;}
+.ui-btn.ui-btn-icon-notext .ui-icon-custom{margin:-2px 0 0 !important;}
+.ui-btn.refresh .ui-icon-custom{background-position:-11px -10px;}
+.ui-btn.magnify .ui-icon-custom{background-position:-252px -10px;}
+.ui-btn.gear .ui-icon-custom{background-position:-395px -58px;}
+.ui-btn.gear2 .ui-icon-custom{background-position:-443px -58px;}
+.ui-btn.star .ui-icon-custom{background-position:-347px -106px;}
+.ui-btn.map .ui-icon-custom{background-position:-107px -490px;}
+.ui-btn.bullhorn .ui-icon-custom{background-position:-155px -584px;}
+.ui-btn.show-lines .ui-icon-custom{background-position:-11px -970px;}
+.dark .ui-btn .ui-icon-custom{background-image:url(../img/icons_sprite-dark.png);}

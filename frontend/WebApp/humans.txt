@@ -6,7 +6,7 @@
     Bobby Gordon -- PM -- @BobbyHSG
     Daniel Garcia -- Frontend, UI/UX -- @zlapper
     Guillermo Alvarez -- Backend -- @guialante
-    Matheo Fiebiger -- Mobile (Native)
+    Matheo Fiebiger -- Mobile (Native) -- @matheof
 
 # THANKS
 

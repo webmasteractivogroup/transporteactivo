@@ -1,0 +1,252 @@
+.pos(@num, @offsetX: -11px, @offsetY: -10px, @cols: 10, @size: 48px) {
+	// a mod n === a - (n * int(a/n))
+	background-position: -(((@num - (@cols * floor(@num / @cols)))-1) * @size)+@offsetX -((floor((@num / @cols)) * @size))+@offsetY;
+}
+.pos2(@col, @row, @offsetX: -11px, @offsetY: -10px, @size: 48px) {
+	background-position: -((@col - 1) * @size)+@offsetX -((@row - 1) * @size)+@offsetY;
+}
+
+.ui-btn {
+	.ui-icon-custom {
+		width: 26px !important;
+		height: 26px !important;
+		margin-left: -13px !important;
+
+		-moz-box-shadow: none!important;
+		-webkit-box-shadow: none!important;
+		box-shadow: none!important;
+
+		-webkit-border-radius: 0 !important;
+		border-radius: 0 !important;
+
+		background-color: transparent;
+		background-image: url(../img/icons_sprite-light.png);
+		background-repeat: no-repeat;
+	}
+	&.ui-btn-icon-top {
+		.ui-btn-inner {
+			padding: 35px 3px 5px !important;
+		}
+	}
+	&.ui-btn-icon-right {
+		.ui-icon-custom {
+			margin-top: -13px !important;
+		}
+	}
+	&.ui-btn-icon-notext {
+		.ui-icon-custom {
+			margin: -2px 0 0 !important;
+		}
+	}
+	// glyphish
+		&.refresh .ui-icon-custom		{ .pos(1); }
+		&.magnify .ui-icon-custom		{ .pos(6, -12px); }
+		&.gear .ui-icon-custom			{ .pos(19); }
+		&.gear2 .ui-icon-custom 		{ .pos2(10, 2); }
+		&.star .ui-icon-custom			{ .pos(28); }
+		&.map .ui-icon-custom			{ .pos(103); }
+		&.bullhorn .ui-icon-custom		{ .pos(124, -11px, -8px); }
+	// glyphicons
+		&.show-lines .ui-icon-custom	{ .pos(201); }
+	// glyphish (unused)
+		// &.redo .ui-icon-custom { background-position: 0px 0px; }
+		// &.loopback .ui-icon-custom { background-position: 0px 0px; }
+		// &.squiggle .ui-icon-custom { background-position: 0px 0px; }
+		// &.shuffle .ui-icon-custom { background-position: 0px 0px; }
+		// &.map-marker .ui-icon-custom { background-position: 0px 0px; }
+		// &.chat .ui-icon-custom { background-position: 0px 0px; }
+		// &.chat-2 .ui-icon-custom { background-position: 0px 0px; }
+		// &.medical .ui-icon-custom { background-position: 0px 0px; }
+		// &.coffee .ui-icon-custom { background-position: 0px 0px; }
+		// &.gameplan .ui-icon-custom { background-position: 0px 0px; }
+		// &.walk .ui-icon-custom { background-position: 0px 0px; }
+		// &.index-cards .ui-icon-custom { background-position: 0px 0px; }
+		// &.piano .ui-icon-custom { background-position: 0px 0px; }
+		// &.sliders .ui-icon-custom { background-position: 0px 0px; }
+		// &.widescreen .ui-icon-custom { background-position: 0px 0px; }
+		// &.badge .ui-icon-custom { background-position: 0px 0px; }
+		// &.chicken .ui-icon-custom { background-position: 0px 0px; }
+		// &.clock .ui-icon-custom { background-position: 0px 0px; }
+		// &.bug .ui-icon-custom { background-position: 0px 0px; }
+		// &.user .ui-icon-custom { background-position: 0px 0px; }
+		// &.group .ui-icon-custom { background-position: 0px 0px; }
+		// &.navigation .ui-icon-custom { background-position: 0px 0px; }
+		// &.balloon .ui-icon-custom { background-position: 0px 0px; }
+		// &.bow-and-arrow .ui-icon-custom { background-position: 0px 0px; }
+		// &.controller .ui-icon-custom { background-position: 0px 0px; }
+		// &.todo .ui-icon-custom { background-position: 0px 0px; }
+		// &.coat-hanger .ui-icon-custom { background-position: 0px 0px; }
+		// &.piggy-bank .ui-icon-custom { background-position: 0px 0px; }
+		// &.eye .ui-icon-custom { background-position: 0px 0px; }
+		// &.headphones .ui-icon-custom { background-position: 0px 0px; }
+		// &.landscape .ui-icon-custom { background-position: 0px 0px; }
+		// &.stats .ui-icon-custom { background-position: 0px 0px; }
+		// &.id-card .ui-icon-custom { background-position: 0px 0px; }
+		// &.food .ui-icon-custom { background-position: 0px 0px; }
+		// &.moon .ui-icon-custom { background-position: 0px 0px; }
+		// &.sock .ui-icon-custom { background-position: 0px 0px; }
+		// &.bone .ui-icon-custom { background-position: 0px 0px; }
+		// &.golf .ui-icon-custom { background-position: 0px 0px; }
+		// &.target .ui-icon-custom { background-position: 0px 0px; }
+		// &.dice .ui-icon-custom { background-position: 0px 0px; }
+		// &.tower .ui-icon-custom { background-position: 0px 0px; }
+		// &.ghost .ui-icon-custom { background-position: 0px 0px; }
+		// &.ufo .ui-icon-custom { background-position: 0px 0px; }
+		// &.viking .ui-icon-custom { background-position: 0px 0px; }
+		// &.hockeymask .ui-icon-custom { background-position: 0px 0px; }
+		// &.tractor .ui-icon-custom { background-position: 0px 0px; }
+		// &.presentation .ui-icon-custom { background-position: 0px 0px; }
+		// &.scales .ui-icon-custom { background-position: 0px 0px; }
+		// &.flags .ui-icon-custom { background-position: 0px 0px; }
+		// &.tag .ui-icon-custom { background-position: 0px 0px; }
+		// &.gradhat .ui-icon-custom { background-position: 0px 0px; }
+		// &.lamp .ui-icon-custom { background-position: 0px 0px; }
+		// &.wine-bottle .ui-icon-custom { background-position: 0px 0px; }
+		// &.liquor-bottle .ui-icon-custom { background-position: 0px 0px; }
+		// &.martini .ui-icon-custom { background-position: 0px 0px; }
+		// &.persondot .ui-icon-custom { background-position: 0px 0px; }
+		// &.gavel .ui-icon-custom { background-position: 0px 0px; }
+		// &.popsicle .ui-icon-custom { background-position: 0px 0px; }
+		// &.doghouse .ui-icon-custom { background-position: 0px 0px; }
+		// &.windmill .ui-icon-custom { background-position: 0px 0px; }
+		// &.tags .ui-icon-custom { background-position: 0px 0px; }
+		// &.sailboat .ui-icon-custom { background-position: 0px 0px; }
+		// &.telescope .ui-icon-custom { background-position: 0px 0px; }
+		// &.rolodex .ui-icon-custom { background-position: 0px 0px; }
+		// &.guitar .ui-icon-custom { background-position: 0px 0px; }
+		// &.necktie .ui-icon-custom { background-position: 0px 0px; }
+		// &.bowtie .ui-icon-custom { background-position: 0px 0px; }
+		// &.controlpad .ui-icon-custom { background-position: 0px 0px; }
+		// &.wrench .ui-icon-custom { background-position: 0px 0px; }
+		// &.wrench-2 .ui-icon-custom { background-position: 0px 0px; }
+		// &.voicemail .ui-icon-custom { background-position: 0px 0px; }
+		// &.line-chart .ui-icon-custom { background-position: 0px 0px; }
+		// &.voicemail-2 .ui-icon-custom { background-position: 0px 0px; }
+		// &.calculator .ui-icon-custom { background-position: 0px 0px; }
+		// &.receipt .ui-icon-custom { background-position: 0px 0px; }
+		// &.glasses-1 .ui-icon-custom { background-position: 0px 0px; }
+		// &.glasses-2 .ui-icon-custom { background-position: 0px 0px; }
+		// &.glasses-3 .ui-icon-custom { background-position: 0px 0px; }
+		// &.newspaper .ui-icon-custom { background-position: 0px 0px; }
+		// &.upload-photo .ui-icon-custom { background-position: 0px 0px; }
+		// &.upload-photo-2 .ui-icon-custom { background-position: 0px 0px; }
+		// &.8ball .ui-icon-custom { background-position: 0px 0px; }
+		// &.bar-chart .ui-icon-custom { background-position: 0px 0px; }
+		// &.butterfly .ui-icon-custom { background-position: 0px 0px; }
+		// &.sun .ui-icon-custom { background-position: 0px 0px; }
+		// &.pricetag .ui-icon-custom { background-position: 0px 0px; }
+		// &.eyedropper .ui-icon-custom { background-position: 0px 0px; }
+		// &.imac .ui-icon-custom { background-position: 0px 0px; }
+		// &.macbook .ui-icon-custom { background-position: 0px 0px; }
+		// &.ipad .ui-icon-custom { background-position: 0px 0px; }
+		// &.building .ui-icon-custom { background-position: 0px 0px; }
+		// &.city .ui-icon-custom { background-position: 0px 0px; }
+		// &.notepad .ui-icon-custom { background-position: 0px 0px; }
+		// &.envelope .ui-icon-custom { background-position: 0px 0px; }
+		// &.stickynote .ui-icon-custom { background-position: 0px 0px; }
+		// &.hammer .ui-icon-custom { background-position: 0px 0px; }
+		// &.messenger-bag .ui-icon-custom { background-position: 0px 0px; }
+		// &.genie-lamp .ui-icon-custom { background-position: 0px 0px; }
+		// &.warning .ui-icon-custom { background-position: 0px 0px; }
+		// &.printer .ui-icon-custom { background-position: 0px 0px; }
+		// &.ruler .ui-icon-custom { background-position: 0px 0px; }
+		// &.pencil .ui-icon-custom { background-position: 0px 0px; }
+		// &.paint-roller .ui-icon-custom { background-position: 0px 0px; }
+		// &.plant .ui-icon-custom { background-position: 0px 0px; }
+		// &.bank .ui-icon-custom { background-position: 0px 0px; }
+		// &.collection .ui-icon-custom { background-position: 0px 0px; }
+		// &.credit-card .ui-icon-custom { background-position: 0px 0px; }
+		// &.location-arrow .ui-icon-custom { background-position: 0px 0px; }
+		// &.note-2 .ui-icon-custom { background-position: 0px 0px; }
+		// &.barcode .ui-icon-custom { background-position: 0px 0px; }
+		// &.radiation .ui-icon-custom { background-position: 0px 0px; }
+		// &.card-diamonds .ui-icon-custom { background-position: 0px 0px; }
+		// &.card-spades .ui-icon-custom { background-position: 0px 0px; }
+		// &.card-hearts .ui-icon-custom { background-position: 0px 0px; }
+		// &.card-clubs .ui-icon-custom { background-position: 0px 0px; }
+		// &.skull .ui-icon-custom { background-position: 0px 0px; }
+		// &.skull-n-bones .ui-icon-custom { background-position: 0px 0px; }
+		// &.bird .ui-icon-custom { background-position: 0px 0px; }
+		// &.gift .ui-icon-custom { background-position: 0px 0px; }
+		// &.weather .ui-icon-custom { background-position: 0px 0px; }
+		// &.bandaid .ui-icon-custom { background-position: 0px 0px; }
+		// &.planet .ui-icon-custom { background-position: 0px 0px; }
+		// &.heart .ui-icon-custom { background-position: 0px 0px; }
+		// &.key .ui-icon-custom { background-position: 0px 0px; }
+		// &.ipod .ui-icon-custom { background-position: 0px 0px; }
+		// &.iphone .ui-icon-custom { background-position: 0px 0px; }
+		// &.cabinet .ui-icon-custom { background-position: 0px 0px; }
+		// &.coffee .ui-icon-custom { background-position: 0px 0px; }
+		// &.shopping .ui-icon-custom { background-position: 0px 0px; }
+		// &.toolbox .ui-icon-custom { background-position: 0px 0px; }
+		// &.suitcase .ui-icon-custom { background-position: 0px 0px; }
+		// &.airplane .ui-icon-custom { background-position: 0px 0px; }
+		// &.spraycan .ui-icon-custom { background-position: 0px 0px; }
+		// &.inbox .ui-icon-custom { background-position: 0px 0px; }
+		// &.picture-frame .ui-icon-custom { background-position: 0px 0px; }
+		// &.photos .ui-icon-custom { background-position: 0px 0px; }
+		// &.film-roll .ui-icon-custom { background-position: 0px 0px; }
+		// &.shoebox .ui-icon-custom { background-position: 0px 0px; }
+		// &.movie-1 .ui-icon-custom { background-position: 0px 0px; }
+		// &.movie-2 .ui-icon-custom { background-position: 0px 0px; }
+		// &.fuel .ui-icon-custom { background-position: 0px 0px; }
+		// &.fork-and-knife .ui-icon-custom { background-position: 0px 0px; }
+		// &.battery .ui-icon-custom { background-position: 0px 0px; }
+		// &.beaker .ui-icon-custom { background-position: 0px 0px; }
+		// &.outlet .ui-icon-custom { background-position: 0px 0px; }
+		// &.pine-tree .ui-icon-custom { background-position: 0px 0px; }
+		// &.house .ui-icon-custom { background-position: 0px 0px; }
+		// &.lock .ui-icon-custom { background-position: 0px 0px; }
+		// &.network .ui-icon-custom { background-position: 0px 0px; }
+		// &.cloud .ui-icon-custom { background-position: 0px 0px; }
+		// &.download .ui-icon-custom { background-position: 0px 0px; }
+		// &.bookmark .ui-icon-custom { background-position: 0px 0px; }
+		// &.flag .ui-icon-custom { background-position: 0px 0px; }
+		// &.signpost .ui-icon-custom { background-position: 0px 0px; }
+		// &.brightness .ui-icon-custom { background-position: 0px 0px; }
+		// &.contrast .ui-icon-custom { background-position: 0px 0px; }
+		// &.runner .ui-icon-custom { background-position: 0px 0px; }
+		// &.zap .ui-icon-custom { background-position: 0px 0px; }
+		// &.note .ui-icon-custom { background-position: 0px 0px; }
+		// &.microphone .ui-icon-custom { background-position: 0px 0px; }
+		// &.tshirt .ui-icon-custom { background-position: 0px 0px; }
+		// &.paperclip .ui-icon-custom { background-position: 0px 0px; }
+		// &.display .ui-icon-custom { background-position: 0px 0px; }
+		// &.tv .ui-icon-custom { background-position: 0px 0px; }
+		// &.compass .ui-icon-custom { background-position: 0px 0px; }
+		// &.pin .ui-icon-custom { background-position: 0px 0px; }
+		// &.radar .ui-icon-custom { background-position: 0px 0px; }
+		// &.location .ui-icon-custom { background-position: 0px 0px; }
+		// &.phone .ui-icon-custom { background-position: 0px 0px; }
+		// &.baby .ui-icon-custom { background-position: 0px 0px; }
+		// &.ekg .ui-icon-custom { background-position: 0px 0px; }
+		// &.stopwatch .ui-icon-custom { background-position: 0px 0px; }
+		// &.medical-bag .ui-icon-custom { background-position: 0px 0px; }
+		// &.shopping-cart .ui-icon-custom { background-position: 0px 0px; }
+		// &.dashboard .ui-icon-custom { background-position: 0px 0px; }
+		// &.dog-paw .ui-icon-custom { background-position: 0px 0px; }
+		// &.calendar .ui-icon-custom { background-position: 0px 0px; }
+		// &.lightbulb .ui-icon-custom { background-position: 0px 0px; }
+		// &.trophy .ui-icon-custom { background-position: 0px 0px; }
+		// &.camera .ui-icon-custom { background-position: 0px 0px; }
+		// &.wine-glass .ui-icon-custom { background-position: 0px 0px; }
+		// &.beer-mug .ui-icon-custom { background-position: 0px 0px; }
+		// &.dumbell .ui-icon-custom { background-position: 0px 0px; }
+		// &.life-buoy .ui-icon-custom { background-position: 0px 0px; }
+		// &.beaker-2 .ui-icon-custom { background-position: 0px 0px; }
+		// &.test-tube .ui-icon-custom { background-position: 0px 0px; }
+		// &.thermometer .ui-icon-custom { background-position: 0px 0px; }
+		// &.pill .ui-icon-custom { background-position: 0px 0px; }
+		// &.equalizer .ui-icon-custom { background-position: 0px 0px; }
+		// &.book .ui-icon-custom { background-position: 0px 0px; }
+		// &.puzzle .ui-icon-custom { background-position: 0px 0px; }
+		// &.palette .ui-icon-custom { background-position: 0px 0px; }
+		// &.umbrella .ui-icon-custom { background-position: 0px 0px; }
+}
+.dark {
+	.ui-btn {
+		.ui-icon-custom {
+			background-image: url(../img/icons_sprite-dark.png);
+		}
+	}
+}
