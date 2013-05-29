@@ -128,21 +128,25 @@ div,span,ul,ol,li,input,textarea,article,section,aside,header,footer,.row{-moz-b
 .ui-header .ui-btn-left{margin-left:-1px;left:0;}
 .ui-header .ui-btn-right{margin-right:-1px;right:0;}
 #plan-trip .ui-content{padding-top:0;}
-#search .ui-listview-filter{margin-top:0;}
+#buscar .ui-listview-filter{margin-top:0;}
 .map-canvas{width:100%;height:100%;}.map-canvas img{max-width:initial;}
 #info-popup h2{margin-right:auto;margin-left:auto;padding:0 45px;}
 #info-popup h3{margin:0;padding:0;}
 #info-popup h4{margin:0;padding:0;}
 #info-popup .ui-content{height:auto !important;max-width:320px;}
-.routes .ui-btn{color:#fff;}.routes .ui-btn.E{background:#2e2482;}
-.routes .ui-btn.T{background:#2e2482;}
-.routes .ui-btn.P{background:#e4004f;}
-.routes .ui-btn.A{background:#bbbb00;}
+.routes .ui-btn,.routes.ui-link-inherit span{color:#fff;}.routes .ui-btn.E,.routes.ui-link-inherit span.E{background:#2e2482;}
+.routes .ui-btn.T,.routes.ui-link-inherit span.T{background:#2e2482;}
+.routes .ui-btn.P,.routes.ui-link-inherit span.P{background:#e4004f;}
+.routes .ui-btn.A,.routes.ui-link-inherit span.A{background:#bbbb00;}
+.routes.ui-link-inherit span{display:inline-block;width:3em;padding:3px 0;margin-right:5px;text-align:center;}
+.stop.icon{display:inline-block;vertical-align:text-bottom;width:16px;height:26px;margin:-4px 10px -4px 0;background-size:16px 28px;background-repeat:no-repeat;}.stop.icon.tipo_1{background-image:url(../img/stop_troncal.png);}
+.stop.icon.tipo_2{background-image:url(../img/stop_pretroncal.png);}
+.stop.icon.tipo_3{background-image:url(../img/stop_alimentadora.png);}
 a.control{display:none;z-index:1;position:relative;overflow:hidden;padding:3px 6px 4px;border:1px solid #717B87;min-width:34px;color:#000 !important;background-color:#fff;background-position:initial initial;background-repeat:initial initial;-webkit-box-shadow:rgba(0, 0, 0, 0.4) 0px 2px 4px;-moz-box-shadow:rgba(0, 0, 0, 0.4) 0px 2px 4px;box-shadow:rgba(0, 0, 0, 0.4) 0px 2px 4px;font-family:Arial,sans-serif;font-size:13px;font-weight:bold;text-align:center;line-height:13px;cursor:pointer;-webkit-user-select:none;}a.control.icon{line-height:20px;}a.control.icon span{display:inline-block;width:20px;height:20px;margin-right:5px;vertical-align:bottom;}
 a.control:hover{background:#ffffff;background:-moz-linear-gradient(top, #ffffff 0%, #e6e6e6 100%);background:-webkit-gradient(linear, left top, left bottom, color-stop(0%, #ffffff), color-stop(100%, #e6e6e6));background:-webkit-linear-gradient(top, #ffffff 0%, #e6e6e6 100%);background:-o-linear-gradient(top, #ffffff 0%, #e6e6e6 100%);background:-ms-linear-gradient(top, #ffffff 0%, #e6e6e6 100%);background:linear-gradient(top, #ffffff 0%, #e6e6e6 100%);filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='@color1', endColorstr='@color2', GradientType=0);}
 a.control:active{background:#fff;}
 a.control.visible{display:inline-block;}
-a.control.geolocalizar{margin:5px;}a.control.geolocalizar span{background:url('vendor/glyphish-icons-dark/74-location.png');}
+a.control.location{margin:5px;}a.control.location span{background:url(../img/icons_sprite-dark.png) -158px -350px no-repeat;}
 .nocallout{-webkit-touch-callout:none;}
 .pressed{background-color:rgba(0, 0, 0, 0.7);}
 textarea[contenteditable]{-webkit-appearance:none;}

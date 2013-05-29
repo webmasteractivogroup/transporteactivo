@@ -90,13 +90,13 @@ class BusquedaViewSet(viewsets.ReadOnlyModelViewSet):
 		q = self.request.QUERY_PARAMS.get('q', None)
 
 		if q:
-			query = r'(^|.*\s)%s.*' % q
-			queryset = Busqueda.objects.filter(nombre__iregex=query)
-			# query = r'(^|.*\s)%s.*' % unidecode(q)
-			# querystring = """	SELECT s.*
-			# 					FROM search s
-			# 					WHERE unaccent(s.nombre) ~* %s"""
-			# queryset = Busqueda.objects.raw(querystring, [query])
+			# query = r'(^|.*\s)%s.*' % q
+			# queryset = Busqueda.objects.filter(nombre__iregex=query)
+			query = r'(^|.*\s)%s.*' % unidecode(q)
+			querystring = """	SELECT s.*
+								FROM search s
+								WHERE unaccent(s.nombre || ' ' || s.extra) ~* %s"""
+			queryset = Busqueda.objects.raw(querystring, [query])
 
 		return queryset
 

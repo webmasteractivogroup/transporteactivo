@@ -282,7 +282,7 @@
 				padding-top: 0;
 			}
 		}
-		#search {
+		#buscar {
 			// .ui-content {
 			// 	padding-top: 0;
 			// }
@@ -320,12 +320,33 @@
 			}
 		}
 		.routes {
-			.ui-btn {
+			.ui-btn, &.ui-link-inherit span {
 				color: #fff;
 				&.E { background: @troncal-color; }
 				&.T { background: @troncal-color; }
 				&.P { background: @pretroncal-color; }
 				&.A { background: @alimentadora-color; }
+			}
+			&.ui-link-inherit span {
+				display: inline-block;
+				width: 3em;
+				padding: 3px 0;
+				margin-right: 5px;
+				text-align: center;
+			}
+		}
+		.stop {
+			&.icon {
+				display: inline-block;
+				vertical-align: text-bottom;
+				width: 16px;
+				height: 26px;
+				margin: -4px 10px -4px 0;
+				background-size: 16px 28px;
+				background-repeat: no-repeat;
+				&.tipo_1 { background-image: url(../img/stop_troncal.png); }
+				&.tipo_2 { background-image: url(../img/stop_pretroncal.png); }
+				&.tipo_3 { background-image: url(../img/stop_alimentadora.png); }
 			}
 		}
 		a.control {
@@ -370,17 +391,17 @@
 			&.visible {
 				display: inline-block;
 			}
-			&.geolocalizar {
+			&.location {
 				margin: 5px;
 				span {
-					background: url('vendor/glyphish-icons-dark/74-location.png');
+					background: url(../img/icons_sprite-dark.png) -158px -350px no-repeat;
 				}
-				
+
 			}
 		}
 
 // Helper classes
-	// Prevent callout 
+	// Prevent callout
 	.nocallout {
 		-webkit-touch-callout: none;
 	}
@@ -388,12 +409,12 @@
 		background-color: rgba(0, 0, 0, 0.7);
 	}
 
-	// A hack for HTML5 contenteditable attribute on mobile 
+	// A hack for HTML5 contenteditable attribute on mobile
 	textarea[contenteditable] {
 		-webkit-appearance: none;
 	}
 
-	// A workaround for S60 3.x and 5.0 devices which do not animated gif images if they have been set as display: none 
+	// A workaround for S60 3.x and 5.0 devices which do not animated gif images if they have been set as display: none
 	.gifhidden {
 		position: absolute;
 		left: -100%;

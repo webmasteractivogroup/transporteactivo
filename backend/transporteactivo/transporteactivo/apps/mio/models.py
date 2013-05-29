@@ -35,6 +35,7 @@ class TipoParada(models.Model):
 class Busqueda(models.Model):
     id = models.IntegerField(primary_key=True)
     nombre = models.CharField(max_length=255)
+    extra = models.CharField(max_length=255)
     tipo = models.CharField(max_length=255)
 
     class Meta:

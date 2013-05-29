@@ -13,14 +13,20 @@ JOIN "STOPS" s ON ls."STOPID" = s."STOPID"
 WHERE l."SHORTNAME" NOT LIKE 'R%'
 GROUP BY ls."STOPID";
 
+-- GRANT ALL PRIVILEGES ON stop_types TO transporteactivo;
+
+
 -- Query que crea la vista para el autocompletado
 -- CREATE OR REPLACE VIEW search AS
-SELECT s."STOPID" AS id, s."LONGNAME" AS nombre, 'p' as tipo
+SELECT s."STOPID" AS id, s."LONGNAME" AS nombre, CAST(ms.tipo_parada AS varchar) AS extra, 'p' as tipo
 FROM "STOPS" s
 JOIN mio_miostops ms ON ms.stops_ptr_id = s."STOPID"
 UNION
-SELECT l."LINEID" AS id, (l."SHORTNAME" || '(' || l."DESCRIPTION" || ')') AS nombre, 'r' as tipo
-FROM "LINES" l;
+SELECT l."LINEID" AS id, l."SHORTNAME" AS nombre, l."DESCRIPTION" AS extra, 'r' as tipo
+FROM "LINES" l
+ORDER BY tipo DESC, nombre;
+
+-- GRANT ALL PRIVILEGES ON search TO transporteactivo;
 
 
 -- Query inicial que podría ayudar para crear las paradas compuestas

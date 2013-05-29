@@ -317,8 +317,8 @@ $(document).on('pageinit', '#plan-trip', function(event){
 		ta.map.loadVisibleStops();
 
 		// add the custom controls
-		ta.map.map.controls[google.maps.ControlPosition.TOP_LEFT].push($('a.control.geolocalizar').get(0));
-		$('a.control.geolocalizar').addClass('visible').click(function(){ta.geoLocation.findLocation();});
+		ta.map.map.controls[google.maps.ControlPosition.TOP_LEFT].push($('a.control.location').get(0));
+		$('a.control.location').addClass('visible').click(function(){ta.geoLocation.findLocation();});
 	});
 
 	// every time the map is moved/dragged or the zoom changed
@@ -346,14 +346,14 @@ $(document).on('pageinit', '#plan-trip', function(event){
 	});
 });
 
-$(document).on("pageinit", "#search", function(event) {
+$(document).on("pageinit", "#buscar", function(event) {
 	$("#autocomplete").on("listviewbeforefilter", function (e, data) {
 		var $ul = $(this),
 			$input = $(data.input),
 			value = $input.val(),
 			html = "";
 		$ul.html("");
-		if (value && value.length > 2) {
+		if (value && value.length >= 2) {
 			$ul.html("<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>");
 			$ul.listview("refresh");
 			$.ajax({
@@ -362,15 +362,26 @@ $(document).on("pageinit", "#search", function(event) {
 				crossDomain: true,
 				data: {
 					q: $input.val()
+				},
+				success: function(data, textStatus, jqXHR) {
+					$.each(data, function (i, val) {
+						html += '<li data-tipo="' + val.tipo + '">';
+						if (val.tipo == 'p') { //paradas
+							html += '<a data-id="' + val.id + '">';
+							html += '<span class="stop icon tipo_' + val.extra + '"></span>';
+							html += val.nombre;
+						} else { //ruta
+							html += '<a data-id="' + val.id + '" class="routes">';
+							tipo_ruta = val.nombre.substring(0, 1);
+							html += '<span class="' + tipo_ruta + '">' + val.nombre + '</span> (' + val.extra + ')';
+						}
+						html += '</a>';
+						html += "</li>";
+					});
+					$ul.html(html);
+					$ul.listview("refresh");
+					$ul.trigger("updatelayout");
 				}
-			})
-			.then(function (response) {
-				$.each(response, function (i, val) {
-					html += "<li data-id='"+val.id+"'>" + val.nombre + "</li>";
-				});
-				$ul.html(html);
-				$ul.listview("refresh");
-				$ul.trigger("updatelayout");
 			});
 		}
 	});

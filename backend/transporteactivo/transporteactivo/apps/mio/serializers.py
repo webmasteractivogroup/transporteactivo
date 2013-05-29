@@ -47,4 +47,4 @@ class BusquedaSerializer(serializers.ModelSerializer):
 
 	class Meta:
 		model = Busqueda
-		fields = ('id', 'nombre', 'tipo')
+		fields = ('id', 'nombre', 'extra', 'tipo')

@@ -9,5 +9,6 @@
 .ui-btn.star .ui-icon-custom{background-position:-347px -106px;}
 .ui-btn.map .ui-icon-custom{background-position:-107px -490px;}
 .ui-btn.bullhorn .ui-icon-custom{background-position:-155px -584px;}
+.ui-btn.location .ui-icon-custom{background-position:-155px -346px;}
 .ui-btn.show-lines .ui-icon-custom{background-position:-11px -970px;}
 .dark .ui-btn .ui-icon-custom{background-image:url(../img/icons_sprite-dark.png);}
