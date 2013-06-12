@@ -21,7 +21,7 @@ router.register(r'buscar-parada', views.BusquedaParadasViewSet)
 urlpatterns = patterns('',
 
     url(r'^$', TemplateView.as_view(template_name='index.html'), name='index'),
-    url(r'^v1/', include(router.urls)),
+    url(r'^api/v1/', include(router.urls)),
     # url(r'^admin/', include(admin.site.urls)),
 )
 urlpatterns += staticfiles_urlpatterns()

@@ -213,7 +213,7 @@ window.ta = {
                     .popup('open');
 
                 $.ajax({
-                    url: "http://"+ta.BASE_URL+"/v1/rutas-por-parada/",
+                    url: "http://"+ta.BASE_URL+"/api/v1/rutas-por-parada/",
                     type: "get",
                     data: {parada_id: marker.stop.id},
                     dataType: "JSON",
@@ -254,7 +254,7 @@ window.ta = {
 
             // TODO: Idea: mostrar max 100 puntos, ordenados por tipo y cercania?
             $.ajax({
-                url: "http://"+ta.BASE_URL+"/v1/paradas-cercanas/",
+                url: "http://"+ta.BASE_URL+"/api/v1/paradas-cercanas/",
                 type: "get",
                 data: data,
                 dataType: "JSON",
@@ -357,7 +357,7 @@ $(document).on("pageinit", "#buscar", function(event) {
             $ul.html("<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>");
             $ul.listview("refresh");
             $.ajax({
-                url: "http://"+ta.BASE_URL+"/v1/buscar/",
+                url: "http://"+ta.BASE_URL+"/api/v1/buscar/",
                 dataType: "json",
                 crossDomain: true,
                 data: {
