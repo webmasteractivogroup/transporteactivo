@@ -19,6 +19,6 @@ router.register(r'buscar-parada', views.BusquedaParadasViewSet)
 
 urlpatterns = patterns('',
 
-    url(r'^v1/', include(router.urls)),
+    url(r'^api/v1/', include(router.urls)),
     # url(r'^admin/', include(admin.site.urls)),
 )
