@@ -12,7 +12,7 @@ from mio import views
 # admin.autodiscover()
 
 router = DefaultRouter()
-router.register(r'paradas-cercanas', views.ParadasCercanasViewSet)
+router.register(r'paradas-cercanas', views.ParadasCercanasViewSet, base_name='paradas_cercanas')
 router.register(r'rutas-por-parada', views.RutasPorParadaViewSet)
 router.register(r'paradas-por-ruta', views.ParadasPorRutaViewSet)
 router.register(r'buscar', views.BusquedaViewSet)
