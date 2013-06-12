@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from django.db import DatabaseError
 from django.contrib.gis.geos import Point, Polygon
 
 from rest_framework import viewsets
@@ -90,13 +91,16 @@ class BusquedaViewSet(viewsets.ReadOnlyModelViewSet):
 		q = self.request.QUERY_PARAMS.get('q', None)
 
 		if q:
-			# query = r'(^|.*\s)%s.*' % q
-			# queryset = Busqueda.objects.filter(nombre__iregex=query)
-			query = r'(^|.*\s)%s.*' % unidecode(q)
-			querystring = """	SELECT s.*
-								FROM search s
-								WHERE unaccent(s.nombre || ' ' || s.extra) ~* %s"""
-			queryset = Busqueda.objects.raw(querystring, [query])
+			try:
+				query = r'(^|.*\s)%s.*' % unidecode(q)
+				querystring = """	SELECT s.*
+									FROM search s
+									WHERE unaccent(s.nombre || ' ' || s.extra) ~* %s"""
+				queryset = Busqueda.objects.raw(querystring, [query])
+			except DatabaseError, e:
+				query = r'(^|.*\s)%s.*' % q
+				queryset = Busqueda.objects.filter(nombre__iregex=query)
+				# raise e
 
 		return queryset
 
