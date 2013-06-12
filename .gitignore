@@ -1,5 +1,10 @@
 *.sublime-project
 *.sublime-workspace
 *.pyc
+
+/backend/transporteactivo/json/*
+/backend/transporteactivo/backup/*
+/backend/transporteactivo/transporteactivo/static/*
+/backend/transporteactivo/transporteactivo/sgco_tables/*
 /backend/transporteactivo/transporteactivo/wsgi.py
 /backend/transporteactivo/transporteactivo/local_settings.py
