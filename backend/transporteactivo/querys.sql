@@ -17,7 +17,7 @@ GROUP BY ls."STOPID";
 
 
 -- Query que crea la vista para el autocompletado
--- CREATE OR REPLACE VIEW search AS
+CREATE OR REPLACE VIEW search AS
 SELECT s."STOPID" AS id, s."LONGNAME" AS nombre, CAST(ms.tipo_parada AS varchar) AS extra, 'p' as tipo
 FROM "STOPS" s
 JOIN mio_miostops ms ON ms.stops_ptr_id = s."STOPID"
