@@ -1,0 +1,11 @@
+.glyphish .ui-btn .ui-icon-custom{width:26px !important;height:26px !important;margin-left:-13px !important;-moz-box-shadow:none!important;-webkit-box-shadow:none!important;box-shadow:none!important;-webkit-border-radius:0 !important;border-radius:0 !important;background-color:transparent;background-image:url(glyphish-light.png);background-repeat:no-repeat;}
+.glyphish .ui-btn.ui-btn-icon-top .ui-btn-inner{padding:35px 3px 5px !important;}
+.glyphish .ui-btn.ui-btn-icon-right .ui-icon-custom{margin-top:-13px !important;}
+.glyphish .ui-btn.ui-btn-icon-notext .ui-icon-custom{margin:-2px 0 0 !important;}
+.glyphish .ui-btn.refresh .ui-icon-custom{background-position:-10px -10px;}
+.glyphish .ui-btn.magnify .ui-icon-custom{background-position:-242px -10px;}
+.glyphish .ui-btn.gear .ui-icon-custom{background-position:-381px -56px;}
+.glyphish .ui-btn.map .ui-icon-custom{background-position:-103px -475px;}
+.glyphish .ui-btn.bullhorn .ui-icon-custom{background-position:-149px -569px;}
+.glyphish .ui-btn.star .ui-icon-custom{background-position:-336px -102px;}
+.glyphish.dark .ui-btn .ui-icon-custom{background-image:url(glyphish-dark.png);}
