@@ -148,10 +148,11 @@
 	// 	color: #222;
 	// }
 
-	// body {
+	body {
 	// 	font-size: 1em;
 	// 	line-height: 1.4;
-	// }
+		overflow: hidden;
+	}
 
 	// a {
 	// 	color: #00e;
@@ -255,8 +256,11 @@
 			.ui-btn {
 				height: 100%;
 				width: auto;
-				margin-top: -1px;
-				top: 0;
+				margin-top: 0;
+				top: -2px;
+			}
+			.ui-btn-inner {
+				line-height: 28px;
 			}
 			.ui-btn-icon-notext {
 				.ui-btn-inner {
@@ -279,7 +283,7 @@
 	// Specific pages layouts
 		#plan-trip {
 			.ui-content {
-				padding-top: 0;
+				// padding-top: 0;
 			}
 		}
 		#buscar {
@@ -495,7 +499,7 @@
 	/* Style adjustments for viewports that meet the condition */
 }
 
-@media only screen and (-webkit-min-device-pixel-ratio: 1.5),
-		 only screen and (min-resolution: 144dpi) {
-	/* Style adjustments for viewports that meet the condition */
-}
+// @media only screen and (-webkit-min-device-pixel-ratio: 1.5),
+// 		 only screen and (min-resolution: 144dpi) {
+// 	/* Style adjustments for viewports that meet the condition */
+// }
