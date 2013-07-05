@@ -162,8 +162,8 @@ window.ta = {
         createMap: function() {
             var mapOptions = {
                 zoom: 15,
-                maxZoom: 17,
-                minZoom: 8,
+                maxZoom: 19,
+                minZoom: 11,
                 center: this.defaultPosition,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
                 panControl: false,
