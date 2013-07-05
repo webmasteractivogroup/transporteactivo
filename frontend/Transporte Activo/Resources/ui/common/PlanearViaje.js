@@ -177,7 +177,7 @@ function getParadas(region) {
 	Ti.API.log('LatitudDelta: ' + region.latitudeDelta);
 	var delta = region.latitudeDelta;
 	var bounds = getMapBounds(region);
-	var url = "http://transporteactivo.com/api/v1/paradas-cercanas/?ne=" + bounds.northEast.lat + "," + bounds.northEast.lng + "&sw=" + bounds.southWest.lat + "," + bounds.southWest.lng;
+	var url = "http://transporteactivo.com/api/v1/paradas-cercanas/?ne[]=" + bounds.northEast.lat + "&ne[]=" + bounds.northEast.lng + "&sw[]=" + bounds.southWest.lat + "&sw[]=" + bounds.southWest.lng;
 	Ti.API.log('URL: ' + url);
 	var json, parada, i;
 
