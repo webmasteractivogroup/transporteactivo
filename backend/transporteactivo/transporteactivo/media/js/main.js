@@ -163,7 +163,7 @@ window.ta = {
             var mapOptions = {
                 zoom: 15,
                 maxZoom: 17,
-                minZoom: 11,
+                minZoom: 8,
                 center: this.defaultPosition,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
                 panControl: false,
