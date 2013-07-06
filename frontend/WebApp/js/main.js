@@ -349,6 +349,12 @@ $(document).on('pageinit', '#plan-trip', function(event){
 			ta.map.loadVisibleStops();
 		}, 250);
 	});
+
+	// every time the map options are changed, refresh the markers
+	$("#map-options input[type='checkbox']").bind( "change", function(event, ui) {
+		ta.map.loadVisibleStops();
+		console.log('actualizado');
+	});
 });
 
 $(document).on("pageinit", "#buscar", function(event) {
