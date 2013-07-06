@@ -294,6 +294,14 @@
 				margin-top: 0;
 			}
 		}
+		#parada {
+			h2, h3 {
+				margin: 0.5em 0 0.25em;
+				&:first-child {
+					margin-top: 0;
+				}
+			}
+		}
 
 	// Widgets and other stand-alone custom elements
 		.map-canvas {
@@ -304,17 +312,16 @@
 				max-width: initial; // fixes broken infowindow layout
 			}
 		}
+		.ui-popup-container {
+			min-width: 66%;
+		}
 		#info-popup {
 			h2 {
 				margin-right: auto;
 				margin-left: auto;
 				padding: 0 45px;
 			}
-			h3 {
-				margin: 0;
-				padding: 0;
-			}
-			h4 {
+			h3, h4 {
 				margin: 0;
 				padding: 0;
 			}
