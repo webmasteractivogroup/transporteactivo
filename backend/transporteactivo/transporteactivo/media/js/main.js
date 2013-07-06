@@ -43,7 +43,7 @@ $(document).on("mobileinit", function () {
 // Transporte Activo
 window.ta = {
     // BASE_URL: (location.hostname == 'localhost') ? 'localhost:8000' : 'transporteactivo.com/api',
-    BASE_URL: 'transporteactivo.com/api',
+    BASE_URL: 'http://transporteactivo.com/',
     nearbyStops: [],
 
     geoLocation: {
@@ -106,19 +106,19 @@ window.ta = {
                 scaledSize: new google.maps.Size(33,33)
             },
             // 1: {
-            //  url: '/static/img/marker_icon_troncal.png',
+            //  url: 'img/marker_icon_troncal.png',
             //  anchor: new google.maps.Point(16,35),
             //  // origin: new google.maps.Point(0,0), //used for sprites, offset
             //  // size: new google.maps.Size(32,46), //used for sprites, display size
             //  scaledSize: new google.maps.Size(24,35)
             // },
             // 2: {
-            //  url: '/static/img/marker_icon_pretroncal.png',
+            //  url: 'img/marker_icon_pretroncal.png',
             //  anchor: new google.maps.Point(16,35),
             //  scaledSize: new google.maps.Size(24,35)
             // },
             // 3: {
-            //  url: '/static/img/marker_icon_alimentadora.png',
+            //  url: 'img/marker_icon_alimentadora.png',
             //  anchor: new google.maps.Point(16,35),
             //  scaledSize: new google.maps.Size(24,35)
             // },
@@ -137,19 +137,19 @@ window.ta = {
                 url: '/static/img/stop_alimentadora.png'
             }
             // 1: {
-            //  url: '/static/img/stops_sprite_small.png',
+            //  url: 'img/stops_sprite_small.png',
             //  origin: new google.maps.Point(0,0), //used for sprites, offset
             //  size: new google.maps.Size(20,35), //used for sprites, display size
             //  // anchor: new google.maps.Point(10,35),
             //  // scaledSize: new google.maps.Size(20,35)
             // },
             // 2: {
-            //  url: '/static/img/stops_sprite_small.png',
+            //  url: 'img/stops_sprite_small.png',
             //  origin: new google.maps.Point(20,0), //used for sprites, offset
             //  size: new google.maps.Size(20,35), //used for sprites, display size
             // },
             // 3: {
-            //  url: '/static/img/stops_sprite_small.png',
+            //  url: 'img/stops_sprite_small.png',
             //  origin: new google.maps.Point(40,0), //used for sprites, offset
             //  size: new google.maps.Size(20,35), //used for sprites, display size
             // }
@@ -216,7 +216,7 @@ window.ta = {
                     .popup('open');
 
                 $.ajax({
-                    url: "http://"+ta.BASE_URL+"/v1/rutas-por-parada/",
+                    url: ta.BASE_URL+"api/v1/rutas-por-parada/",
                     type: "get",
                     data: {parada_id: marker.stop.id},
                     dataType: "JSON",
@@ -236,7 +236,7 @@ window.ta = {
                             }
                             // console.log(html_list);
                             ta.map.$infoPopup.find('.routes').html(html).trigger('create');
-                            ta.search.parada = {id: marker.stop.id, nombre: marker.getTitle()};
+                            ta.search.parada = {id: marker.stop.id, nombre: marker.getTitle(), position: marker.getPosition(), icon: marker.getIcon().url};
                         }
                     }
                 });
@@ -258,7 +258,7 @@ window.ta = {
 
             // TODO: Idea: mostrar max 100 puntos, ordenados por tipo y cercania?
             $.ajax({
-                url: "http://"+ta.BASE_URL+"/v1/paradas-cercanas/",
+                url: ta.BASE_URL+"api/v1/paradas-cercanas/",
                 type: "get",
                 data: data,
                 dataType: "JSON",
@@ -362,7 +362,7 @@ $(document).on("pageinit", "#buscar", function(event) {
             $ul.html("<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>");
             $ul.listview("refresh");
             $.ajax({
-                url: "http://"+ta.BASE_URL+"/v1/buscar/",
+                url: ta.BASE_URL+"api/v1/buscar/",
                 dataType: "json",
                 crossDomain: true,
                 data: {
@@ -391,18 +391,40 @@ $(document).on("pageinit", "#buscar", function(event) {
         }
     });
     $('#autocomplete').on("click", "a", function(event) {
-        // todo: hacer condicional para rutas
-        ta.search.parada = {id: jQuery(this).data('id'), nombre: jQuery(this).text()};
+        switch(jQuery(this).parent("li").data('tipo')) {
+            case 'r': //ruta
+                ta.search.ruta = {id: jQuery(this).data('id'), nombre: jQuery(this).text()};
+                break;
+            case 'p': //parada
+                ta.search.parada = {id: jQuery(this).data('id'), nombre: jQuery(this).text()};
+                //TODO: ADD POSITION AND ICON URL
+                break;
+        }
     });
 });
 
 $(document).on("pageshow", "#parada", function(event) {
-    if (ta.search.parada) {
-        $("#parada").find('h1').html(ta.search.parada.nombre);
+    parada = ta.search.parada;
+    if (parada) {
+        // change the page title
+        $("#parada").find('h1').html(parada.nombre);
+
+        // set the static map
+        if (parada.position) {
+            $staticmap = $("#parada").find('.staticmap');
+            url = "http://maps.googleapis.com/maps/api/staticmap?";
+            url += "center=" + parada.position.lat() + "," + parada.position.lng();
+            url += "&markers=icon:" + ta.BASE_URL + "static/" + parada.icon + "%7C" + parada.position.lat() + "," + parada.position.lng();
+            url += "&size=" + $staticmap.width() + "x" + Math.round($staticmap.width()/3);
+            url += "&zoom=15&maptype=roadmap&sensor=false";
+            $staticmap.html("<img src='"+url+"'/>");
+        }
+
+        // load and display the routes
         $.ajax({
-            url: "http://"+ta.BASE_URL+"/v1/rutas-por-parada/",
+            url: ta.BASE_URL+"api/v1/rutas-por-parada/",
             type: "get",
-            data: {parada_id: ta.search.parada.id},
+            data: {parada_id: parada.id},
             dataType: "JSON",
             success: function(data, textStatus, jqXHR) {
                 if (textStatus === "success") {
@@ -416,7 +438,7 @@ $(document).on("pageshow", "#parada", function(event) {
                     var html = '';
                     // add opening and closing tags for the lists
                     for (var k in html_list) {
-                        html += '<h4>Sentido '+orientaciones[k]+'</h4><div data-role="controlgroup" data-type="horizontal">' + html_list[k] + '</div>';
+                        html += '<h3>Sentido '+orientaciones[k]+'</h3><div data-role="controlgroup" data-type="horizontal">' + html_list[k] + '</div>';
                     }
                     $("#parada").find('.routes').html(html).trigger('create');
                 }
@@ -429,16 +451,18 @@ $(document).on("pageshow", "#parada", function(event) {
 });
 
 $(window).on('orientationchange resize pageshow', function(event) {
-    // fix the content height
-    fixgeometry();
+    if ($.mobile.activePage) {
+        // fix the content height
+        fixgeometry();
 
-    switch($.mobile.activePage.attr('id')) {
-        case 'plan-trip':
-            // resize the map to fit the content, minus the search form
-            $('.map-canvas').height($(".ui-content:visible").height()-$(".planear-viaje").height());
-            google.maps.event.trigger(ta.map.map, "resize");
-            break;
-        case 'search':
-            break;
+        switch($.mobile.activePage.attr('id')) {
+            case 'plan-trip':
+                // resize the map to fit the content, minus the search form
+                $('.map-canvas').height($(".ui-content:visible").height()-$(".planear-viaje").height());
+                google.maps.event.trigger(ta.map.map, "resize");
+                break;
+            case 'search':
+                break;
+        }
     }
 });
