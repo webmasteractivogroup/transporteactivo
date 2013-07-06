@@ -7,6 +7,7 @@ function ApplicationWindow(title) {
 		backgroundColor:'white'
 	});
 	
+	
 	if(title==='Planear Viaje'){
 	var mapview = new Mapview();
 	self.add(mapview);

@@ -91,6 +91,7 @@ exports.popup = function(current, id, nombre) {
 	});
 
 	btnExit.addEventListener('click', function() {
+		current.isPopUpActive= false;
 		current.remove(win);
 		current.remove(current.blur);
 
