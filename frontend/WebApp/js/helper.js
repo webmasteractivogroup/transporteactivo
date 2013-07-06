@@ -383,18 +383,18 @@ var fixgeometry = function() {
 	 * that isn't 0,0. This is annoying for user experience. */
 	scroll(0, 0);
 
-	// Calculate the geometry that our content area should take 
-	var header = $.mobile.activePage.find(".ui-header");
-	var footer = $.mobile.activePage.find(".ui-footer");
-	var content = $.mobile.activePage.find(".ui-content");
-	var panels = $.mobile.activePage.find(".ui-panel");
+	// Calculate the geometry that our content area should take
+	var $header = $.mobile.activePage.find(".ui-header");
+	var $footer = $.mobile.activePage.find(".ui-footer");
+	var $content = $.mobile.activePage.find(".ui-content");
+	var $panels = $.mobile.activePage.find(".ui-panel");
 
 	var viewport_height = $(window).height();
-	var panels_height = ((panels.length > 0) ? 2 : 0); //if there are panels, it takes 2px height
+	var panels_height = (($panels.length > 0) ? 2 : 0); //if there are panels, it takes 2px height
 
-	var content_height = viewport_height - header.outerHeight() - footer.outerHeight() - panels_height;
+	var content_height = viewport_height - $header.outerHeight() - $footer.outerHeight() - panels_height;
 
-	// Trim margin/border/padding height 
-	content_height -= (content.outerHeight() - content.height());
-	content.height(content_height);
+	// Trim margin/border/padding height
+	content_height -= ($content.outerHeight() - $content.height());
+	$content.height(content_height);
 };
