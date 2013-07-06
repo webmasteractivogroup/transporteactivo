@@ -12,6 +12,16 @@ class CalificarViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.
     model = Calificar
     serializer_class = CalificarSerializer
 
+    def get_queryset(self):
+        queryset = self.model.objects.all()
+        object_id = self.request.QUERY_PARAMS.get('id', None)
+        approval_type = self.request.QUERY_PARAMS.get('tipo', None)
+        if object_id is not None:
+            queryset = queryset.filter(object_id=object_id)
+        if approval_type:
+            queryset = queryset.filter(approval_type=approval_type)
+        return queryset
+
     def pre_save(self, obj):
         model_name = self.request.DATA.get('model')
         object_id = self.request.DATA.get('object_id')
