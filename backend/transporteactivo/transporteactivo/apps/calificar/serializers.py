@@ -1,9 +1,9 @@
-# -*- coding: utf-8 -*-
-from rest_framework import serializers
-from rest_framework import mixins
+# # -*- coding: utf-8 -*-
+# from rest_framework import serializers
+# from rest_framework import mixins, 
 
-from .models import Calificar
+# from .models import Calificar
 
 
 
-class CalificaViewSet(mixins.CreateModelMixin, mixins.ListModelMixin,)
+# class CalificaViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, )
