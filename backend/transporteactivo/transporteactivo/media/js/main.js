@@ -414,7 +414,7 @@ $(document).on("pageshow", "#parada", function(event) {
             $staticmap = $("#parada").find('.staticmap');
             url = "http://maps.googleapis.com/maps/api/staticmap?";
             url += "center=" + parada.position.lat() + "," + parada.position.lng();
-            url += "&markers=icon:" + ta.BASE_URL + "static/" + parada.icon + "%7C" + parada.position.lat() + "," + parada.position.lng();
+            url += "&markers=icon:" + ta.BASE_URL + parada.icon + "%7C" + parada.position.lat() + "," + parada.position.lng();
             url += "&size=" + $staticmap.width() + "x" + Math.round($staticmap.width()/3);
             url += "&zoom=15&maptype=roadmap&sensor=false";
             $staticmap.html("<img src='"+url+"'/>");

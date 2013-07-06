@@ -5,7 +5,7 @@ from .models import MioStops, Busqueda
 from sgco.models import LineStops, Arcs
 
 
-class ParadasSerializer(serializers.ModelSerializer):
+class ParadasSerializer(serializers.ReadOnlyModelViewSet):
     id = serializers.Field(source='STOPID')
     nombre = serializers.Field(source='LONGNAME')
     lat = serializers.Field(source='DECIMALLATITUDE')
@@ -16,7 +16,7 @@ class ParadasSerializer(serializers.ModelSerializer):
         fields = ('id', 'nombre', 'lat', 'lng', 'tipo_parada')
 
 
-class RutasPorParadaSerializer(serializers.ModelSerializer):
+class RutasPorParadaSerializer(serializers.ReadOnlyModelViewSet):
     """
         Este serializer define las rutas que pasan por una parada especifica
     """
@@ -29,7 +29,7 @@ class RutasPorParadaSerializer(serializers.ModelSerializer):
         fields = ('nombre_ruta', 'id_ruta', 'orientacion')
 
 
-class ParadasPorRutaSerializer(serializers.ModelSerializer):
+class ParadasPorRutaSerializer(serializers.ReadOnlyModelViewSet):
     """
         Este serializer define las paradas que tiene una ruta especifica
     """
@@ -43,7 +43,7 @@ class ParadasPorRutaSerializer(serializers.ModelSerializer):
         fields = ('nombre_parada', 'lat', 'lng')
 
 
-class BusquedaSerializer(serializers.ModelSerializer):
+class BusquedaSerializer(serializers.ReadOnlyModelViewSet):
 
     class Meta:
         model = Busqueda
