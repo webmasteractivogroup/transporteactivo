@@ -128,13 +128,13 @@ window.ta = {
                 scaledSize: new google.maps.Size(43,35)
             },
             1: {
-                url: '/static/img/stop_troncal.png',
+                url: '/static/img/stop_troncal.png'
             },
             2: {
-                url: '/static/img/stop_pretroncal.png',
+                url: '/static/img/stop_pretroncal.png'
             },
             3: {
-                url: '/static/img/stop_alimentadora.png',
+                url: '/static/img/stop_alimentadora.png'
             }
             // 1: {
             //  url: '/static/img/stops_sprite_small.png',
