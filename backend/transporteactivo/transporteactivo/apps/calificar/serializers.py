@@ -1,9 +1,11 @@
 # # -*- coding: utf-8 -*-
-# from rest_framework import serializers
-# from rest_framework import mixins, 
+from rest_framework import serializers
 
-# from .models import Calificar
-
+from .models import Calificar
 
 
-# class CalificaViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, )
+class CalificarSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model = Calificar
+        fields = ('id', 'approval_type', 'total_approve', 'total_neutral', 'total_disapprove', 'comment', 'object_id')

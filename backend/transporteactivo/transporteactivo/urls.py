@@ -5,18 +5,20 @@ from django.views.generic import TemplateView
 
 from rest_framework.routers import DefaultRouter
 
-from mio import views
+from mio import views as mioviews
+from calificar import views as calificarviews
 
 # Uncomment the next two lines to enable the admin:
 # from django.contrib import admin
 # admin.autodiscover()
 
 router = DefaultRouter()
-router.register(r'paradas-cercanas', views.ParadasCercanasViewSet, base_name='paradas_cercanas')
-router.register(r'rutas-por-parada', views.RutasPorParadaViewSet)
-router.register(r'paradas-por-ruta', views.ParadasPorRutaViewSet)
-router.register(r'buscar', views.BusquedaViewSet)
-router.register(r'buscar-parada', views.BusquedaParadasViewSet)
+router.register(r'paradas-cercanas', mioviews.ParadasCercanasViewSet, base_name='paradas_cercanas')
+router.register(r'rutas-por-parada', mioviews.RutasPorParadaViewSet)
+router.register(r'paradas-por-ruta', mioviews.ParadasPorRutaViewSet)
+router.register(r'buscar', mioviews.BusquedaViewSet)
+router.register(r'buscar-parada', mioviews.BusquedaParadasViewSet)
+router.register(r'calificar', calificarviews.CalificarViewSet)
 
 urlpatterns = patterns('',
 
