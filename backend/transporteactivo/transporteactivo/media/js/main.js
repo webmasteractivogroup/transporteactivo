@@ -32,6 +32,7 @@ $(document).on("mobileinit", function () {
     $.mobile.loader.prototype.options.theme = "a";
     // $.mobile.loader.prototype.options.text = "Cargando...";
     // $.mobile.loader.prototype.options.textVisible = true;
+    $.mobile.page.prototype.options.backBtnText = "Atrás";
 
     /* Necesario para Phonegap, aunque genera peligro potencial de XSS sin el Whitelist de Phonegap.
      * Ref: http://jquerymobile.com/test/docs/pages/phonegap.html
@@ -41,8 +42,10 @@ $(document).on("mobileinit", function () {
 
 // Transporte Activo
 window.ta = {
-    BASE_URL: (location.hostname == 'localhost') ? 'localhost:8000' : 'transporteactivo.com/api',
+    // BASE_URL: (location.hostname == 'localhost') ? 'localhost:8000' : 'transporteactivo.com/api',
+    BASE_URL: 'transporteactivo.com/api',
     nearbyStops: [],
+
     geoLocation: {
         browserSupportFlag: new Boolean(),
 
@@ -103,19 +106,19 @@ window.ta = {
                 scaledSize: new google.maps.Size(33,33)
             },
             // 1: {
-            //  url: 'img/marker_icon_troncal.png',
+            //  url: '/static/img/marker_icon_troncal.png',
             //  anchor: new google.maps.Point(16,35),
             //  // origin: new google.maps.Point(0,0), //used for sprites, offset
             //  // size: new google.maps.Size(32,46), //used for sprites, display size
             //  scaledSize: new google.maps.Size(24,35)
             // },
             // 2: {
-            //  url: 'img/marker_icon_pretroncal.png',
+            //  url: '/static/img/marker_icon_pretroncal.png',
             //  anchor: new google.maps.Point(16,35),
             //  scaledSize: new google.maps.Size(24,35)
             // },
             // 3: {
-            //  url: 'img/marker_icon_alimentadora.png',
+            //  url: '/static/img/marker_icon_alimentadora.png',
             //  anchor: new google.maps.Point(16,35),
             //  scaledSize: new google.maps.Size(24,35)
             // },
@@ -125,28 +128,28 @@ window.ta = {
                 scaledSize: new google.maps.Size(43,35)
             },
             1: {
-                url: '/static/img/stop_troncal.png'
+                url: '/static/img/stop_troncal.png',
             },
             2: {
-                url: '/static/img/stop_pretroncal.png'
+                url: '/static/img/stop_pretroncal.png',
             },
             3: {
-                url: '/static/img/stop_alimentadora.png'
+                url: '/static/img/stop_alimentadora.png',
             }
             // 1: {
-            //  url: 'img/stops_sprite_small.png',
+            //  url: '/static/img/stops_sprite_small.png',
             //  origin: new google.maps.Point(0,0), //used for sprites, offset
             //  size: new google.maps.Size(20,35), //used for sprites, display size
             //  // anchor: new google.maps.Point(10,35),
             //  // scaledSize: new google.maps.Size(20,35)
             // },
             // 2: {
-            //  url: 'img/stops_sprite_small.png',
+            //  url: '/static/img/stops_sprite_small.png',
             //  origin: new google.maps.Point(20,0), //used for sprites, offset
             //  size: new google.maps.Size(20,35), //used for sprites, display size
             // },
             // 3: {
-            //  url: 'img/stops_sprite_small.png',
+            //  url: '/static/img/stops_sprite_small.png',
             //  origin: new google.maps.Point(40,0), //used for sprites, offset
             //  size: new google.maps.Size(20,35), //used for sprites, display size
             // }
@@ -159,7 +162,7 @@ window.ta = {
         createMap: function() {
             var mapOptions = {
                 zoom: 15,
-                maxZoom: 17,
+                maxZoom: 19,
                 minZoom: 11,
                 center: this.defaultPosition,
                 mapTypeId: google.maps.MapTypeId.ROADMAP,
@@ -209,7 +212,7 @@ window.ta = {
                 ta.map.$infoPopup
                     .find('h2').text(marker.getTitle()).end()
                     .find('.routes').html('').end()
-                    .find('.ver-mas').attr('href', "#"+marker.stop.id).end()
+                    .find('.ver-mas').attr('href', "#parada").data('id', marker.stop.id).end()
                     .popup('open');
 
                 $.ajax({
@@ -224,15 +227,16 @@ window.ta = {
                             // construct the html for each list, grouped by orientation
                             for (i = 0; i < data.length; ++i) {
                                 html_list[data[i].orientacion] = html_list[data[i].orientacion] || '';
-                                html_list[data[i].orientacion] += '<a href="'+data[i].id_ruta+'" data-role="button" data-mini="true" class="'+data[i].nombre_ruta.substring(0, 1)+'">'+data[i].nombre_ruta+'</a>';
+                                html_list[data[i].orientacion] += '<a href="ruta_id='+data[i].id_ruta+'#ruta" data-role="button" data-mini="true" class="'+data[i].nombre_ruta.substring(0, 1)+'">'+data[i].nombre_ruta+'</a>';
                             }
                             var html = '';
                             // add opening and closing tags for the lists
                             for (var k in html_list) {
                                 html += '<h4>Sentido '+orientaciones[k]+'</h4><div data-role="controlgroup" data-type="horizontal">' + html_list[k] + '</div>';
                             }
-                            console.log(html_list);
+                            // console.log(html_list);
                             ta.map.$infoPopup.find('.routes').html(html).trigger('create');
+                            ta.search.parada = {id: marker.stop.id, nombre: marker.getTitle()};
                         }
                     }
                 });
@@ -277,9 +281,9 @@ window.ta = {
                     }
                 },
                 error: function(jqXHR, textStatus, errorThrown) {
-                    console.log(jqXHR);
-                    console.log(textStatus);
-                    console.log(errorThrown);
+                    // console.log(jqXHR);
+                    // console.log(textStatus);
+                    // console.log(errorThrown);
                     //ocultarIndicadorAjax();
                     alert("Error cargando las paradas cercanas"); //TODO: Agregar mensaje
                 }
@@ -299,7 +303,8 @@ window.ta = {
     },
 
     search: {
-
+        parada: null,
+        ruta: null
     },
 
     init: function() {
@@ -367,11 +372,11 @@ $(document).on("pageinit", "#buscar", function(event) {
                     $.each(data, function (i, val) {
                         html += '<li data-tipo="' + val.tipo + '">';
                         if (val.tipo == 'p') { //paradas
-                            html += '<a data-id="' + val.id + '">';
+                            html += '<a href="#parada" data-id="' + val.id + '">';
                             html += '<span class="stop icon tipo_' + val.extra + '"></span>';
                             html += val.nombre;
                         } else { //ruta
-                            html += '<a data-id="' + val.id + '" class="routes">';
+                            html += '<a href="#ruta" data-id="' + val.id + '" class="routes">';
                             tipo_ruta = val.nombre.substring(0, 1);
                             html += '<span class="' + tipo_ruta + '">' + val.nombre + '</span> (' + val.extra + ')';
                         }
@@ -385,6 +390,42 @@ $(document).on("pageinit", "#buscar", function(event) {
             });
         }
     });
+    $('#autocomplete').on("click", "a", function(event) {
+        // todo: hacer condicional para rutas
+        ta.search.parada = {id: jQuery(this).data('id'), nombre: jQuery(this).text()};
+    });
+});
+
+$(document).on("pageshow", "#parada", function(event) {
+    if (ta.search.parada) {
+        $("#parada").find('h1').html(ta.search.parada.nombre);
+        $.ajax({
+            url: "http://"+ta.BASE_URL+"/v1/rutas-por-parada/",
+            type: "get",
+            data: {parada_id: ta.search.parada.id},
+            dataType: "JSON",
+            success: function(data, textStatus, jqXHR) {
+                if (textStatus === "success") {
+                    var orientaciones = {0: "Norte-Sur", 1: "Sur-Norte"};
+                    var html_list = {};
+                    // construct the html for each list, grouped by orientation
+                    for (i = 0; i < data.length; ++i) {
+                        html_list[data[i].orientacion] = html_list[data[i].orientacion] || '';
+                        html_list[data[i].orientacion] += '<a href="ruta_id='+data[i].id_ruta+'#ruta" data-role="button" data-mini="true" class="'+data[i].nombre_ruta.substring(0, 1)+'">'+data[i].nombre_ruta+'</a>';
+                    }
+                    var html = '';
+                    // add opening and closing tags for the lists
+                    for (var k in html_list) {
+                        html += '<h4>Sentido '+orientaciones[k]+'</h4><div data-role="controlgroup" data-type="horizontal">' + html_list[k] + '</div>';
+                    }
+                    $("#parada").find('.routes').html(html).trigger('create');
+                }
+            }
+        });
+    }
+    else {
+        jQuery.mobile.changePage("#buscar");
+    }
 });
 
 $(window).on('orientationchange resize pageshow', function(event) {

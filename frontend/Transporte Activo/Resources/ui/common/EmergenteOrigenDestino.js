@@ -6,9 +6,9 @@ exports.popup = function(current, id, nombre) {
 
 	var win = Ti.UI.createView({
 		left : 20,
-		top : 50,
+		top : 10,
 		right : 20,
-		bottom : 100,
+		bottom: 10,
 		height : Ti.UI.SIZE
 	});
 
@@ -91,6 +91,7 @@ exports.popup = function(current, id, nombre) {
 	});
 
 	btnExit.addEventListener('click', function() {
+		current.isPopUpActive= false;
 		current.remove(win);
 		current.remove(current.blur);
 

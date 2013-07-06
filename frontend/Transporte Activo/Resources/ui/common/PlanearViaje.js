@@ -11,20 +11,44 @@ var paradas = new Array();
 var updateMapTimeout;
 var viewContenedora;
 var activeRequest = false;
+var isPopUpActive = false;
+var popupWindow;
 
 function PlanearViaje() {
 	Ti.API.log('CREANDO MAPA ');
 
-	var blur = Ti.UI.createView({
-		opacity:0.8,
-		backgroundColor:'gray',
-		height: Ti.UI.FILL,
-		width:Ti.UI.FILL
-	});
+	var temp = Ti.App.tabgroup;
+	temp.addEventListener('android:back', function(e) {
 	
+	if(isPopUpActive===false){
+		var dialog = Titanium.UI.createAlertDialog({
+			message : '¿Quiere Salir de la App?',
+			buttonNames : ['Si', 'No'],
+		});
+		dialog.show();
+		dialog.addEventListener('click', function(e) {
+			if (e.index == 0) {
+				temp.close();
+
+			}
+		});
+		}else{
+			isPopUpActive = false;
+			viewContenedora.remove(blur);
+			viewContenedora.remove(popupWindow);
+			
+		}
+	});
+
+	var blur = Ti.UI.createView({
+		opacity : 0.8,
+		backgroundColor : 'gray',
+		height : Ti.UI.FILL,
+		width : Ti.UI.FILL
+	});
 
 	viewContenedora = Ti.UI.createView({
-		blur:blur,
+		blur : blur,
 		Height : Ti.FILL,
 		Width : Ti.FILL
 	});
@@ -43,17 +67,20 @@ function PlanearViaje() {
 
 		Ti.API.info('source:' + evt.clicksource);
 
-
 		// Check for all of the possible names that clicksouce
 		// can report for the left button/view.
 		if (evt.clicksource == 'leftButton' || evt.clicksource == 'leftPane' || evt.clicksource == 'leftView') {
 			Ti.API.info("Annotation " + evt.title + ", left button clicked.");
 		}
-		if(evt.clicksource==='pin'){
-		mapview.deselectAnnotation(evt.title);
-		var popUpRuta = require("/ui/common/EmergenteOrigenDestino");	
-		viewContenedora.add(blur);
-		viewContenedora.add(popUpRuta.popup(viewContenedora,evt.annotation.myid,evt.title));}
+		if (evt.clicksource === 'pin') {
+			mapview.deselectAnnotation(evt.title);
+			var popUpRuta = require("/ui/common/EmergenteOrigenDestino");
+			isPopUpActive = true;
+		    popupWindow = popUpRuta.popup(viewContenedora, evt.annotation.myid, evt.title);
+			viewContenedora.add(blur);
+			viewContenedora.add(popupWindow);
+
+		}
 	});
 
 	var goToMe = Titanium.UI.createButton({
@@ -90,7 +117,6 @@ function PlanearViaje() {
 			mapview.setLocation(region);
 		});
 	});
-	
 
 	viewContenedora.add(mapview);
 	viewContenedora.add(goToMe);
@@ -177,7 +203,7 @@ function getParadas(region) {
 	Ti.API.log('LatitudDelta: ' + region.latitudeDelta);
 	var delta = region.latitudeDelta;
 	var bounds = getMapBounds(region);
-	var url = "http://transporteactivo.com/api/v1/paradas-cercanas/?ne=" + bounds.northEast.lat + "," + bounds.northEast.lng + "&sw=" + bounds.southWest.lat + "," + bounds.southWest.lng;
+	var url = "http://transporteactivo.com/api/v1/paradas-cercanas/?ne[]=" + bounds.northEast.lat + "&ne[]=" + bounds.northEast.lng + "&sw[]=" + bounds.southWest.lat + "&sw[]=" + bounds.southWest.lng;
 	Ti.API.log('URL: ' + url);
 	var json, parada, i;
 
@@ -205,7 +231,7 @@ function getParadas(region) {
 				var pin = Titanium.Map.createAnnotation({
 					latitude : parada.lat,
 					longitude : parada.lng,
-					title:parada.nombre,
+					title : parada.nombre,
 					image : imagen,
 					animate : true,
 					myid : parada.id // Custom property to uniquely identify this annotation.
@@ -228,11 +254,11 @@ function getParadas(region) {
 			Ti.API.log("TEXT:   " + this.responseText);
 			Ti.API.log("ERROR:  " + e.error);
 			alert('No se pudo contactar al servidor, intentelo de nuevo');
-			activeRequest=false;
+			activeRequest = false;
 		},
 		timeout : 5000
 	});
-	
+
 	if (activeRequest === false) {
 		Ti.API.log('Paradas request va a abrir');
 		activeRequest = true;
@@ -240,13 +266,12 @@ function getParadas(region) {
 		xhr.send();
 		Ti.API.log('Paradas request enviado');
 	}
-	
 
 	return null;
 }
 
-function setOrigen (id,nombre) {
-  
+function setOrigen(id, nombre) {
+
 };
 
 module.exports = PlanearViaje;
