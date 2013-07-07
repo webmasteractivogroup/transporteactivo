@@ -22,11 +22,12 @@ class RutasPorParadaSerializer(serializers.ModelSerializer):
     """
     id_ruta = serializers.Field(source='LINEID.LINEID')
     nombre_ruta = serializers.Field(source='LINEID.SHORTNAME')
+    descripcion = serializers.Field(source='LINEID.DESCRIPTION')
     orientacion = serializers.Field(source='ORIENTATION')
 
     class Meta:
         model = LineStops
-        fields = ('nombre_ruta', 'id_ruta', 'orientacion')
+        fields = ('nombre_ruta', 'id_ruta', 'descripcion', 'orientacion')
 
 
 class ParadasPorRutaSerializer(serializers.ModelSerializer):
