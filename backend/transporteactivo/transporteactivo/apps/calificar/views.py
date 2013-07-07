@@ -25,9 +25,13 @@ class CalificarViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.
     def pre_save(self, obj):
         model_name = self.request.DATA.get('model')
         object_id = self.request.DATA.get('object_id')
+        tipo = self.request.DATA.get('tipo')
+        comentario = self.request.DATA.get('comentario')
         model = ContentType.objects.get(model=model_name)
         content_object = model.get_object_for_this_type(pk=object_id)
         obj.content_object = content_object
+        obj.approval_type = tipo
+        obj.comment = comentario
 
     def post_save(self, obj, created=True):
         obj.total_approve = self.model.objects.filter(approval_type='a').count()
