@@ -6,6 +6,7 @@ Titanium.Geolocation.purpose = "Recieve User Location";
 Titanium.Geolocation.accuracy = Titanium.Geolocation.ACCURACY_BEST;
 Titanium.Geolocation.distanceFilter = 10;
 
+var MapModule;
 var mapview;
 var paradas = new Array();
 var updateMapTimeout;
@@ -19,24 +20,24 @@ function PlanearViaje() {
 
 	var temp = Ti.App.tabgroup;
 	temp.addEventListener('android:back', function(e) {
-	
-	if(isPopUpActive===false){
-		var dialog = Titanium.UI.createAlertDialog({
-			message : '¿Quiere Salir de la App?',
-			buttonNames : ['Si', 'No'],
-		});
-		dialog.show();
-		dialog.addEventListener('click', function(e) {
-			if (e.index == 0) {
-				temp.close();
 
-			}
-		});
-		}else{
+		if (isPopUpActive === false) {
+			var dialog = Titanium.UI.createAlertDialog({
+				message : '¿Quiere Salir de la App?',
+				buttonNames : ['Si', 'No'],
+			});
+			dialog.show();
+			dialog.addEventListener('click', function(e) {
+				if (e.index == 0) {
+					temp.close();
+
+				}
+			});
+		} else {
 			isPopUpActive = false;
 			viewContenedora.remove(blur);
 			viewContenedora.remove(popupWindow);
-			
+
 		}
 	});
 
@@ -53,14 +54,26 @@ function PlanearViaje() {
 		Width : Ti.FILL
 	});
 
-	mapview = Titanium.Map.createView({
-		Height : Ti.FILL,
-		Width : Ti.FILL,
-		mapType : Titanium.Map.STANDARD_TYPE,
-		animate : true,
-		regionFit : true,
-		userLocation : true
-	});
+	if (Ti.Platform.osname === 'android') {
+			MapModule = require('ti.map');
+		/// GOOGLE MAPS API V2 INSERT HERE
+		mapview = MapModule.createView({
+			userLocation : true,
+			userLocationButton : false,
+			mapType : MapModule.NORMAL_TYPE,
+			animate : true,
+		});
+	} else {
+		mapview = Titanium.Map.createView({
+			Height : Ti.FILL,
+			Width : Ti.FILL,
+			mapType : Titanium.Map.STANDARD_TYPE,
+			animate : true,
+			regionFit : true,
+			userLocation : true
+		});
+
+	}
 
 	// Handle click events on any annotations on this map.
 	mapview.addEventListener('click', function(evt) {
@@ -73,10 +86,17 @@ function PlanearViaje() {
 			Ti.API.info("Annotation " + evt.title + ", left button clicked.");
 		}
 		if (evt.clicksource === 'pin') {
-			mapview.deselectAnnotation(evt.title);
+			
+			if (Ti.Platform.osname === 'android') {
+				
+			} else {
+
+				mapview.deselectAnnotation(evt.title);
+			}
+			
 			var popUpRuta = require("/ui/common/EmergenteOrigenDestino");
 			isPopUpActive = true;
-		    popupWindow = popUpRuta.popup(viewContenedora, evt.annotation.myid, evt.title);
+			popupWindow = popUpRuta.popup(viewContenedora, evt.annotation.myid, evt.annotation.eltitle);
 			viewContenedora.add(blur);
 			viewContenedora.add(popupWindow);
 
@@ -85,22 +105,23 @@ function PlanearViaje() {
 
 	var goToMe = Titanium.UI.createButton({
 		backgroundImage : '/images/userloc.png',
-		top : 10,
-		right : 25,
-		width : 40,
-		height : 40
+		top : '10 dp',
+		right : '25 dp',
+		width : '40 dp',
+		height : '40 dp'
 
 	});
 	var goToMeLabel = Titanium.UI.createLabel({
 		color : 'black',
 		font : {
 			fontWeight : 'bold',
+			fontSize : '15 dp'
 		},
 		text : 'ubicame',
-		top : 50,
-		right : 6,
-		width : 70,
-		height : 20
+		top : '50 dp',
+		right : '6 dp',
+		width : '70 dp',
+		height : '20 dp'
 
 	});
 
@@ -114,7 +135,13 @@ function PlanearViaje() {
 				longitudeDelta : 0.01
 			};
 
-			mapview.setLocation(region);
+			if (Ti.Platform.osname === 'android') {
+				mapview.setRegion(region);
+			} else {
+
+				mapview.setLocation(region);
+			}
+
 		});
 	});
 
@@ -132,6 +159,9 @@ function getLocation() {
 		times++;
 		//Get the current position and set it to the mapview
 		Titanium.Geolocation.getCurrentPosition(function(e) {
+
+			Ti.API.log('USER ENCONTRADO, CAMBIANDO CAMARA HACIA ' + e.coords.latitude + ',' + e.coords.longitude);
+
 			var region = {
 				latitude : e.coords.latitude,
 				longitude : e.coords.longitude,
@@ -140,7 +170,12 @@ function getLocation() {
 				longitudeDelta : 0.01
 			};
 
-			mapview.setLocation(region);
+			if (Ti.Platform.osname === 'android') {
+				mapview.setRegion(region);
+			} else {
+
+				mapview.setLocation(region);
+			}
 			Ti.API.log('GET REGION PARA PARADAS ');
 			getParadas(region);
 
@@ -198,6 +233,7 @@ function getMapBounds(region) {
 	return b;
 }
 
+/// SERVICIO CONSULTA PARADAS
 function getParadas(region) {
 
 	Ti.API.log('LatitudDelta: ' + region.latitudeDelta);
@@ -226,16 +262,29 @@ function getParadas(region) {
 				} else {
 					imagen = '/images/marker_icon_alimentadora.png';
 				}
-				;
+				
 
-				var pin = Titanium.Map.createAnnotation({
-					latitude : parada.lat,
-					longitude : parada.lng,
-					title : parada.nombre,
-					image : imagen,
-					animate : true,
-					myid : parada.id // Custom property to uniquely identify this annotation.
-				});
+				if (Ti.Platform.osname === 'android') {
+					var pin = MapModule.createAnnotation({
+						latitude : parada.lat,
+						longitude : parada.lng,
+						eltitle : parada.nombre,
+						image : imagen,
+						animate : true,
+						myid : parada.id // Custom property to uniquely identify this annotation.
+					});
+				} else {
+
+					var pin = Titanium.Map.createAnnotation({
+						latitude : parada.lat,
+						longitude : parada.lng,
+						title : parada.nombre,
+						image : imagen,
+						animate : true,
+						myid : parada.id, // Custom property to uniquely identify this annotation.
+						eltitle : parada.nombre
+					});
+				}
 
 				if (delta < 0.025) {
 					paradas.push(pin);

@@ -5,16 +5,16 @@
 exports.popup = function(current, id, nombre) {
 
 	var win = Ti.UI.createView({
-		left : 20,
-		top : 10,
-		right : 20,
-		bottom: 10,
+		left : '20 dp',
+		top : '10 dp',
+		right : '20 dp',
+		bottom: '10 dp',
 		height : Ti.UI.SIZE
 	});
 
 	var shadow = Ti.UI.createView({
 		backgroundColor : 'black',
-		height : 40
+		height : '40 dp'
 	});
 	var frmLog = Ti.UI.createView({
 
@@ -25,23 +25,27 @@ exports.popup = function(current, id, nombre) {
 
 	var txtuser = Ti.UI.createTextField({
 
-		top : 30,
-		left : 30,
-		right : 30,
+		top : '30 dp',
+		left : '30 dp',
+		right : '30 dp',
 		txtID : "txtuser"
 	});
 
 	var btngroup = Ti.UI.createView({
 		height : Ti.UI.SIZE,
 		width : "100%",
-		top : 5,
-		bottom : 5,
+		top : '5 dp',
+		bottom : '5 dp',
 	});
 	var btnInicio = Ti.UI.createButton({
 		title : "Iniciar Aquí",
 		width : "45%",
-		height : 40,
-		left : 10
+		height : '40 dp',
+		left : '10 dp',
+		font : {
+			fontWeight : 'bold',
+			fontSize: '15 dp'
+		}
 
 	});
 
@@ -54,8 +58,12 @@ exports.popup = function(current, id, nombre) {
 	var btnFinal = Ti.UI.createButton({
 		title : "Llegar Aquí",
 		width : "45%",
-		height : 40,
-		right : 10
+		height : '40 dp',
+		right : '10 dp',
+		font : {
+			fontWeight : 'bold',
+			fontSize: '15 dp'
+		}
 	});
 
 	btnFinal.addEventListener('click', function() {
@@ -66,11 +74,15 @@ exports.popup = function(current, id, nombre) {
 
 	var btnVerMas = Ti.UI.createButton({
 		title : "Ver más información",
-		left : 10,
-		right : 10,
-		height : 40,
-		bottom : 15,
-		top : 5
+		left : '10 dp',
+		right : '10 dp',
+		height : '40 dp',
+		bottom : '15 dp',
+		top : '5 dp',
+		font : {
+			fontWeight : 'bold',
+			fontSize: '15 dp'
+		}
 	});
 
 	btnVerMas.addEventListener('click', function() {
@@ -83,7 +95,7 @@ exports.popup = function(current, id, nombre) {
 		title : "x",
 		right : 0,
 		width : "15%",
-		height : 40,
+		height : '40 dp',
 		borderColor : null,
 		backgroundColor : 'gray',
 		borderRadius : 0,
@@ -102,6 +114,7 @@ exports.popup = function(current, id, nombre) {
 		text : nombre,
 		font : {
 			fontWeight : 'bold',
+			fontSize: '13 dp'
 		},
 		textAlign : Ti.UI.TEXT_ALIGNMENT_CENTER,
 		width : "100%",
@@ -113,20 +126,19 @@ exports.popup = function(current, id, nombre) {
 		text : 'Rutas',
 		font : {
 			fontWeight : 'bold',
-			fontSize : 18,
+			fontSize : '18 dp',
 		},
 		width : Ti.UI.SIZE,
-		left : 10,
-		top : 3
-	});
+		left : '10 dp',
+		top : '3 dp'	});
 
 	var rutasgroup = Ti.UI.createView({
 		layout : 'horizontal',
-		left : 10,
-		right : 10,
+		left : '10 dp',
+		right : '10 dp',
 		height : Ti.UI.SIZE,
-		top : 10,
-		bottom : 10
+		top : '10 dp',
+		bottom : '10 dp'
 	});
 
 	var json, ruta, i;
@@ -152,14 +164,14 @@ exports.popup = function(current, id, nombre) {
 
 				var rutasquare = Ti.UI.createLabel({
 					color : 'white',
-					width : 50,
-					height : 22,
-					right : 1,
-					bottom : 1,
+					width : '50 dp',
+					height : '22 dp',
+					right : '1 dp',
+					bottom : '1 dp',
 					backgroundColor : color,
 					text : ruta.nombre_ruta,
 					font : {
-						fontSize : 12,
+						fontSize : '12 dp',
 						fontWeight : 'bold'
 					},
 					textAlign : Ti.UI.TEXT_ALIGNMENT_CENTER,
