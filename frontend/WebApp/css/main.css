@@ -469,12 +469,22 @@ footer,
   margin-top: 0;
 }
 #parada h2,
-#parada h3 {
+#ruta h2,
+#parada h3,
+#ruta h3 {
   margin: 0.5em 0 0.25em;
 }
 #parada h2:first-child,
-#parada h3:first-child {
+#ruta h2:first-child,
+#parada h3:first-child,
+#ruta h3:first-child {
   margin-top: 0;
+}
+#ruta .type {
+  line-height: 40px;
+}
+#ruta .type img {
+  float: right;
 }
 .map-canvas {
   width: 100%;

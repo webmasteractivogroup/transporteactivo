@@ -45,6 +45,22 @@ window.ta = {
 	// BASE_URL: (location.hostname == 'localhost') ? 'localhost:8000' : 'transporteactivo.com/api',
 	BASE_URL: 'http://transporteactivo.com/',
 	nearbyStops: [],
+	buses_icons: {
+		E: "img/bus_articulado.png",
+		T: "img/bus_articulado.png",
+		P: "img/bus_padron.png",
+		A: "img/bus_alimentador.png"
+	},
+	buses_names: {
+		E: "Expreso (Articulado)",
+		T: "Articulado",
+		P: "Padrón",
+		A: "Alimentador"
+	},
+	orientaciones: {
+		0: "Norte-Sur",
+		1: "Sur-Norte"
+	},
 
 	geoLocation: {
 		browserSupportFlag: new Boolean(),
@@ -222,21 +238,31 @@ window.ta = {
 					dataType: "JSON",
 					success: function(data, textStatus, jqXHR) {
 						if (textStatus === "success") {
-							var orientaciones = {0: "Norte-Sur", 1: "Sur-Norte"};
 							var html_list = {};
-							// construct the html for each list, grouped by orientation
+							// construct the html for each routes list, grouped by orientation
 							for (i = 0; i < data.length; ++i) {
-								html_list[data[i].orientacion] = html_list[data[i].orientacion] || '';
-								html_list[data[i].orientacion] += '<a href="ruta_id='+data[i].id_ruta+'#ruta" data-role="button" data-mini="true" class="'+data[i].nombre_ruta.substring(0, 1)+'">'+data[i].nombre_ruta+'</a>';
+								val = data[i];
+								html_list[val.orientacion] = html_list[val.orientacion] || '';
+								tipo = val.nombre_ruta.substring(0, 1);
+								html_list[val.orientacion] += '<a href="#ruta" data-id="'+val.id_ruta+'" data-nombre="'+val.nombre_ruta+'" data-descripcion="' + val.descripcion + '" data-orientacion="'+val.orientacion+'" data-role="button" data-mini="true" class="'+tipo+'" title="'+val.descripcion+'">'+val.nombre_ruta+'</a>';
 							}
 							var html = '';
 							// add opening and closing tags for the lists
 							for (var k in html_list) {
-								html += '<h4>Sentido '+orientaciones[k]+'</h4><div data-role="controlgroup" data-type="horizontal">' + html_list[k] + '</div>';
+								html += '<h4>Sentido '+ta.orientaciones[k]+'</h4><div data-role="controlgroup" data-type="horizontal">' + html_list[k] + '</div>';
 							}
 							// console.log(html_list);
-							ta.map.$infoPopup.find('.routes').html(html).trigger('create');
 							ta.search.parada = {id: marker.stop.id, nombre: marker.getTitle(), position: marker.getPosition(), icon: marker.getIcon().url};
+							ta.map.$infoPopup
+								.find('.routes').html(html).trigger('create').end()
+								.on('click', 'a', function(){
+									ta.search.ruta = {
+										id: jQuery(this).data('id'),
+										nombre: jQuery(this).data('nombre'),
+										orientacion: jQuery(this).data('orientacion'),
+										descripcion: jQuery(this).data('descripcion')
+									};
+								});
 						}
 					}
 				});
@@ -353,7 +379,6 @@ $(document).on('pageinit', '#plan-trip', function(event){
 	// every time the map options are changed, refresh the markers
 	$("#map-options input[type='checkbox']").bind( "change", function(event, ui) {
 		ta.map.loadVisibleStops();
-		console.log('actualizado');
 	});
 });
 
@@ -378,11 +403,11 @@ $(document).on("pageinit", "#buscar", function(event) {
 					$.each(data, function (i, val) {
 						html += '<li data-tipo="' + val.tipo + '">';
 						if (val.tipo == 'p') { //paradas
-							html += '<a href="#parada" data-id="' + val.id + '">';
+							html += '<a href="#parada" data-id="' + val.id + '" data-position="' + val.extra2 + '">';
 							html += '<span class="stop icon tipo_' + val.extra + '"></span>';
 							html += val.nombre;
 						} else { //ruta
-							html += '<a href="#ruta" data-id="' + val.id + '" class="routes">';
+							html += '<a href="#ruta" data-id="' + val.id + '" data-nombre="' + val.nombre + '" data-descripcion="' + val.extra + '" data-orientacion="' + val.extra2 + '" class="routes">';
 							tipo_ruta = val.nombre.substring(0, 1);
 							html += '<span class="' + tipo_ruta + '">' + val.nombre + '</span> (' + val.extra + ')';
 						}
@@ -396,13 +421,25 @@ $(document).on("pageinit", "#buscar", function(event) {
 			});
 		}
 	});
-	$('#autocomplete').on("click", "a", function(event) {
-		switch(jQuery(this).parent("li").data('tipo')) {
+	$('#autocomplete').on('click', 'a', function(event) {
+		tipo = jQuery(this).closest("li").data('tipo');
+		switch(tipo) {
 			case 'r': //ruta
-				ta.search.ruta = {id: jQuery(this).data('id'), nombre: jQuery(this).text()};
+				ta.search.ruta = {
+									id: jQuery(this).data('id'),
+									nombre: jQuery(this).data('nombre'),
+									descripcion: jQuery(this).data('descripcion'),
+									orientacion: jQuery(this).data('orientacion')
+								};
 				break;
 			case 'p': //parada
-				ta.search.parada = {id: jQuery(this).data('id'), nombre: jQuery(this).text()};
+				coords = jQuery(this).data('position').split(';');
+				position = new google.maps.LatLng(parseFloat(coords[0]), parseFloat(coords[1]));
+				ta.search.parada = {
+									id: jQuery(this).data('id'),
+									nombre: jQuery(this).text(),
+									position: position
+								};
 				//TODO: ADD POSITION AND ICON URL
 				break;
 		}
@@ -434,17 +471,18 @@ $(document).on("pageshow", "#parada", function(event) {
 			dataType: "JSON",
 			success: function(data, textStatus, jqXHR) {
 				if (textStatus === "success") {
-					var orientaciones = {0: "Norte-Sur", 1: "Sur-Norte"};
 					var html_list = {};
-					// construct the html for each list, grouped by orientation
+					// construct the html for each routes list, grouped by orientation
 					for (i = 0; i < data.length; ++i) {
-						html_list[data[i].orientacion] = html_list[data[i].orientacion] || '';
-						html_list[data[i].orientacion] += '<a href="ruta_id='+data[i].id_ruta+'#ruta" data-role="button" data-mini="true" class="'+data[i].nombre_ruta.substring(0, 1)+'">'+data[i].nombre_ruta+'</a>';
+						val = data[i];
+						html_list[val.orientacion] = html_list[val.orientacion] || '';
+						tipo = val.nombre_ruta.substring(0, 1);
+						html_list[val.orientacion] += '<a href="#ruta" data-id="'+val.id_ruta+'" data-nombre="'+val.nombre_ruta+'" data-orientacion="'+val.orientacion+'" data-role="button" data-mini="true" class="'+tipo+'">'+val.nombre_ruta+'</a>';
 					}
 					var html = '';
 					// add opening and closing tags for the lists
 					for (var k in html_list) {
-						html += '<h3>Sentido '+orientaciones[k]+'</h3><div data-role="controlgroup" data-type="horizontal">' + html_list[k] + '</div>';
+						html += '<h3>Sentido '+ta.orientaciones[k]+'</h3><div data-role="controlgroup" data-type="horizontal">' + html_list[k] + '</div>';
 					}
 					$("#parada").find('.routes').html(html).trigger('create');
 				}
@@ -455,6 +493,61 @@ $(document).on("pageshow", "#parada", function(event) {
 		jQuery.mobile.changePage("#buscar");
 	}
 });
+
+$(document).on("pageinit", "#ruta", function(event) {
+	$('#ruta')
+		.on('expand', '.ui-collapsible', function () {
+			$(this).find('h3 .ui-btn-text').text('Ocultar Paradas');
+		})
+		.on('collapse', '.ui-collapsible', function () {
+			$(this).find('h3 .ui-btn-text').text('Ver Paradas');
+		});
+});
+
+$(document).on("pageshow", "#ruta", function(event) {
+	ruta = ta.search.ruta;
+	if (ruta) {
+		// change the page title
+		// if (!ruta.orientacion) {
+		// 	ruta.orientacion = '0'; //TODO: fix orientation on search
+		// }
+		tipo = ruta.nombre.substring(0,1);
+		$("#ruta")
+			.find('h1').html(ruta.nombre).end()
+			.find('.type').html("Tipo: " + ta.buses_names[tipo] + "<img src='"+ta.buses_icons[tipo]+"' />").end()
+			.find('.description').html(ruta.descripcion).end()
+			.find('.orientation').html("Sentido: " + ta.orientaciones[ruta.orientacion]);
+
+		// load and display the stops
+		$.ajax({
+			url: ta.BASE_URL+"api/v1/paradas-por-ruta/",
+			type: "get",
+			data: {ruta_id: ruta.id, orientacion: ruta.orientacion},
+			dataType: "JSON",
+			success: function(data, textStatus, jqXHR) {
+				if (textStatus === "success") {
+					// console.log(data);
+					var html = '<ul data-role="listview">';
+					// construct the html list for stops
+					for (i = 0; i < data.length; ++i) {
+						parada = data[i];
+						html += '<li><a href="#parada" data-id="' + parada.id + '">';
+						html += '<span class="stop icon tipo_' + parada.extra + '"></span>';
+						html += parada.nombre_parada;
+						html += '</a></li>';
+					}
+					html += '</ul>';
+					$("#ruta").find('.stops').html(html).trigger('create');
+					// $("#ruta").find('.stops').html(html);
+				}
+			}
+		});
+	}
+	else {
+		jQuery.mobile.changePage("#buscar");
+	}
+});
+
 
 $(window).on('orientationchange resize pageshow', function(event) {
 	if ($.mobile.activePage) {

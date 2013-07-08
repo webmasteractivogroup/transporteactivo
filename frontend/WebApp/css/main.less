@@ -294,11 +294,24 @@
 				margin-top: 0;
 			}
 		}
-		#parada {
+		#parada, #ruta {
 			h2, h3 {
 				margin: 0.5em 0 0.25em;
 				&:first-child {
 					margin-top: 0;
+				}
+			}
+		}
+		#ruta {
+			.type {
+				line-height: 40px;
+				img {
+					float: right;
+				}
+			}
+			.stops {
+				.ui-listview {
+					// margin: 0;
 				}
 			}
 		}
