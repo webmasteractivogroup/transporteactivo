@@ -398,3 +398,51 @@ var fixgeometry = function() {
 	content_height -= ($content.outerHeight() - $content.height());
 	$content.height(content_height);
 };
+
+// JQuery Mobile Android-style Toast popup
+// based on: https://gist.github.com/kamranzafar/3136584
+var toast = function(msg){
+	$("<div class='ui-loader ui-overlay-shadow ui-body-e ui-corner-all toast'><h3>"+msg+"</h3></div>")
+	.css({
+		left: ($(window).width() - 284)/2,
+		top: $(window).height()/2
+	})
+	.appendTo( $.mobile.pageContainer ).delay( 1500 )
+	.fadeOut( 400, function(){
+		$(this).remove();
+	});
+}
+
+
+// twitter widget
+// based on: http://tappetyclick.com/blog/2012/12/20/how-dynamically-resize-new-twitter-widget
+function loadTwitter(d,s,id){
+  var js,fjs=d.getElementsByTagName(s)[0];
+  if(!d.getElementById(id)){
+    js=d.createElement(s);
+    js.id=id;
+    js.src="//platform.twitter.com/widgets.js";
+    fjs.parentNode.insertBefore(js,fjs);
+  }
+}
+
+function removeTwitter(id){
+  jQuery('script[id='+id+']').remove(); // Remove the included js file
+  jQuery('iframe.twitter-timeline').remove(); // Remove the timeline iframe
+}
+
+function addTwitter(options){
+  var linkStr = '<a class="twitter-timeline ir" data-chrome="noheader nofooter noborder transparent" data-dnt="true"';
+  linkStr += (options.width)?' width="'+options.width+'"':'';
+  linkStr += (options.height)?' height="'+options.height+'"':'';
+  linkStr += (options.color)?' data-link-color="'+options.color+'"':'';
+  linkStr += (options.theme)?' data-theme="'+options.theme+'"':'';
+  linkStr += ' href="https://twitter.com/search?q=metrocali" data-widget-id="354651560220975104">Tweets acerca de "metrocali"</a>';
+  $(linkStr).appendTo(options.element);
+}
+
+function showTwitter(id, options) {
+  removeTwitter(id);
+  addTwitter(options);
+  loadTwitter(document,'script',id);
+}

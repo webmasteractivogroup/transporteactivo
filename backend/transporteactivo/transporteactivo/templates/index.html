@@ -1,178 +1,205 @@
 <!DOCTYPE html>
 <!--[if IEMobile 7 ]>    <html class="no-js iem7"> <![endif]-->
 <!--[if (gt IEMobile 7)|!(IEMobile)]><!--> <html class="no-js"> <!--<![endif]-->
-	<head>
-		<meta charset="utf-8">
-		<title>Transporte Activo</title>
-		<meta name="description" content="">
-		<meta name="author" content="Daniel García">
-		<meta name="HandheldFriendly" content="True">
-		<meta name="MobileOptimized" content="320">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<!--[if IEMobile]><meta http-equiv="cleartype" content="on"><![endif]-->
+    <head>
+        <meta charset="utf-8">
+        <title>Transporte Activo</title>
+        <meta name="description" content="">
+        <meta name="author" content="Daniel García">
+        <meta name="HandheldFriendly" content="True">
+        <meta name="MobileOptimized" content="320">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!--[if IEMobile]><meta http-equiv="cleartype" content="on"><![endif]-->
 
-		<link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ STATIC_URL }}img/touch/apple-touch-icon-144x144-precomposed.png">
-		<link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ STATIC_URL }}img/touch/apple-touch-icon-114x114-precomposed.png">
-		<link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ STATIC_URL }}img/touch/apple-touch-icon-72x72-precomposed.png">
-		<link rel="apple-touch-icon-precomposed" href="{{ STATIC_URL }}img/touch/apple-touch-icon-57x57-precomposed.png">
-		<link rel="shortcut icon" href="{{ STATIC_URL }}img/touch/apple-touch-icon.png">
+        <link rel="apple-touch-icon-precomposed" sizes="144x144" href="{{ STATIC_URL }}img/touch/apple-touch-icon-144x144-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="114x114" href="{{ STATIC_URL }}img/touch/apple-touch-icon-114x114-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" sizes="72x72" href="{{ STATIC_URL }}img/touch/apple-touch-icon-72x72-precomposed.png">
+        <link rel="apple-touch-icon-precomposed" href="{{ STATIC_URL }}img/touch/apple-touch-icon-57x57-precomposed.png">
+        <link rel="shortcut icon" href="{{ STATIC_URL }}img/touch/apple-touch-icon.png">
 
-		<!-- Tile icon for Win8 (144x144 + tile color) -->
-		<meta name="msapplication-TileImage" content="{{ STATIC_URL }}img/touch/apple-touch-icon-144x144-precomposed.png">
-		<meta name="msapplication-TileColor" content="#222222">
-
-
-		<!-- For iOS web apps. Delete if not needed. https://github.com/h5bp/mobile-boilerplate/issues/94 -->
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black">
-		<meta name="apple-mobile-web-app-title" content="Transporte Activo">
-
-		<!-- This script prevents links from opening in Mobile Safari. https://gist.github.com/1042026 -->
-		<script>(function(a,b,c){if(c in b&&b[c]){var d,e=a.location,f=/^(a|html)$/i;a.addEventListener("click",function(a){d=a.target;while(!f.test(d.nodeName))d=d.parentNode;"href"in d&&(d.href.indexOf("http")||~d.href.indexOf(e.host))&&(a.preventDefault(),e.href=d.href)},!1)}})(document,window.navigator,"standalone")</script>
+        <!-- Tile icon for Win8 (144x144 + tile color) -->
+        <meta name="msapplication-TileImage" content="{{ STATIC_URL }}img/touch/apple-touch-icon-144x144-precomposed.png">
+        <meta name="msapplication-TileColor" content="#222222">
 
 
-		<link rel="stylesheet" href="{{ STATIC_URL }}css/vendor/normalize.css">
-		<!-- <link rel="stylesheet" href="css/themes/default/jquery.mobile-1.3.1.min.css"> -->
-		<!-- <link rel="stylesheet" type="text/css" href="css/themes/flat-ui/jquery.mobile.flatui.css"> -->
-		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/vendor/jquery.mobile.structure-1.3.1.min.css">
-		<link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/themes/holo/AndroidHoloDarkLight.min.css">
-		<link href='http://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
-		<link rel="stylesheet" href="{{ STATIC_URL }}css/icons_sprite.css">
-		<link rel="stylesheet" href="{{ STATIC_URL }}css/main.css">
-		<script src="{{ STATIC_URL }}js/vendor/modernizr-2.6.2.min.js"></script>
-		<!--script type="text/javascript" src="http://livejs.com/live.js"></script-->
-	</head>
-	<body>
-		<article data-role="page" id="plan-trip">
-			<header data-role="header">
-				<a href="#menu-panel-plan-trip" data-icon="custom" data-iconpos="notext" class="show-lines">Menú</a>
-				<h1>Paradas Cercanas</h1>
-				<a href="#map-options-panel" data-icon="custom" data-iconpos="notext" class="gear">Opciones del mapa</a>
-			</header>
-			<section data-role="content">
-				<!-- form class="row clearfix planear-viaje">
-					<div class="eight columns">
-						<input type="text" name="origen" placeholder="Parada inicial...">
-						<input type="text" name="destino" placeholder="Parada final...">
-					</div>
-					<div class="four columns">
-						<input type="submit" value="Paradas Cercanas">
-					</div>
-				</form -->
-				<a class="control location icon" title="Mostrar mi ubicación"><span></span>Localizarme</a>
-				<section class="map-canvas"></section>
-				<aside data-role="popup" id="info-popup" data-position-to="window" data-overlay-theme="a" data-theme="c">
-					<header data-role="header" data-theme="a" class="ui-corner-top">
-						<h2></h2>
-						<a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Cerrar</a>
-					</header>
-					<section data-role="content">
-						<h3>Rutas</h3>
-						<section class="routes"></section>
-						<div class="actions">
-							<!--a href="#" data-role="button" data-inline="true">Iniciar Aquí</a>
-							<a href="#" data-role="button" data-inline="true" data-rel="back">Llegar Aquí</a-->
-						</div>
-						<a href="#parada" data-role="button" data-theme="a" data-icon="arrow-r" data-iconpos="right" class="ver-mas">Ver más</a>
-					</section>
-				</aside>
-			</section>
-			<footer data-role="footer">
-				<nav data-role="navbar">
-					<ul>
-						<li><a href="#plan-trip" data-icon="custom" class="map ui-btn-active ui-state-persist">Paradas Cercanas</a></li>
-						<li><a href="#buscar" data-icon="custom" class="magnify">Buscar</a></li>
-						<li><a href="#" data-icon="custom" class="star">Favoritos</a></li>
-						<li><a href="#" data-icon="custom" class="bullhorn">Noticias</a></li>
-					</ul>
-				</nav>
-			</footer>
-			<aside data-role="panel" data-position="left" data-display="reveal" id="menu-panel-plan-trip">
-				<h2>Transporte Activo</h2>
-				<ul data-role="listview" data-icon="custom" class="dark">
-					<li class="map"><a href="#plan-trip" class="ui-btn-active ui-state-persist">Paradas Cercanas</a></li>
-					<li class="magnify"><a href="#buscar">Buscar</a></li>
-					<li class="star"><a href="#">Favoritos</a></li>
-					<li class="bullhorn"><a href="#">Noticias</a></li>
-				</ul>
-			</aside><!-- #menu-panel-plan-trip -->
+        <!-- For iOS web apps. Delete if not needed. https://github.com/h5bp/mobile-boilerplate/issues/94 -->
+        <meta name="apple-mobile-web-app-capable" content="yes">
+        <meta name="apple-mobile-web-app-status-bar-style" content="black">
+        <meta name="apple-mobile-web-app-title" content="Transporte Activo">
 
-			<aside data-role="panel" data-position="right" data-display="reveal" id="map-options-panel">
-				<h2>Opciones del mapa</h2>
-				<form id="map-options">
-					<fieldset data-role="controlgroup">
-						<legend>Mostrar:</legend>
-						<input type="checkbox" name="ver-troncales" id="ver-troncales" checked="checked">
-						<label for="ver-troncales">Estaciones (Troncales)</label>
-						<input type="checkbox" name="ver-pretroncales" id="ver-pretroncales" checked="checked">
-						<label for="ver-pretroncales">Paradas Pretroncales</label>
-						<input type="checkbox" name="ver-alimentadoras" id="ver-alimentadoras" checked="checked">
-						<label for="ver-alimentadoras">Paradas Alimentadoras</label>
-					</fieldset>
-				</form>
-			</aside><!-- #map-options-panel -->
-		</article><!-- #plan-trip -->
-
-		<article data-role="page" id="buscar">
-			<header data-role="header">
-				<a href="#menu-panel-buscar" data-icon="custom" data-iconpos="notext" class="show-lines">Menú</a>
-				<h1>Buscar por Nombre</h1>
-			</header>
-			<section data-role="content">
-				<ul id="autocomplete" data-role="listview" data-filter-theme="b" data-inset="true" data-filter="true" data-filter-placeholder="Buscar ruta, estación o parada..."></ul>
-			</section>
-			<footer data-role="footer">
-				<nav data-role="navbar">
-					<ul>
-						<li><a href="#plan-trip" data-icon="custom" class="map">Paradas Cercanas</a></li>
-						<li><a href="#buscar" data-icon="custom" class="magnify ui-btn-active ui-state-persist">Buscar</a></li>
-						<li><a href="#" data-icon="custom" class="star">Favoritos</a></li>
-						<li><a href="#" data-icon="custom" class="bullhorn">Noticias</a></li>
-					</ul>
-				</nav>
-			</footer>
-			<aside data-role="panel" data-position="left" data-display="reveal" id="menu-panel-buscar">
-				<h2>Transporte Activo</h2>
-				<ul data-role="listview" data-icon="custom" class="dark">
-					<li class="map"><a href="#plan-trip">Paradas Cercanas</a></li>
-					<li class="magnify"><a href="#buscar" class="ui-btn-active ui-state-persist">Buscar</a></li>
-					<li class="star"><a href="#">Favoritos</a></li>
-					<li class="bullhorn"><a href="#">Noticias</a></li>
-				</ul>
-			</aside><!-- #menu-panel-buscar -->
-		</article><!-- #buscar -->
-
-		<article data-role="page" id="parada" data-add-back-btn="true">
-			<header data-role="header">
-				<h1></h1>
-			</header>
-			<section data-role="content">
-				<h2>Ubicación</h2>
-				<figure class="staticmap"></figure>
-
-				<h2>Rutas</h2>
-				<section class="routes"></section>
-				<!-- <h3>Próximas rutas</h3> -->
-				<!-- <section class="nextroutes"></section> -->
-			</section>
-			<footer data-role="footer">
-				<nav data-role="navbar">
-					<ul>
-						<li><a href="#plan-trip" data-icon="custom" class="map">Paradas Cercanas</a></li>
-						<li><a href="#buscar" data-icon="custom" class="magnify ui-btn-active ui-state-persist">Buscar</a></li>
-						<li><a href="#" data-icon="custom" class="star">Favoritos</a></li>
-						<li><a href="#" data-icon="custom" class="bullhorn">Noticias</a></li>
-					</ul>
-				</nav>
-			</footer>
-		</article><!-- #parada -->
+        <!-- This script prevents links from opening in Mobile Safari. https://gist.github.com/1042026 -->
+        <script>(function(a,b,c){if(c in b&&b[c]){var d,e=a.location,f=/^(a|html)$/i;a.addEventListener("click",function(a){d=a.target;while(!f.test(d.nodeName))d=d.parentNode;"href"in d&&(d.href.indexOf("http")||~d.href.indexOf(e.host))&&(a.preventDefault(),e.href=d.href)},!1)}})(document,window.navigator,"standalone")</script>
 
 
-		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBWdIbq64kbz8B83nx9TS3u5NqiIYFK9r0&amp;sensor=true&amp;language=es-ES"></script>
-		<script src="{{ STATIC_URL }}js/vendor/jquery-1.9.1.min.js"></script>
-		<script src="{{ STATIC_URL }}js/helper.js"></script>
-		<script src="{{ STATIC_URL }}js/main.js"></script>
-		<script src="{{ STATIC_URL }}js/vendor/jquery.mobile-1.3.1.min.js"></script>
-		<!-- // <script src="js/vendor/purl.js"></script> -->
-	</body>
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/vendor/normalize.css">
+        <!-- <link rel="stylesheet" href="{{ STATIC_URL }}css/themes/default/jquery.mobile-1.3.1.min.css"> -->
+        <!-- <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/themes/flat-ui/jquery.mobile.flatui.css"> -->
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/vendor/jquery.mobile.structure-1.3.1.min.css">
+        <link rel="stylesheet" type="text/css" href="{{ STATIC_URL }}css/themes/holo/AndroidHoloDarkLight.min.css">
+        <link href='http://fonts.googleapis.com/css?family=Roboto:400,700,400italic,700italic' rel='stylesheet' type='text/css'>
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/icons_sprite.css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}css/main.css">
+        <script src="{{ STATIC_URL }}js/vendor/modernizr-2.6.2.min.js"></script>
+        <!--script type="text/javascript" src="http://livejs.com/live.js"></script-->
+    </head>
+    <body>
+        <article data-role="page" id="plan-trip">
+            <header data-role="header">
+                <a href="#menu-panel-plan-trip" data-icon="custom" data-iconpos="notext" class="show-lines">Menú</a>
+                <h1>Paradas Cercanas</h1>
+                <a href="#map-options-panel" data-icon="custom" data-iconpos="notext" class="gear">Opciones del mapa</a>
+            </header>
+            <section data-role="content">
+                <!-- form class="row clearfix planear-viaje">
+                    <div class="eight columns">
+                        <input type="text" name="origen" placeholder="Parada inicial...">
+                        <input type="text" name="destino" placeholder="Parada final...">
+                    </div>
+                    <div class="four columns">
+                        <input type="submit" value="Paradas Cercanas">
+                    </div>
+                </form -->
+                <a class="control location icon" title="Mostrar mi ubicación"><span></span>Localizarme</a>
+                <section class="map-canvas"></section>
+                <aside data-role="popup" id="info-popup" data-position-to="window" data-overlay-theme="a" data-theme="c">
+                    <header data-role="header" data-theme="a" class="ui-corner-top">
+                        <h2></h2>
+                        <a href="#" data-rel="back" data-role="button" data-icon="delete" data-iconpos="notext" class="ui-btn-right">Cerrar</a>
+                    </header>
+                    <section data-role="content">
+                        <h3>Rutas</h3>
+                        <section class="routes"></section>
+                        <div class="actions">
+                            <!--a href="#" data-role="button" data-inline="true">Iniciar Aquí</a>
+                            <a href="#" data-role="button" data-inline="true" data-rel="back">Llegar Aquí</a-->
+                        </div>
+                        <a href="#parada" data-role="button" data-theme="a" data-icon="arrow-r" data-iconpos="right" class="ver-mas">Ver más</a>
+                    </section>
+                </aside>
+            </section>
+            <footer data-role="footer">
+                <nav data-role="navbar">
+                    <ul>
+                        <li><a href="#plan-trip" data-icon="custom" class="map ui-btn-active ui-state-persist">Paradas Cercanas</a></li>
+                        <li><a href="#buscar" data-icon="custom" class="magnify">Buscar</a></li>
+                        <li><a href="#" data-icon="custom" class="star">Favoritos</a></li>
+                        <li><a href="#" data-icon="custom" class="bullhorn">Noticias</a></li>
+                    </ul>
+                </nav>
+            </footer>
+            <aside data-role="panel" data-position="left" data-display="reveal" id="menu-panel-plan-trip">
+                <h2>Transporte Activo</h2>
+                <ul data-role="listview" data-icon="custom" class="dark">
+                    <li class="map"><a href="#plan-trip" class="ui-btn-active ui-state-persist">Paradas Cercanas</a></li>
+                    <li class="magnify"><a href="#buscar">Buscar</a></li>
+                    <li class="star"><a href="#">Favoritos</a></li>
+                    <li class="bullhorn"><a href="#">Noticias</a></li>
+                </ul>
+            </aside><!-- #menu-panel-plan-trip -->
+
+            <aside data-role="panel" data-position="right" data-display="reveal" id="map-options-panel">
+                <h2>Opciones del mapa</h2>
+                <form id="map-options">
+                    <fieldset data-role="controlgroup">
+                        <legend>Mostrar:</legend>
+                        <input type="checkbox" name="ver-troncales" id="ver-troncales" checked="checked">
+                        <label for="ver-troncales">Estaciones (Troncales)</label>
+                        <input type="checkbox" name="ver-pretroncales" id="ver-pretroncales" checked="checked">
+                        <label for="ver-pretroncales">Paradas Pretroncales</label>
+                        <input type="checkbox" name="ver-alimentadoras" id="ver-alimentadoras" checked="checked">
+                        <label for="ver-alimentadoras">Paradas Alimentadoras</label>
+                    </fieldset>
+                </form>
+            </aside><!-- #map-options-panel -->
+        </article><!-- #plan-trip -->
+
+        <article data-role="page" id="buscar">
+            <header data-role="header">
+                <a href="#menu-panel-buscar" data-icon="custom" data-iconpos="notext" class="show-lines">Menú</a>
+                <h1>Buscar por Nombre</h1>
+            </header>
+            <section data-role="content">
+                <ul id="autocomplete" data-role="listview" data-filter-theme="b" data-inset="true" data-filter="true" data-filter-placeholder="Buscar ruta, estación o parada..."></ul>
+            </section>
+            <footer data-role="footer">
+                <nav data-role="navbar">
+                    <ul>
+                        <li><a href="#plan-trip" data-icon="custom" class="map">Paradas Cercanas</a></li>
+                        <li><a href="#buscar" data-icon="custom" class="magnify ui-btn-active ui-state-persist">Buscar</a></li>
+                        <li><a href="#" data-icon="custom" class="star">Favoritos</a></li>
+                        <li><a href="#" data-icon="custom" class="bullhorn">Noticias</a></li>
+                    </ul>
+                </nav>
+            </footer>
+            <aside data-role="panel" data-position="left" data-display="reveal" id="menu-panel-buscar">
+                <h2>Transporte Activo</h2>
+                <ul data-role="listview" data-icon="custom" class="dark">
+                    <li class="map"><a href="#plan-trip">Paradas Cercanas</a></li>
+                    <li class="magnify"><a href="#buscar" class="ui-btn-active ui-state-persist">Buscar</a></li>
+                    <li class="star"><a href="#">Favoritos</a></li>
+                    <li class="bullhorn"><a href="#">Noticias</a></li>
+                </ul>
+            </aside><!-- #menu-panel-buscar -->
+        </article><!-- #buscar -->
+
+        <article data-role="page" id="parada" data-add-back-btn="true">
+            <header data-role="header">
+                <h1></h1>
+            </header>
+            <section data-role="content">
+                <h2>Ubicación</h2>
+                <figure class="staticmap"></figure>
+
+                <h2>Rutas</h2>
+                <section class="routes"></section>
+                <!-- <h3>Próximas rutas</h3> -->
+                <!-- <section class="nextroutes"></section> -->
+            </section>
+            <footer data-role="footer">
+                <nav data-role="navbar">
+                    <ul>
+                        <li><a href="#plan-trip" data-icon="custom" class="map">Paradas Cercanas</a></li>
+                        <li><a href="#buscar" data-icon="custom" class="magnify ui-btn-active ui-state-persist">Buscar</a></li>
+                        <li><a href="#" data-icon="custom" class="star">Favoritos</a></li>
+                        <li><a href="#" data-icon="custom" class="bullhorn">Noticias</a></li>
+                    </ul>
+                </nav>
+            </footer>
+        </article><!-- #parada -->
+
+        <article data-role="page" id="ruta" data-add-back-btn="true">
+            <header data-role="header">
+                <h1></h1>
+            </header>
+            <section data-role="content">
+                <h2 class="description"></h2>
+                <h2 class="type"></h2>
+                <h2 class="orientation"></h2>
+
+
+                <h2>Paradas</h2>
+                <div data-role="collapsible">
+                    <h3>Ver Paradas</h3>
+                    <section class="stops"></section>
+                </div>
+            </section>
+            <footer data-role="footer">
+                <nav data-role="navbar">
+                    <ul>
+                        <li><a href="#plan-trip" data-icon="custom" class="map">Paradas Cercanas</a></li>
+                        <li><a href="#buscar" data-icon="custom" class="magnify ui-btn-active ui-state-persist">Buscar</a></li>
+                        <li><a href="#" data-icon="custom" class="star">Favoritos</a></li>
+                        <li><a href="#" data-icon="custom" class="bullhorn">Noticias</a></li>
+                    </ul>
+                </nav>
+            </footer>
+        </article><!-- #ruta -->
+
+        <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBWdIbq64kbz8B83nx9TS3u5NqiIYFK9r0&amp;sensor=true&amp;language=es-ES"></script>
+        <script src="{{ STATIC_URL }}js/vendor/jquery-1.9.1.min.js"></script>
+        <script src="{{ STATIC_URL }}js/helper.js"></script>
+        <script src="{{ STATIC_URL }}js/main.js"></script>
+        <script src="{{ STATIC_URL }}js/vendor/jquery.mobile-1.3.1.min.js"></script>
+        <!-- // <script src="js/vendor/purl.js"></script> -->
+    </body>
 </html>
