@@ -548,6 +548,8 @@ $(document).on("pageshow", "#ruta", function(event) {
 	}
 });
 
+// $(document).on("pageshow", "#noticias", function(event) {
+// });
 
 $(window).on('orientationchange resize pageshow', function(event) {
 	if ($.mobile.activePage) {
@@ -560,7 +562,13 @@ $(window).on('orientationchange resize pageshow', function(event) {
 				$('.map-canvas').height($(".ui-content:visible").height()-$(".planear-viaje").height());
 				google.maps.event.trigger(ta.map.map, "resize");
 				break;
-			case 'search':
+			case 'noticias':
+				$content = $("#noticias .ui-content");
+				height = $content.height();
+				width = $content.width();
+
+				showTwitter('twitter-metrocali', {width: width, height: height, element: $content});
+
 				break;
 		}
 	}

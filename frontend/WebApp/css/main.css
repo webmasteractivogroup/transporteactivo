@@ -486,6 +486,9 @@ footer,
 #ruta .type img {
   float: right;
 }
+#noticias .ui-content {
+  overflow: hidden;
+}
 .map-canvas {
   width: 100%;
   height: 100%;
@@ -609,6 +612,16 @@ a.control.location {
 }
 a.control.location span {
   background: url(../img/icons_sprite-dark.png) -158px -350px no-repeat;
+}
+.toast {
+  display: block;
+  opacity: 0.90;
+  background: #222;
+  color: #fff;
+  position: fixed;
+  padding: 7px;
+  text-align: center;
+  width: 50%;
 }
 .nocallout {
   -webkit-touch-callout: none;
