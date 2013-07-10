@@ -121,18 +121,37 @@ exports.popup = function(current, id, nombre) {
 		height : shadow.height,
 		left:0
 	});
-	var labelRutas = Ti.UI.createLabel({
+	var labelRutasSur = Ti.UI.createLabel({
 		color : 'black',
-		text : 'Rutas',
+		text : 'Rutas Norte -> Sur',
 		font : {
 			fontWeight : 'bold',
-			fontSize : '18 dp',
+			fontSize : '16 dp',
+		},
+		width : Ti.UI.SIZE,
+		left : '10 dp',
+		top : '3 dp'	});
+		
+		var labelRutasNorte = Ti.UI.createLabel({
+		color : 'black',
+		text : 'Rutas Sur -> Norte',
+		font : {
+			fontWeight : 'bold',
+			fontSize : '16 dp',
 		},
 		width : Ti.UI.SIZE,
 		left : '10 dp',
 		top : '3 dp'	});
 
-	var rutasgroup = Ti.UI.createView({
+	var rutasgroupSur = Ti.UI.createView({
+		layout : 'horizontal',
+		left : '10 dp',
+		right : '10 dp',
+		height : Ti.UI.SIZE,
+		top : '10 dp',
+		bottom : '10 dp'
+	});
+	var rutasgroupNorte = Ti.UI.createView({
 		layout : 'horizontal',
 		left : '10 dp',
 		right : '10 dp',
@@ -153,6 +172,7 @@ exports.popup = function(current, id, nombre) {
 			Ti.API.log('RUTAS: ' + json.length);
 			for ( i = 0; i < json.length; i++) {
 				ruta = json[i];
+				
 				var color;
 				if (ruta.nombre_ruta.charAt(0) === 'A') {
 					color = '#bbbb00';
@@ -176,7 +196,10 @@ exports.popup = function(current, id, nombre) {
 					},
 					textAlign : Ti.UI.TEXT_ALIGNMENT_CENTER,
 				});
-				rutasgroup.add(rutasquare);
+				if(ruta.orientacion===0){
+				rutasgroupSur.add(rutasquare);}else{
+					rutasgroupNorte.add(rutasquare)
+				}
 			}
 
 		},
@@ -199,10 +222,12 @@ exports.popup = function(current, id, nombre) {
 	shadow.add(labelTitulo);
 	shadow.add(btnExit);
 	frmLog.add(shadow);
-	frmLog.add(labelRutas);
-	frmLog.add(rutasgroup);
-	btngroup.add(btnInicio);
-	btngroup.add(btnFinal);
+	frmLog.add(labelRutasSur);
+	frmLog.add(rutasgroupSur);
+	frmLog.add(labelRutasNorte);
+	frmLog.add(rutasgroupNorte);
+	//btngroup.add(btnInicio);
+	//btngroup.add(btnFinal);
 	frmLog.add(btngroup);
 	frmLog.add(btnVerMas);
 	win.add(frmLog);
