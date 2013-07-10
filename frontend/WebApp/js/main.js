@@ -440,7 +440,7 @@ $(document).on("pageinit", "#buscar", function(event) {
 									nombre: jQuery(this).text(),
 									position: position
 								};
-				//TODO: ADD POSITION AND ICON URL
+				//TODO: ADD ICON URL
 				break;
 		}
 	});
@@ -531,14 +531,27 @@ $(document).on("pageshow", "#ruta", function(event) {
 					// construct the html list for stops
 					for (i = 0; i < data.length; ++i) {
 						parada = data[i];
-						html += '<li><a href="#parada" data-id="' + parada.id + '">';
+						html += '<li><a href="#parada" data-id="' + parada.id + '" data-lat="' + parada.lat + '" data-lng="' + parada.lng + '">';
 						html += '<span class="stop icon tipo_' + parada.extra + '"></span>';
 						html += parada.nombre_parada;
 						html += '</a></li>';
 					}
 					html += '</ul>';
-					$("#ruta").find('.stops').html(html).trigger('create');
-					// $("#ruta").find('.stops').html(html);
+					$("#ruta .stops")
+						.html(html).trigger('create')
+						.on('click', 'a', function(){
+							position = new google.maps.LatLng(
+											parseFloat(jQuery(this).data('lat')),
+											parseFloat(jQuery(this).data('lng'))
+							);
+							ta.search.parada = {
+								id: jQuery(this).data('id'),
+								nombre: jQuery(this).text(),
+								position: position//,
+								// icon: marker.getIcon().url
+							};
+						});
+					// todo: set parada ID and ICON
 				}
 			}
 		});
@@ -547,9 +560,6 @@ $(document).on("pageshow", "#ruta", function(event) {
 		jQuery.mobile.changePage("#buscar");
 	}
 });
-
-// $(document).on("pageshow", "#noticias", function(event) {
-// });
 
 $(window).on('orientationchange resize pageshow', function(event) {
 	if ($.mobile.activePage) {
