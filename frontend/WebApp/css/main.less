@@ -184,7 +184,7 @@
 	}
 
 // Author's custom styles
-	// Mixins
+	// Mixins (from 3L)
 		// Box sizing
 		.content-box-sizing(){-moz-box-sizing:content-box;-webkit-box-sizing:content-box;box-sizing:content-box;}
 		.padding-box-sizing(){-moz-box-sizing:padding-box;-webkit-box-sizing:padding-box;box-sizing:padding-box;}
@@ -215,10 +215,18 @@
 			box-shadow: @arguments;
 		}
 
+		// Border Radius
+		.border-radius (@radius:5px, ...) {
+			-webkit-border-radius: @arguments;
+			-moz-border-radius: @arguments;
+			border-radius: @arguments;
+		}
+
 	// Constants
 		@troncal-color: #2E2482;
 		@pretroncal-color: #E4004F;
 		@alimentadora-color: #BBBB00;
+		@azul-ciudadanos: #1abbee;
 
 	// General
 		html, body {
@@ -327,6 +335,13 @@
 		}
 
 	// Widgets and other stand-alone custom elements
+		.logo {
+			background: @azul-ciudadanos url(../img/logo.png) 4px center no-repeat;
+			padding-left: 40px;
+			line-height: 44px;
+			color: white;
+			.border-radius(5px);
+		}
 		.map-canvas {
 			width: 100%;
 			// min-height: 320px;
@@ -441,7 +456,7 @@
 			position: fixed;
 			padding: 7px;
 			text-align: center;
-			width: 50%;
+			width: 300px;
 		}
 
 // Helper classes
