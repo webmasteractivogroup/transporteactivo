@@ -58,8 +58,8 @@ window.ta = {
 		A: "Alimentador"
 	},
 	orientaciones: {
-		0: "Norte-Sur",
-		1: "Sur-Norte"
+		0: "Norte &rsaquo; Sur",
+		1: "Sur &rsaquo; Norte"
 	},
 
 	geoLocation: {
@@ -311,7 +311,7 @@ window.ta = {
 					// console.log(textStatus);
 					// console.log(errorThrown);
 					//ocultarIndicadorAjax();
-					alert("Error cargando las paradas cercanas"); //TODO: Agregar mensaje
+					toast("Error cargando las paradas cercanas");
 				}
 			});
 		},
@@ -409,7 +409,7 @@ $(document).on("pageinit", "#buscar", function(event) {
 						} else { //ruta
 							html += '<a href="#ruta" data-id="' + val.id + '" data-nombre="' + val.nombre + '" data-descripcion="' + val.extra + '" data-orientacion="' + val.extra2 + '" class="routes">';
 							tipo_ruta = val.nombre.substring(0, 1);
-							html += '<span class="' + tipo_ruta + '">' + val.nombre + '</span> (' + val.extra + ')';
+							html += '<span class="' + tipo_ruta + '">' + val.nombre + '</span> ' + val.extra + ' (' + ta.orientaciones[val.extra2] + ')';
 						}
 						html += '</a>';
 						html += "</li>";
@@ -444,6 +444,18 @@ $(document).on("pageinit", "#buscar", function(event) {
 				break;
 		}
 	});
+});
+
+$(document).on("pageinit", "#parada", function(event) {
+	$('#parada')
+		.on('click', '.add-fav', function () {
+			$(this).toggleClass('yellow');
+			if ($(this).hasClass('yellow')) {
+				toast('Agregada a Favoritos');
+			} else {
+				toast('Eliminada de Favoritos');
+			}
+		});
 });
 
 $(document).on("pageshow", "#parada", function(event) {
@@ -501,16 +513,20 @@ $(document).on("pageinit", "#ruta", function(event) {
 		})
 		.on('collapse', '.ui-collapsible', function () {
 			$(this).find('h3 .ui-btn-text').text('Ver Paradas');
+		})
+		.on('click', '.add-fav', function () {
+			$(this).toggleClass('yellow');
+			if ($(this).hasClass('yellow')) {
+				toast('Agregada a Favoritos');
+			} else {
+				toast('Eliminada de Favoritos');
+			}
 		});
 });
 
 $(document).on("pageshow", "#ruta", function(event) {
 	ruta = ta.search.ruta;
 	if (ruta) {
-		// change the page title
-		// if (!ruta.orientacion) {
-		// 	ruta.orientacion = '0'; //TODO: fix orientation on search
-		// }
 		tipo = ruta.nombre.substring(0,1);
 		$("#ruta")
 			.find('h1').html(ruta.nombre).end()
