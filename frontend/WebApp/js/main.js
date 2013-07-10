@@ -339,7 +339,7 @@ window.ta = {
 	}
 };
 
-$(document).on('pageinit', '#plan-trip', function(event){
+$(document).on('pageinit', '#mapa', function(event){
 	window.ta.init();
 
 	// when the map finishes loading
@@ -583,7 +583,7 @@ $(window).on('orientationchange resize pageshow', function(event) {
 		fixgeometry();
 
 		switch($.mobile.activePage.attr('id')) {
-			case 'plan-trip':
+			case 'mapa':
 				// resize the map to fit the content, minus the search form
 				$('.map-canvas').height($(".ui-content:visible").height()-$(".planear-viaje").height());
 				google.maps.event.trigger(ta.map.map, "resize");
