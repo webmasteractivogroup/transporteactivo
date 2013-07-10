@@ -287,6 +287,12 @@
 				right: 0;
 			}
 		}
+		.ui-panel-inner {
+			h2 {
+				margin-top: -10px;
+				margin-bottom: 0;
+			}
+		}
 
 	// Specific pages layouts
 		#inicio {
@@ -295,17 +301,23 @@
 			}
 		}
 		#acerca-de-panel {
-			h3 {
-				margin-bottom: 0;
+			h2, h3 {
+				margin-bottom: 0.5em;
+			}
+			p {
+				margin: 0;
 			}
 			.ui-listview {
-				margin-bottom: 1em;
+				margin: 0 0 1em;
 				h4, p {
 					margin: 0;
 				}
 				h4 {
 					line-height: 20px;
-					// margin: -2px 0 0;
+				}
+				a {
+					padding-top: 3px;
+					padding-bottom: 3px;
 				}
 			}
 		}
@@ -361,6 +373,7 @@
 			line-height: 44px;
 			color: white;
 			.border-radius(5px);
+			margin-bottom: 20px !important;
 			&.home {
 				text-align: center;
 				padding-left: 0;
