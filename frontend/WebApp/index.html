@@ -43,6 +43,69 @@
 		<!--script type="text/javascript" src="http://livejs.com/live.js"></script-->
 	</head>
 	<body>
+		<article data-role="page" id="inicio">
+			<header data-role="header">
+				<a href="#menu-panel-inicio" data-icon="custom" data-iconpos="notext" class="show-lines">Menú</a>
+				<h1>Transporte Activo</h1>
+				<a href="#acerca-de-panel" data-icon="custom" data-iconpos="notext" class="id-card">Acerca de Transporte Activo</a>
+			</header>
+			<section data-role="content">
+				<h2 class="logo home">Transporte Activo</h2>
+				<p>Información y participación ciudadana para el sistema de transporte <strong>Masivo Integrado de Occidente, MIO</strong> de la ciudad de Santiago de Cali.</p>
+			</section>
+			<footer data-role="footer">
+				<nav data-role="navbar">
+					<ul>
+						<li><a href="#mapa" data-icon="custom" class="map">Mapa</a></li>
+						<li><a href="#buscar" data-icon="custom" class="magnify">Buscar</a></li>
+						<li><a href="#" data-icon="custom" class="star">Favoritos</a></li>
+						<li><a href="#noticias" data-icon="custom" class="bullhorn">Noticias</a></li>
+					</ul>
+				</nav>
+			</footer>
+			<aside data-role="panel" data-position="left" data-display="reveal" id="menu-panel-inicio">
+				<h2 class="logo">Transporte Activo</h2>
+				<ul data-role="listview" data-icon="custom" class="dark">
+					<li class="house"><a href="#inicio" class="ui-btn-active ui-state-persist">Inicio</a></li>
+					<li class="map"><a href="#mapa">Paradas Cercanas</a></li>
+					<li class="magnify"><a href="#buscar">Buscar</a></li>
+					<li class="star"><a href="#">Favoritos</a></li>
+					<li class="bullhorn"><a href="#noticias">Noticias</a></li>
+				</ul>
+			</aside><!-- #menu-panel-inicio -->
+			<aside data-role="panel" data-position="right" data-display="reveal" id="acerca-de-panel">
+				<h2>Acerca de</h2>
+				<p><strong>Transporte Activo</strong> es una iniciativa de <em>código abierto</em> de la fundación <a href="http://ciudadanosactivos.com" target="_blank">Ciudadanos Activos</a> para la convocatoria <a href="http://co-creacolombia.co/" target="_blank">Co-Crea Colombia</a>, con el apoyo del Banco Mundial, MetroCali, y la Alcaldía Municipal de Cali.</p>
+
+				<h3>Responsables</h3>
+				<ul data-role="listview" data-inset="true">
+					<li>
+						<a href="http://ciudadanosactivos.com" target="_blank">
+							<h4>Bobby Gordon</h4><p>Fundador Ciudadanos Activos</p>
+						</a>
+					</li>
+					<li>
+						<a href="http://danielgarcia.co" target="_blank">
+							<h4>Daniel García</h4><p>Desarrollo Aplicación Web</p>
+						</a>
+					</li>
+					<li>
+						<a href="http://guillermoalvarez.co" target="_blank">
+							<h4>Guillermo Álvarez</h4><p>Desarrollo Back-end</p>
+						</a>
+					</li>
+					<li>
+						<a href="#" target="_blank">
+							<h4>Matheo Fiebiger</h4><p>Desarrollo Aplicación Nativa</p>
+						</a>
+					</li>
+				</ul>
+
+				<h3>Código Fuente</h3>
+				<p><a href="https://github.com/webmasteractivogroup/transporteactivo" target="_blank" data-role="button">Repositorio en Github</a></p>
+			</aside><!-- #acerca-de-panel -->
+		</article><!-- #noticias -->
+
 		<article data-role="page" id="mapa">
 			<header data-role="header">
 				<a href="#menu-panel-plan-trip" data-icon="custom" data-iconpos="notext" class="show-lines">Menú</a>
