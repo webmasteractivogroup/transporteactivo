@@ -172,11 +172,12 @@ function fetchTwitter() {
 				var av_image = Titanium.UI.createImageView({
 					image : avatar, // the image for the image view
 					top : 0,
-					left : 0,
-					height : '70 dp',
-					width : '70 dp',
+					left : '10 dp',
+					height : 'auto',
+					width : 'auto',
 					borderColor : '#888888',
-					borderRadius : 10
+					borderRadius : 10,
+					preventDefaultImage:true
 				});
 				post_view.add(av_image);
 
@@ -185,7 +186,7 @@ function fetchTwitter() {
 					text : user,
 					left : '74 dp',
 					width : Ti.UI.FILL,
-					top : '-72 dp',
+					top : '-50 dp',
 					bottom : '2 dp',
 					height : '16 dp',
 					textAlign : 'left',

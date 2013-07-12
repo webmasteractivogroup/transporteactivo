@@ -23,37 +23,58 @@ function Search() {
 		}
 
 	});
-	
+
 	tblsearch.addEventListener('cancel', function(e) {
-		
-		tblsearch.value="";
-		data=[];
-		tableview.data=data;
-		times=0;
-		
+
+		tblsearch.value = "";
+		data = [];
+		tableview.data = data;
+		times = 0;
 
 	});
 
-if (Ti.Platform.osname === 'android') {
-	tableview = Ti.UI.createTableView({
-		search : tblsearch,
-		filterAttribute : 'title'
-	});
-}else{
-	tableview = Ti.UI.createTableView({
-		search : tblsearch,
-		filterAttribute : 'nombre'
-	});
-	
-}
-	
+	if (Ti.Platform.osname === 'android') {
+		tableview = Ti.UI.createTableView({
+			search : tblsearch,
+			filterAttribute : 'title'
+		});
+	} else {
+		tableview = Ti.UI.createTableView({
+			search : tblsearch,
+			filterAttribute : 'titulo'
+		});
+
+	}
+
 	tableview.addEventListener('click', function(e) {
-		
-		tblsearch.value="";
-		data=[];
-		tableview.data=data;
-		times=0;
-		
+
+		tblsearch.value = "";
+		data = [];
+		tableview.data = data;
+		times = 0;
+
+		var masInfoWindow = Ti.UI.createWindow({
+			backgroundColor : 'white'
+		});
+
+		Ti.API.info('ROW TIPO =' + e.row.tipores);
+		if (e.row.tipores === 'r') {
+			masInfoWindow.title = 'Información de Ruta';
+			var Ruta = require('ui/common/DisplayRuta');
+			var vistaRuta = new Ruta(e.row.nombre, e.row.tipo, e.row.orientacion, e.row.id);
+			masInfoWindow.add(vistaRuta);
+
+			Ti.App.tabPerfiles.open(masInfoWindow);
+
+		} else {
+			masInfoWindow.title = 'Información de Parada';
+			var Parada = require('ui/common/DisplayParada');
+			var vistaParada = new Parada(e.row.nombre, e.row.latlng, e.row.id);
+			masInfoWindow.add(vistaParada);
+
+			Ti.App.tabPerfiles.open(masInfoWindow);
+
+		}
 
 	});
 
@@ -73,6 +94,11 @@ function consulta(q) {
 
 			json = JSON.parse(this.responseText);
 			for ( i = 0; i < json.length; i++) {
+
+				var row = Ti.UI.createTableViewRow({
+					height : '50 dp',
+				});
+
 				result = json[i];
 				var imagen;
 
@@ -80,6 +106,7 @@ function consulta(q) {
 					layout : 'horizontal'
 				});
 
+				row.tipores = result.tipo;
 				if (result.tipo === 'p') {
 					if (result.extra === '1') {
 						imagen = '/images/marker_icon_troncal.png';
@@ -100,15 +127,19 @@ function consulta(q) {
 
 					var myText = Ti.UI.createLabel({
 						text : result.nombre,
-						top : '10dp',
+						top : '10 dp',
 						left : '5 dp',
-						width : Ti.UI.SIZE,
+						width : '70%',
 						height : 'auto',
 						textAlign : 'left',
 						font : {
-							fontSize : '14 dp'
+							fontSize : '13 dp'
 						}
 					});
+
+					row.nombre = result.nombre;
+					row.latlng = result.extra2;
+					
 					myView.add(av_image);
 					myView.add(myText);
 				} else {
@@ -116,18 +147,21 @@ function consulta(q) {
 					var color;
 					if (result.nombre.charAt(0) === 'A') {
 						color = '#bbbb00';
+						row.tipo = 'Tipo: Alimentador';
 					} else if (result.nombre.charAt(0) === 'P') {
 						color = '#e4004f';
+						row.tipo = 'Tipo: Padron';
 					} else {
 						color = '#2e2482';
+						row.tipo = 'Tipo: Articulado';
 					}
 
 					var rutasquare = Ti.UI.createLabel({
 						color : 'white',
 						width : '50 dp',
 						height : '22 dp',
-						top: '10 dp',
-						left: '10 dp',
+						top : '10 dp',
+						left : '10 dp',
 						backgroundColor : color,
 						text : result.nombre,
 						font : {
@@ -136,30 +170,39 @@ function consulta(q) {
 						},
 						textAlign : Ti.UI.TEXT_ALIGNMENT_CENTER,
 					});
-
+					var adding ;
+					if (result.extra2 === '0') {
+						row.orientacion = 'Sentido: Norte -> Sur';
+						adding = 'Norte -> Sur';
+					} else {
+						row.orientacion = 'Sentido: Sur -> Norte';
+						adding = 'Sur -> Norte';
+					}
+					
 					var myText = Ti.UI.createLabel({
-						text : result.extra,
-						top : '10dp',
+						text : result.extra + ' (' +adding+')',
+						top : '10 dp',
 						left : '10 dp',
-						width : Ti.UI.SIZE,
+						width : '70%',
 						height : 'auto',
 						textAlign : 'left',
 						font : {
-							fontSize : '14 dp'
+							fontSize : '13 dp'
 						}
 					});
+
+					row.nombre = result.extra;
 					myView.add(rutasquare);
 					myView.add(myText);
 				}
 
-				var row = Ti.UI.createTableViewRow({
-					height : '40 dp',
-				});
-
 				if (Ti.Platform.osname === 'android') {
-					row.title = result.nombre;}else{
-						row.nombre = result.nombre
-					}
+					row.title = result.nombre;
+				} else {
+					row.titulo = result.nombre;
+				}
+
+				row.id = result.id;
 				row.add(myView);
 				row.classname = "item";
 				data[i] = row;

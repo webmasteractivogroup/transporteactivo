@@ -23,14 +23,6 @@ exports.popup = function(current, id, nombre) {
 		height : Ti.UI.SIZE
 	});
 
-	var txtuser = Ti.UI.createTextField({
-
-		top : '30 dp',
-		left : '30 dp',
-		right : '30 dp',
-		txtID : "txtuser"
-	});
-
 	var btngroup = Ti.UI.createView({
 		height : Ti.UI.SIZE,
 		width : "100%",
