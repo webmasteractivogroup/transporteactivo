@@ -96,7 +96,7 @@ function PlanearViaje() {
 			
 			var popUpRuta = require("/ui/common/EmergenteOrigenDestino");
 			isPopUpActive = true;
-			popupWindow = popUpRuta.popup(viewContenedora, evt.annotation.myid, evt.annotation.eltitle);
+			popupWindow = popUpRuta.popup(viewContenedora, evt.annotation.myid, evt.annotation.eltitle,evt.annotation.latlng);
 			viewContenedora.add(blur);
 			viewContenedora.add(popupWindow);
 
@@ -271,7 +271,8 @@ function getParadas(region) {
 						eltitle : parada.nombre,
 						image : imagen,
 						animate : true,
-						myid : parada.id // Custom property to uniquely identify this annotation.
+						myid : parada.id, // Custom property to uniquely identify this annotation.
+						latlng: parada.lat+';'+parada.lng
 					});
 				} else {
 
@@ -282,7 +283,8 @@ function getParadas(region) {
 						image : imagen,
 						animate : true,
 						myid : parada.id, // Custom property to uniquely identify this annotation.
-						eltitle : parada.nombre
+						eltitle : parada.nombre,
+						latlng: parada.lat+';'+parada.lng
 					});
 				}
 

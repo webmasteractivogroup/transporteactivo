@@ -65,7 +65,19 @@ function DisplayRuta(nombre, tipo, sentido, id) {
 	tableViewParadas = Ti.UI.createTableView({
 		left : '10 dp',
 		top : '10 dp',
-		right:'10 dp'
+		right : '10 dp'
+	});
+
+	tableViewParadas.addEventListener('click', function(e) {
+		var masInfoWindow = Ti.UI.createWindow({
+			backgroundColor : 'white'
+		});
+		masInfoWindow.title = 'Información de Parada';
+		var Parada = require('ui/common/DisplayParada');
+		var vistaParada = new Parada(e.row.nombre, e.row.latlng, e.row.id);
+		masInfoWindow.add(vistaParada);
+
+		Ti.App.tabPerfiles.open(masInfoWindow);
 	});
 
 	var or;
@@ -123,7 +135,9 @@ function buscarParadas(id, orient) {
 				});
 
 				myView.add(myText);
-
+				row.nombre= result.nombre_parada;
+				row.latlng = result.lat +';'+result.lng
+				row.id = result.id;
 				row.add(myView);
 				row.classname = "item";
 				data[i] = row;

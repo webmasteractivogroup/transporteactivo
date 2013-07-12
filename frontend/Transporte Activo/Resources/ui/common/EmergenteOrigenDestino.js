@@ -2,17 +2,23 @@
  * @author Matheo Fiebiger
  */
 
-exports.popup = function(current, id, nombre) {
+var container;
+var win;
+var shadow;
 
-	var win = Ti.UI.createView({
+exports.popup = function(current, id, nombre, latlng) {
+
+	container = current;
+
+	win = Ti.UI.createView({
 		left : '20 dp',
 		top : '10 dp',
 		right : '20 dp',
-		bottom: '10 dp',
+		bottom : '10 dp',
 		height : Ti.UI.SIZE
 	});
 
-	var shadow = Ti.UI.createView({
+	shadow = Ti.UI.createView({
 		backgroundColor : 'black',
 		height : '40 dp'
 	});
@@ -36,7 +42,7 @@ exports.popup = function(current, id, nombre) {
 		left : '10 dp',
 		font : {
 			fontWeight : 'bold',
-			fontSize: '15 dp'
+			fontSize : '15 dp'
 		}
 
 	});
@@ -54,7 +60,7 @@ exports.popup = function(current, id, nombre) {
 		right : '10 dp',
 		font : {
 			fontWeight : 'bold',
-			fontSize: '15 dp'
+			fontSize : '15 dp'
 		}
 	});
 
@@ -73,13 +79,24 @@ exports.popup = function(current, id, nombre) {
 		top : '5 dp',
 		font : {
 			fontWeight : 'bold',
-			fontSize: '15 dp'
+			fontSize : '15 dp'
 		}
 	});
 
 	btnVerMas.addEventListener('click', function() {
+
 		current.remove(win);
 		current.remove(current.blur);
+		var masInfoWindow = Ti.UI.createWindow({
+			backgroundColor : 'white'
+		});
+		masInfoWindow.title = 'Información de Parada';
+		var Parada = require('ui/common/DisplayParada');
+		var vistaParada = new Parada(nombre, latlng, id);
+		masInfoWindow.add(vistaParada);
+
+		Ti.App.tabPerfiles.open(masInfoWindow);
+		Ti.App.tabgroup.setActiveTab(1);
 
 	});
 
@@ -95,7 +112,7 @@ exports.popup = function(current, id, nombre) {
 	});
 
 	btnExit.addEventListener('click', function() {
-		current.isPopUpActive= false;
+		current.isPopUpActive = false;
 		current.remove(win);
 		current.remove(current.blur);
 
@@ -106,12 +123,12 @@ exports.popup = function(current, id, nombre) {
 		text : nombre,
 		font : {
 			fontWeight : 'bold',
-			fontSize: '13 dp'
+			fontSize : '13 dp'
 		},
 		textAlign : Ti.UI.TEXT_ALIGNMENT_CENTER,
 		width : "100%",
 		height : shadow.height,
-		left:0
+		left : 0
 	});
 	var labelRutasSur = Ti.UI.createLabel({
 		color : 'black',
@@ -122,9 +139,10 @@ exports.popup = function(current, id, nombre) {
 		},
 		width : Ti.UI.SIZE,
 		left : '10 dp',
-		top : '3 dp'	});
-		
-		var labelRutasNorte = Ti.UI.createLabel({
+		top : '3 dp'
+	});
+
+	var labelRutasNorte = Ti.UI.createLabel({
 		color : 'black',
 		text : 'Rutas Sur -> Norte',
 		font : {
@@ -133,7 +151,8 @@ exports.popup = function(current, id, nombre) {
 		},
 		width : Ti.UI.SIZE,
 		left : '10 dp',
-		top : '3 dp'	});
+		top : '3 dp'
+	});
 
 	var rutasgroupSur = Ti.UI.createView({
 		layout : 'horizontal',
@@ -164,7 +183,7 @@ exports.popup = function(current, id, nombre) {
 			Ti.API.log('RUTAS: ' + json.length);
 			for ( i = 0; i < json.length; i++) {
 				ruta = json[i];
-				
+
 				var color;
 				if (ruta.nombre_ruta.charAt(0) === 'A') {
 					color = '#bbbb00';
@@ -174,6 +193,25 @@ exports.popup = function(current, id, nombre) {
 					color = '#2e2482';
 				}
 
+				var elTipo;
+				if (ruta.nombre_ruta.charAt(0) === 'A') {
+
+					elTipo = 'Tipo: Alimentador';
+				} else if (ruta.nombre_ruta.charAt(0) === 'P') {
+
+					elTipo = 'Tipo: Padron';
+				} else {
+
+					elTipo = 'Tipo: Articulado';
+				}
+				var or;
+				if (ruta.orientacion === '0') {
+					or = 'Sentido: Norte -> Sur';
+
+				} else {
+					or = 'Sentido: Sur -> Norte';
+
+				}
 				var rutasquare = Ti.UI.createLabel({
 					color : 'white',
 					width : '50 dp',
@@ -187,9 +225,17 @@ exports.popup = function(current, id, nombre) {
 						fontWeight : 'bold'
 					},
 					textAlign : Ti.UI.TEXT_ALIGNMENT_CENTER,
+					nombre : ruta.nombre_ruta,
+					tipo : elTipo,
+					orient : or,
+					id : ruta.id_ruta
 				});
-				if(ruta.orientacion===0){
-				rutasgroupSur.add(rutasquare);}else{
+
+				rutasquare.addEventListener('click', goToRuta);
+
+				if (ruta.orientacion === 0) {
+					rutasgroupSur.add(rutasquare);
+				} else {
 					rutasgroupNorte.add(rutasquare)
 				}
 			}
@@ -210,7 +256,6 @@ exports.popup = function(current, id, nombre) {
 	xhr.send();
 	Ti.API.log('Rutas por parada request enviado');
 
-	
 	shadow.add(labelTitulo);
 	shadow.add(btnExit);
 	frmLog.add(shadow);
@@ -224,4 +269,21 @@ exports.popup = function(current, id, nombre) {
 	frmLog.add(btnVerMas);
 	win.add(frmLog);
 	return win;
+}
+function goToRuta(e) {
+	var masInfoWindow = Ti.UI.createWindow({
+		backgroundColor : 'white'
+	});
+	masInfoWindow.title = 'Información de Ruta';
+	var Ruta = require('ui/common/DisplayRuta');
+	var vistaRuta = new Ruta(e.source.nombre, e.source.tipo, e.source.orient, e.source.id);
+	masInfoWindow.add(vistaRuta);
+
+	Ti.App.tabPerfiles.open(masInfoWindow);
+
+	container.isPopUpActive = false;
+	container.remove(win);
+	container.remove(container.blur);
+	Ti.App.tabgroup.setActiveTab(1);
+
 }

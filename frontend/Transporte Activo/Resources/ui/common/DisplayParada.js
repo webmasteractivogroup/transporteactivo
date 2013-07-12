@@ -1,9 +1,9 @@
-function DisplayParada(nombre,latlng,id) {
-	
-	var latlngs= latlng.split(';');
+function DisplayParada(nombre, latlng, id) {
+
+	var latlngs = latlng.split(';');
 	var lat = latlngs[0];
 	var lng = latlngs[1];
-	
+
 	var self = Ti.UI.createView({
 		layout : 'vertical',
 		width : Ti.UI.FILL,
@@ -32,11 +32,11 @@ function DisplayParada(nombre,latlng,id) {
 	});
 
 	var imageMap = Ti.UI.createImageView({
-		image : 'http://maps.googleapis.com/maps/api/staticmap?center='+lat+','+lng +'&markers=%7C'+lat+','+lng +'&size=460x153&zoom=15&maptype=roadmap&sensor=false',
+		image : 'http://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&markers=%7C' + lat + ',' + lng + '&size=460x153&zoom=15&maptype=roadmap&sensor=false',
 		top : '5 dp',
 		right : '5 dp',
-		left: '5 dp',
-		preventDefaultImage:true
+		left : '5 dp',
+		preventDefaultImage : true
 	});
 
 	Ti.API.info(imageMap.image);
@@ -49,9 +49,10 @@ function DisplayParada(nombre,latlng,id) {
 		},
 		width : Ti.UI.SIZE,
 		left : '10 dp',
-		top : '3 dp'	});
-		
-		var labelRutasNorte = Ti.UI.createLabel({
+		top : '3 dp'
+	});
+
+	var labelRutasNorte = Ti.UI.createLabel({
 		color : 'black',
 		text : 'Rutas Sur -> Norte',
 		font : {
@@ -60,7 +61,8 @@ function DisplayParada(nombre,latlng,id) {
 		},
 		width : Ti.UI.SIZE,
 		left : '10 dp',
-		top : '3 dp'	});
+		top : '3 dp'
+	});
 
 	var rutasgroupSur = Ti.UI.createView({
 		layout : 'horizontal',
@@ -78,7 +80,7 @@ function DisplayParada(nombre,latlng,id) {
 		top : '10 dp',
 		bottom : '10 dp'
 	});
-	
+
 	var json, ruta, i;
 
 	var url = "http://transporteactivo.com/api/v1/rutas-por-parada/?parada_id=" + id;
@@ -91,7 +93,7 @@ function DisplayParada(nombre,latlng,id) {
 			Ti.API.log('RUTAS: ' + json.length);
 			for ( i = 0; i < json.length; i++) {
 				ruta = json[i];
-				
+
 				var color;
 				if (ruta.nombre_ruta.charAt(0) === 'A') {
 					color = '#bbbb00';
@@ -101,6 +103,25 @@ function DisplayParada(nombre,latlng,id) {
 					color = '#2e2482';
 				}
 
+				var elTipo;
+				if (ruta.nombre_ruta.charAt(0) === 'A') {
+
+					elTipo = 'Tipo: Alimentador';
+				} else if (ruta.nombre_ruta.charAt(0) === 'P') {
+
+					elTipo = 'Tipo: Padron';
+				} else {
+
+					elTipo = 'Tipo: Articulado';
+				}
+				var or;
+				if (ruta.orientacion === '0') {
+					or = 'Sentido: Norte -> Sur';
+
+				} else {
+					or = 'Sentido: Sur -> Norte';
+
+				}
 				var rutasquare = Ti.UI.createLabel({
 					color : 'white',
 					width : '50 dp',
@@ -114,9 +135,17 @@ function DisplayParada(nombre,latlng,id) {
 						fontWeight : 'bold'
 					},
 					textAlign : Ti.UI.TEXT_ALIGNMENT_CENTER,
+					nombre : ruta.nombre_ruta,
+					tipo : elTipo,
+					orient : or,
+					id : ruta.id_ruta
 				});
-				if(ruta.orientacion===0){
-				rutasgroupSur.add(rutasquare);}else{
+
+				rutasquare.addEventListener('click', goToRuta);
+
+				if (ruta.orientacion === 0) {
+					rutasgroupSur.add(rutasquare);
+				} else {
 					rutasgroupNorte.add(rutasquare)
 				}
 			}
@@ -147,6 +176,18 @@ function DisplayParada(nombre,latlng,id) {
 
 	return self;
 
+}
+
+function goToRuta(e) {
+	var masInfoWindow = Ti.UI.createWindow({
+		backgroundColor : 'white'
+	});
+	masInfoWindow.title = 'Información de Ruta';
+	var Ruta = require('ui/common/DisplayRuta');
+	var vistaRuta = new Ruta(e.source.nombre, e.source.tipo, e.source.orient, e.source.id);
+	masInfoWindow.add(vistaRuta);
+	
+	Ti.App.tabPerfiles.open(masInfoWindow);
 }
 
 module.exports = DisplayParada;
