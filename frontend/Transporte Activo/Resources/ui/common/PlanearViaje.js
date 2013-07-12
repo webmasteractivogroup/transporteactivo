@@ -55,7 +55,7 @@ function PlanearViaje() {
 	});
 
 	if (Ti.Platform.osname === 'android') {
-			MapModule = require('ti.map');
+		MapModule = require('ti.map');
 		/// GOOGLE MAPS API V2 INSERT HERE
 		mapview = MapModule.createView({
 			userLocation : true,
@@ -86,17 +86,17 @@ function PlanearViaje() {
 			Ti.API.info("Annotation " + evt.title + ", left button clicked.");
 		}
 		if (evt.clicksource === 'pin') {
-			
+
 			if (Ti.Platform.osname === 'android') {
-				
+
 			} else {
 
 				mapview.deselectAnnotation(evt.title);
 			}
-			
+
 			var popUpRuta = require("/ui/common/EmergenteOrigenDestino");
 			isPopUpActive = true;
-			popupWindow = popUpRuta.popup(viewContenedora, evt.annotation.myid, evt.annotation.eltitle,evt.annotation.latlng);
+			popupWindow = popUpRuta.popup(viewContenedora, evt.annotation.myid, evt.annotation.eltitle, evt.annotation.latlng);
 			viewContenedora.add(blur);
 			viewContenedora.add(popupWindow);
 
@@ -255,14 +255,25 @@ function getParadas(region) {
 				parada = json[i];
 				var imagen;
 
-				if (parada.tipo_parada === 1) {
-					imagen = '/images/marker_icon_troncal.png';
-				} else if (parada.tipo_parada === 2) {
-					imagen = '/images/marker_icon_pretroncal.png';
+				var dpi = Titanium.Platform.displayCaps.dpi;
+
+				if (dpi >= 240) {
+					if (parada.tipo_parada === 1) {
+						imagen = '/images/marker_icon_troncal_high.png';
+					} else if (parada.tipo_parada === 2) {
+						imagen = '/images/marker_icon_pretroncal_high.png';
+					} else {
+						imagen = '/images/marker_icon_alimentadora_high.png';
+					}
 				} else {
-					imagen = '/images/marker_icon_alimentadora.png';
+					if (parada.tipo_parada === 1) {
+						imagen = '/images/marker_icon_troncal.png';
+					} else if (parada.tipo_parada === 2) {
+						imagen = '/images/marker_icon_pretroncal.png';
+					} else {
+						imagen = '/images/marker_icon_alimentadora.png';
+					}
 				}
-				
 
 				if (Ti.Platform.osname === 'android') {
 					var pin = MapModule.createAnnotation({
@@ -272,7 +283,8 @@ function getParadas(region) {
 						image : imagen,
 						animate : true,
 						myid : parada.id, // Custom property to uniquely identify this annotation.
-						latlng: parada.lat+';'+parada.lng
+						latlng : parada.lat + ';' + parada.lng,
+						classname:'pin'
 					});
 				} else {
 
@@ -284,7 +296,7 @@ function getParadas(region) {
 						animate : true,
 						myid : parada.id, // Custom property to uniquely identify this annotation.
 						eltitle : parada.nombre,
-						latlng: parada.lat+';'+parada.lng
+						latlng : parada.lat + ';' + parada.lng
 					});
 				}
 

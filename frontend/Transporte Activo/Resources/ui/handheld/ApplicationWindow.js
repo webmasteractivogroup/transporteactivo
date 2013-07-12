@@ -7,7 +7,7 @@ function ApplicationWindow(title) {
 		backgroundColor : 'white'
 	});
 
-	if (title === 'Planear Viaje') {
+	if (title === 'Mapa') {
 		if (Ti.Platform.osname === 'android') {
 			var MapModule = require('ti.map');
 			var rc = MapModule.isGooglePlayServicesAvailable()

@@ -14,10 +14,46 @@ function Search() {
 
 		if (e.value != "" && times === 0) {
 			times = 1;
+			var navActInd = Titanium.UI.createActivityIndicator({
+				left : '60 dp',
+				top : '18 dp',
+
+			});
+			navActInd.show();
+			var loadingRow = Ti.UI.createTableViewRow({
+				height : '50 dp',
+				backgroundColor : 'black'
+			});
+
+			var myView = Ti.UI.createView({
+				layout : 'horizontal',
+				backgroundColor : 'black'
+
+			});
+			var myText = Ti.UI.createLabel({
+				text : 'Buscando...',
+				left : '10 dp',
+				top : '10 dp',
+				color : 'white',
+				width : Ti.UI.SIZE,
+				height : 'auto',
+				textAlign : 'left',
+				font : {
+					fontSize : '17 dp',
+					fontWeight : 'bold'
+				}
+			});
+			myView.add(navActInd);
+			myView.add(myText);
+			loadingRow.add(myView);
+
+			data[0] = loadingRow;
+			tableview.data = data;
 			consulta(tblsearch.value);
 
 		}
 		if (e.value === "") {
+			data = [];
 			times = 0;
 
 		}
@@ -54,7 +90,7 @@ function Search() {
 		times = 0;
 
 		var masInfoWindow = Ti.UI.createWindow({
-			backgroundColor : 'white'
+			backgroundColor : 'white',
 		});
 
 		Ti.API.info('ROW TIPO =' + e.row.tipores);
@@ -132,6 +168,7 @@ function consulta(q) {
 						width : '70%',
 						height : 'auto',
 						textAlign : 'left',
+						color : 'black',
 						font : {
 							fontSize : '13 dp'
 						}
@@ -139,7 +176,7 @@ function consulta(q) {
 
 					row.nombre = result.nombre;
 					row.latlng = result.extra2;
-					
+
 					myView.add(av_image);
 					myView.add(myText);
 				} else {
@@ -170,7 +207,7 @@ function consulta(q) {
 						},
 						textAlign : Ti.UI.TEXT_ALIGNMENT_CENTER,
 					});
-					var adding ;
+					var adding;
 					if (result.extra2 === '0') {
 						row.orientacion = 'Sentido: Norte -> Sur';
 						adding = 'Norte -> Sur';
@@ -178,14 +215,15 @@ function consulta(q) {
 						row.orientacion = 'Sentido: Sur -> Norte';
 						adding = 'Sur -> Norte';
 					}
-					
+
 					var myText = Ti.UI.createLabel({
-						text : result.extra + ' (' +adding+')',
+						text : result.extra + ' (' + adding + ')',
 						top : '10 dp',
 						left : '10 dp',
 						width : '70%',
 						height : 'auto',
 						textAlign : 'left',
+						color : 'black',
 						font : {
 							fontSize : '13 dp'
 						}

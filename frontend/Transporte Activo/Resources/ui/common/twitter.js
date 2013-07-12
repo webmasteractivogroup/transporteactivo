@@ -4,8 +4,8 @@ var rowData = [];
 var tableView = Titanium.UI.createTableView({ });
 var currentSize;
 var updating = false;
-var loadingRow;
-var lastId='';
+
+var lastId = '';
 var refresh;
 
 function TwitterFeed() {
@@ -20,7 +20,7 @@ function TwitterFeed() {
 
 	});
 	navActInd.show();
-	loadingRow = Ti.UI.createTableViewRow({
+	var loadingRow = Ti.UI.createTableViewRow({
 		height : '50 dp',
 	});
 
@@ -28,12 +28,14 @@ function TwitterFeed() {
 
 	var myView = Ti.UI.createView({
 		layout : 'horizontal',
-		backgroundColor : 'orange'
+		backgroundColor : 'black'
 	});
 	var myText = Ti.UI.createLabel({
 		text : 'Cargando Tweets',
 		left : '5 dp',
 		top : '15 dp',
+		colo: 'white',
+		backgroundColor : 'black',
 		width : Ti.UI.SIZE,
 		height : 'auto',
 		textAlign : 'left',
@@ -65,11 +67,8 @@ function TwitterFeed() {
 
 	tableView.addEventListener('scroll', function(e) {
 
+		if (Ti.Platform.osname === 'iphone' || Ti.Platform.osname === 'ipad') {
 
-
-		if (Ti.Platform.osname === 'iphone'|| Ti.Platform.osname === 'ipad') {
-			
-		
 			var offset = e.contentOffset.y;
 			var height = e.size.height;
 			var total = offset + height;
@@ -95,7 +94,7 @@ function TwitterFeed() {
 			var firstVisibleItemIndex = e.firstVisibleItem;
 			var totalItems = e.totalItemCount;
 			var visibleItemCount = e.visibleItemCount;
-			if (!updating &&((firstVisibleItemIndex + visibleItemCount) >= (totalItems * 0.75))) {
+			if (!updating && ((firstVisibleItemIndex + visibleItemCount) >= (totalItems * 0.75))) {
 				updating = true;
 				fetchTwitter();
 			}
@@ -104,47 +103,47 @@ function TwitterFeed() {
 	});
 
 	var viewContenedora = Ti.UI.createView({
-		height: Ti.UI.FILL,
-		width: Ti.UI.FILL,
-		layout: 'vertical'
+		height : Ti.UI.FILL,
+		width : Ti.UI.FILL,
+		layout : 'vertical'
 	});
-	
+
 	refresh = Ti.UI.createButton({
-			title : 'Presiona aquí para actualizar',
-			backgroundColor: 'gray',
-			color: 'white',
-			backgroundImage: 'none',
-			height : '30 dp',
-			width : Ti.UI.FILL,
-		});
-		
-		// Listen for click events.
-		refresh.addEventListener('click', function() {
-			if (!updating) {
-					refresh.title ='Actualizando...'
-					tableView.appendRow(loadingRow);
-					updating = true;
-					rowData = [];
-					lastId='';
-					fetchTwitter();
-				}
-		});
-		
-		// Add to the parent view.
-		
-		viewContenedora.add(refresh);
-		viewContenedora.add(tableView);
+		title : 'Presiona aquí para actualizar',
+		backgroundColor : 'gray',
+		color : 'white',
+		backgroundImage : 'none',
+		height : '30 dp',
+		width : Ti.UI.FILL,
+	});
+
+	// Listen for click events.
+	refresh.addEventListener('click', function() {
+		if (!updating) {
+			refresh.title = 'Actualizando...'
+			tableView.appendRow(loadingRow);
+			updating = true;
+			rowData = [];
+			lastId = '';
+			fetchTwitter();
+		}
+	});
+
+	// Add to the parent view.
+
+	viewContenedora.add(refresh);
+	viewContenedora.add(tableView);
 
 	return viewContenedora;
 };
 
 function fetchTwitter() {
 
-	cb.__call('search_tweets', "q=" + Ti.Network.encodeURIComponent("metrocali") + "&count=16&result_type=recent"+lastId, function(reply) {
+	cb.__call('search_tweets', "q=" + Ti.Network.encodeURIComponent("metrocali") + "&count=16&result_type=recent" + lastId, function(reply) {
 		// ...
 		try {
 			currentSize = rowData.length;
-			
+
 			for (var i = 0; i < reply.statuses.length; i++) {
 				var tweet = reply.statuses[i].text;
 				// The tweet message
@@ -154,7 +153,6 @@ function fetchTwitter() {
 				var avatar = reply.statuses[i].user.profile_image_url;
 				// The profile image
 
-				
 				// Create a row and set its height to auto
 				var row = Titanium.UI.createTableViewRow({
 					height : Ti.UI.SIZE,
@@ -166,18 +164,18 @@ function fetchTwitter() {
 					top : '5 dp',
 					right : '5 dp',
 					left : '5 dp',
-					bottom: '5dp'
+					bottom : '5dp'
 				});
 
 				var av_image = Titanium.UI.createImageView({
 					image : avatar, // the image for the image view
 					top : 0,
 					left : '10 dp',
-					height : 'auto',
-					width : 'auto',
+					height : '50 dp',
+					width : '50 dp',
 					borderColor : '#888888',
 					borderRadius : 10,
-					preventDefaultImage:true
+					preventDefaultImage : true
 				});
 				post_view.add(av_image);
 
@@ -190,7 +188,7 @@ function fetchTwitter() {
 					bottom : '2 dp',
 					height : '16 dp',
 					textAlign : 'left',
-					color : '#444444',
+					color : 'black',
 					font : {
 						fontFamily : 'Trebuchet MS',
 						fontSize : '14 dp',
@@ -207,6 +205,7 @@ function fetchTwitter() {
 					bottom : '2 dp',
 					height : Ti.UI.SIZE,
 					width : Ti.UI.FILL,
+					color : 'black',
 					textAlign : 'left',
 					font : {
 						fontSize : '14 dp'
@@ -219,11 +218,10 @@ function fetchTwitter() {
 				// Give each row a class name
 				row.className = "item";
 				// Add row to the rowData array
-				
-				
-				if((reply.statuses.length-1)===i){
-					lastId = '&max_id='+reply.statuses[i].id;
-				}else{
+
+				if ((reply.statuses.length - 1) === i) {
+					lastId = '&max_id=' + reply.statuses[i].id;
+				} else {
 					rowData[currentSize + i] = row;
 				}
 			}
@@ -239,10 +237,13 @@ function fetchTwitter() {
 function endUpdate() {
 
 	updating = false;
-	
-	if(refresh.title ==='Actualizando...'){
-	tableView.scrollToIndex(0,{animated:true,position:Ti.UI.iPhone.TableViewScrollPosition.TOP});
-	refresh.title ='Presiona aquí para actualizar';
+
+	if (refresh.title === 'Actualizando...') {
+		tableView.scrollToIndex(0, {
+			animated : true,
+			position : Ti.UI.iPhone.TableViewScrollPosition.TOP
+		});
+		refresh.title = 'Presiona aquí para actualizar';
 	}
 
 }
