@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from rest_framework import serializers
 
-from .models import MioStops, Busqueda
-from sgco.models import LineStops, Arcs
+from sgco.models import LineStops
+from .models import MioStops, Busqueda, ParadasPorRuta
 
 
 class ParadasSerializer(serializers.ModelSerializer):
@@ -34,14 +34,9 @@ class ParadasPorRutaSerializer(serializers.ModelSerializer):
     """
         Este serializer define las paradas que tiene una ruta especifica
     """
-
-    nombre_parada = serializers.Field(source='STOPS_STOPID_START.LONGNAME')
-    lat = serializers.Field(source='STOPS_STOPID_START.DECIMALLATITUDE')
-    lng = serializers.Field(source='STOPS_STOPID_START.DECIMALLONGITUDE')
-
     class Meta:
-        model = Arcs
-        fields = ('nombre_parada', 'lat', 'lng')
+        model = ParadasPorRuta
+        fields = ('stop_start_id', 'stop_start_name', 'stop_start_lat', 'stop_start_lng', 'stop_end_id', 'stop_end_name', 'stop_end_lat', 'stop_end_lng', 'arcsequence')
 
 
 class BusquedaSerializer(serializers.ModelSerializer):

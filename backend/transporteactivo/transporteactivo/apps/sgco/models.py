@@ -158,7 +158,7 @@ class LinesArcs(models.Model):
         db_table = 'LINESARCS'
 
     def __unicode__(self):
-        return u'%s, %s' % (self.LINEID.SHORTNAME, self.ARCID)
+        return u'%s - %s' % (self.LINEID.SHORTNAME, self.ARCID)
 
 
 class TripTypes(models.Model):

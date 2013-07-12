@@ -1,14 +1,14 @@
 # -*- coding: utf-8 -*-
-from django.db import DatabaseError
+# from django.db import DatabaseError
 from django.contrib.gis.geos import Point, Polygon
 
 from rest_framework import viewsets
-from unidecode import unidecode
+# from unidecode import unidecode
 
-from .models import MioStops, Busqueda
+from .models import MioStops, Busqueda, ParadasPorRuta
+from sgco.models import LineStops
+
 from .serializers import ParadasSerializer, RutasPorParadaSerializer, ParadasPorRutaSerializer, BusquedaSerializer
-
-from sgco.models import LineStops, Arcs
 
 
 class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
@@ -68,7 +68,7 @@ class RutasPorParadaViewSet(viewsets.ReadOnlyModelViewSet):
 
 
 class ParadasPorRutaViewSet(viewsets.ReadOnlyModelViewSet):
-    model = Arcs
+    model = ParadasPorRuta
     serializer_class = ParadasPorRutaSerializer
 
     def get_queryset(self):
@@ -77,8 +77,10 @@ class ParadasPorRutaViewSet(viewsets.ReadOnlyModelViewSet):
         orientacion = self.request.QUERY_PARAMS.get('orientacion', None)
 
         if ruta_id and orientacion:
-            queryset = Arcs.objects.filter(linearcs__LINEID=ruta_id, linearcs__ORIENTATION=orientacion).reverse()
-
+            if orientacion == '1':
+                queryset = self.model.objects.filter(lineid=ruta_id, orientation=orientacion, linevariant=4).order_by('arcsequence')
+            elif orientacion == '0':
+                queryset = self.model.objects.filter(lineid=ruta_id, orientation=orientacion, linevariant=2).order_by('arcsequence')
         return queryset
 
 

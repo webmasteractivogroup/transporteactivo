@@ -1,12 +1,12 @@
 ﻿-- Query que crea la vista con los stoptype generados.
 -- CREATE OR REPLACE VIEW stop_types AS
-SELECT	distinct(ls."STOPID"),
-	min(case substring(l."SHORTNAME" from 1 for 1)
-		when 'E' then 1
-		when 'T' then 1
-		when 'P' then 2
-		when 'A' then 3
-	end) as "STOPTYPE"
+SELECT  distinct(ls."STOPID"),
+    min(case substring(l."SHORTNAME" from 1 for 1)
+        when 'E' then 1
+        when 'T' then 1
+        when 'P' then 2
+        when 'A' then 3
+    end) as "STOPTYPE"
 FROM "LINESTOPS" ls
 JOIN "LINES" l ON ls."LINEID" = l."LINEID"
 JOIN "STOPS" s ON ls."STOPID" = s."STOPID"
@@ -39,14 +39,28 @@ JOIN "LINESARCS" larcs ON larcs."LINEID" = l."LINEID"
 ORDER BY tipo DESC, nombre;
 
 
+
+-- paradas por rutas
+CREATE OR REPLACE VIEW paradas_por_ruta AS 
+SELECT 
+    "LINESARCS"."LINEARCID" as id , "LINESARCS"."LINEID" as lineid, "ARCS"."STOPS_STOPID_START" as stop_start_id, "STOPS"."LONGNAME" as stop_start_name, 
+    "STOPS"."DECIMALLATITUDE" as stop_start_lat, "STOPS"."DECIMALLONGITUDE" as stop_start_lng, "ARCS"."STOPS_STOPID_END" as stop_end_id, T5."LONGNAME" as stop_end_name, 
+    T5."DECIMALLATITUDE" as stop_end_lat, T5."DECIMALLONGITUDE" as stop_end_lng, "LINESARCS"."ARCSEQUENCE" as arcsequence, 
+    "LINESARCS"."ORIENTATION" as orientation, "LINESARCS"."LINEVARIANT" as linevariant
+FROM 
+    "ARCS" LEFT OUTER JOIN "LINESARCS" ON ("ARCS"."ARCID" = "LINESARCS"."ARCID") 
+    INNER JOIN "STOPS" ON ("ARCS"."STOPS_STOPID_START" = "STOPS"."STOPID") 
+    INNER JOIN "STOPS" T5 ON ("ARCS"."STOPS_STOPID_END" = T5."STOPID")
+
+
 -- GRANT ALL PRIVILEGES ON search TO transporteactivo;
 
 
 -- Query inicial que podría ayudar para crear las paradas compuestas
-SELECT	s."STOPID",
-	s."LONGNAME",
-	substring (s."LONGNAME" from '^(.*) [ABCDabcd][0-9]$') as NAME,
-	substring (s."LONGNAME" from '^.* ([ABCDabcd][0-9])$') as GATE
+SELECT  s."STOPID",
+    s."LONGNAME",
+    substring (s."LONGNAME" from '^(.*) [ABCDabcd][0-9]$') as NAME,
+    substring (s."LONGNAME" from '^.* ([ABCDabcd][0-9])$') as GATE
 FROM "STOPS" s
 JOIN mio_miostops ms ON s."STOPID" = ms.stops_ptr_id
 WHERE s."LONGNAME" ~* '.*[ABCD][0-9]$'
