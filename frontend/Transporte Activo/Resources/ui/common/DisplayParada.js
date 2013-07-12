@@ -1,135 +1,45 @@
-/**
- * @author Matheo Fiebiger
- */
+function DisplayParada(nombre, latlng, id) {
 
-var container;
-var win;
-var shadow;
+	var latlngs = latlng.split(';');
+	var lat = latlngs[0];
+	var lng = latlngs[1];
 
-exports.popup = function(current, id, nombre, latlng) {
+	var self = Ti.UI.createView({
+		layout : 'vertical',
+		width : Ti.UI.FILL,
+		height : Ti.UI.FILL
 
-	container = current;
-
-	win = Ti.UI.createView({
-		left : '20 dp',
-		top : '10 dp',
-		right : '20 dp',
-		bottom : '10 dp',
-		height : Ti.UI.SIZE
 	});
 
-	shadow = Ti.UI.createView({
-		backgroundColor : 'black',
-		height : '40 dp'
-	});
-	var frmLog = Ti.UI.createView({
-
-		backgroundColor : 'white',
-		layout : "vertical",
-		height : Ti.UI.SIZE
-	});
-
-	var btngroup = Ti.UI.createView({
-		height : Ti.UI.SIZE,
-		width : "100%",
+	var titulo = Ti.UI.createLabel({
 		top : '5 dp',
-		bottom : '5 dp',
-	});
-	var btnInicio = Ti.UI.createButton({
-		title : "Iniciar Aquí",
-		width : "45%",
-		height : '40 dp',
-		left : '10 dp',
-		font : {
-			fontWeight : 'bold',
-			fontSize : '15 dp'
-		}
-
-	});
-
-	btnInicio.addEventListener('click', function() {
-		current.remove(win);
-		current.activePopUp = false;
-		current.remove(current.blur);
-
-	});
-	var btnFinal = Ti.UI.createButton({
-		title : "Llegar Aquí",
-		width : "45%",
-		height : '40 dp',
-		right : '10 dp',
-		font : {
-			fontWeight : 'bold',
-			fontSize : '15 dp'
-		}
-	});
-
-	btnFinal.addEventListener('click', function() {
-		current.remove(win);
-		current.remove(current.blur);
-
-	});
-
-	var btnVerMas = Ti.UI.createButton({
-		title : "Ver más información",
-		left : '10 dp',
-		right : '10 dp',
-		height : '40 dp',
-		bottom : '15 dp',
-		top : '5 dp',
-		font : {
-			fontWeight : 'bold',
-			fontSize : '15 dp'
-		}
-	});
-
-	btnVerMas.addEventListener('click', function() {
-
-		current.remove(win);
-		current.remove(current.blur);
-		var masInfoWindow = Ti.UI.createWindow({
-			backgroundColor : 'white'
-		});
-		masInfoWindow.title = 'Información de Parada';
-		var Parada = require('ui/common/DisplayParada');
-		var vistaParada = new Parada(nombre, latlng, id);
-		masInfoWindow.add(vistaParada);
-
-		Ti.App.tabPerfiles.open(masInfoWindow);
-		Ti.App.tabgroup.setActiveTab(1);
-
-	});
-
-	var btnExit = Ti.UI.createButton({
-		title : "x",
-		right : 0,
-		width : "15%",
-		height : '40 dp',
-		borderColor : null,
-		backgroundColor : 'gray',
-		borderRadius : 0,
-		style : Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
-	});
-
-	btnExit.addEventListener('click', function() {
-		current.isPopUpActive = false;
-		current.remove(win);
-		current.remove(current.blur);
-
-	});
-
-	var labelTitulo = Ti.UI.createLabel({
-		color : '#FFFF',
+		left : '5 dp',
 		text : nombre,
 		font : {
 			fontWeight : 'bold',
-			fontSize : '13 dp'
+			fontSize : '20 dp'
 		},
-		textAlign : Ti.UI.TEXT_ALIGNMENT_CENTER,
-		width : "100%",
-		height : shadow.height,
-		left : 0
 	});
+
+	var ubicacionLabel = Ti.UI.createLabel({
+		top : '10 dp',
+		left : '5 dp',
+		text : 'Ubicación',
+		font : {
+			fontWeight : 'bold',
+			fontSize : '17 dp'
+		}
+	});
+
+	var imageMap = Ti.UI.createImageView({
+		image : 'http://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&markers=%7C' + lat + ',' + lng + '&size=460x153&zoom=15&maptype=roadmap&sensor=false',
+		top : '5 dp',
+		right : '5 dp',
+		left : '5 dp',
+		preventDefaultImage : true
+	});
+
+	Ti.API.info(imageMap.image);
 	var labelRutasSur = Ti.UI.createLabel({
 		color : 'black',
 		text : 'Rutas Norte -> Sur',
@@ -256,20 +166,18 @@ exports.popup = function(current, id, nombre, latlng) {
 	xhr.send();
 	Ti.API.log('Rutas por parada request enviado');
 
-	shadow.add(labelTitulo);
-	shadow.add(btnExit);
-	frmLog.add(shadow);
-	frmLog.add(labelRutasSur);
-	frmLog.add(rutasgroupSur);
-	frmLog.add(labelRutasNorte);
-	frmLog.add(rutasgroupNorte);
-	//btngroup.add(btnInicio);
-	//btngroup.add(btnFinal);
-	frmLog.add(btngroup);
-	frmLog.add(btnVerMas);
-	win.add(frmLog);
-	return win;
+	self.add(titulo);
+	self.add(ubicacionLabel);
+	self.add(imageMap);
+	self.add(labelRutasSur);
+	self.add(rutasgroupSur);
+	self.add(labelRutasNorte);
+	self.add(rutasgroupNorte);
+
+	return self;
+
 }
+
 function goToRuta(e) {
 	var masInfoWindow = Ti.UI.createWindow({
 		backgroundColor : 'white'
@@ -278,12 +186,8 @@ function goToRuta(e) {
 	var Ruta = require('ui/common/DisplayRuta');
 	var vistaRuta = new Ruta(e.source.nombre, e.source.tipo, e.source.orient, e.source.id);
 	masInfoWindow.add(vistaRuta);
-
+	
 	Ti.App.tabPerfiles.open(masInfoWindow);
-
-	container.isPopUpActive = false;
-	container.remove(win);
-	container.remove(container.blur);
-	Ti.App.tabgroup.setActiveTab(1);
-
 }
+
+module.exports = DisplayParada;

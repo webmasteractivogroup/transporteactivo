@@ -3,6 +3,7 @@ function ApplicationTabGroup(Window) {
 	var self = Ti.UI.createTabGroup({navBarHidden:true,barColor: '#0000'});
 	Ti.App.tabgroup = self;
 	
+	
 	//create app tabs
 	var win1 = new Window('Planear Viaje'),
 		win2 = new Window('Buscar'), 
@@ -23,6 +24,8 @@ function ApplicationTabGroup(Window) {
 		icon: '/images/search.png',
 		window: win2
 	});
+	
+	Ti.App.tabPerfiles = tab2;
 	
 	var tab3 = Ti.UI.createTab({
 		title: 'Favoritos',
