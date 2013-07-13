@@ -61,26 +61,24 @@ class RutasPorParadaViewSet(viewsets.ReadOnlyModelViewSet):
         parada_id = self.request.QUERY_PARAMS.get('parada_id', None)
 
         if parada_id:
-            queryset = LineStops.objects.filter(STOPID=parada_id).distinct('LINEID')
+            queryset = self.model.objects.filter(STOPID=parada_id).distinct('LINEID')
             # TODO: Evaluar la necesidad del distinct
 
         return queryset
 
 
 class ParadasPorRutaViewSet(viewsets.ReadOnlyModelViewSet):
-    model = ParadasPorRuta
+    model = LineStops
     serializer_class = ParadasPorRutaSerializer
 
     def get_queryset(self):
         queryset = []
         ruta_id = self.request.QUERY_PARAMS.get('ruta_id', None)
         orientacion = self.request.QUERY_PARAMS.get('orientacion', None)
+        linevariant = self.request.QUERY_PARAMS.get('linevariant', None)
 
-        if ruta_id and orientacion:
-            if orientacion == '1':
-                queryset = self.model.objects.filter(lineid=ruta_id, orientation=orientacion, linevariant=4).order_by('arcsequence')
-            elif orientacion == '0':
-                queryset = self.model.objects.filter(lineid=ruta_id, orientation=orientacion, linevariant=2).order_by('arcsequence')
+        if ruta_id is not None and orientacion is not None and linevariant is not None:
+            queryset = self.model.objects.filter(LINEID=ruta_id, ORIENTATION=orientacion, LINEVARIANT=linevariant).order_by('STOPSEQUENCE')
         return queryset
 
 
@@ -101,7 +99,7 @@ class BusquedaViewSet(viewsets.ReadOnlyModelViewSet):
             #   queryset = Busqueda.objects.raw(querystring, [query])
             # except DatabaseError, e:
             query = r'(^|.*\s)%s.*' % q
-            queryset = Busqueda.objects.filter(nombre__iregex=query)
+            queryset = self.model.objects.filter(nombre__iregex=query)
                 # raise e
 
         return queryset
