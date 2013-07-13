@@ -15,6 +15,7 @@ function DisplayParada(nombre, latlng, id) {
 		top : '5 dp',
 		left : '5 dp',
 		text : nombre,
+			color : 'black',
 		font : {
 			fontWeight : 'bold',
 			fontSize : '20 dp'
@@ -25,6 +26,7 @@ function DisplayParada(nombre, latlng, id) {
 		top : '10 dp',
 		left : '5 dp',
 		text : 'Ubicación',
+			color : 'black',
 		font : {
 			fontWeight : 'bold',
 			fontSize : '17 dp'
@@ -32,10 +34,12 @@ function DisplayParada(nombre, latlng, id) {
 	});
 
 	var imageMap = Ti.UI.createImageView({
-		image : 'http://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&markers=%7C' + lat + ',' + lng + '&size=460x153&zoom=15&maptype=roadmap&sensor=false',
+		height:'30%',
+		image : 'http://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&markers=%7C' + lat + ',' + lng + '&size='+Titanium.Platform.displayCaps.platformWidth+'x'+Titanium.Platform.displayCaps.platformHeight*0.3+'&zoom=15&maptype=roadmap&sensor=false',
 		top : '5 dp',
 		right : '5 dp',
 		left : '5 dp',
+		width: Ti.UI.FILL,
 		preventDefaultImage : true
 	});
 
@@ -69,7 +73,7 @@ function DisplayParada(nombre, latlng, id) {
 		left : '10 dp',
 		right : '10 dp',
 		height : Ti.UI.SIZE,
-		top : '10 dp',
+		top : '5 dp',
 		bottom : '10 dp'
 	});
 	var rutasgroupNorte = Ti.UI.createView({
@@ -77,7 +81,7 @@ function DisplayParada(nombre, latlng, id) {
 		left : '10 dp',
 		right : '10 dp',
 		height : Ti.UI.SIZE,
-		top : '10 dp',
+		top : '5 dp',
 		bottom : '10 dp'
 	});
 
@@ -180,8 +184,10 @@ function DisplayParada(nombre, latlng, id) {
 
 function goToRuta(e) {
 	var masInfoWindow = Ti.UI.createWindow({
-		backgroundColor : 'white'
+		backgroundColor : 'white',
+		
 	});
+	masInfoWindow.orientationModes=[Titanium.UI.PORTRAIT];
 	masInfoWindow.title = 'Información de Ruta';
 	var Ruta = require('ui/common/DisplayRuta');
 	var vistaRuta = new Ruta(e.source.nombre, e.source.tipo, e.source.orient, e.source.id);

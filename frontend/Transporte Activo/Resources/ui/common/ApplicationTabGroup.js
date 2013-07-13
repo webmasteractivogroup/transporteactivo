@@ -5,7 +5,7 @@ function ApplicationTabGroup(Window) {
 	
 	
 	//create app tabs
-	var win1 = new Window('Planear Viaje'),
+	var win1 = new Window('Mapa'),
 		win2 = new Window('Buscar'), 
 		win3 = new Window('Favoritos'),
 		win4 = new Window('Noticias');
@@ -13,7 +13,7 @@ function ApplicationTabGroup(Window) {
 		
 	
 	var tab1 = Ti.UI.createTab({
-		title: 'Planear Viaje',
+		title: 'Mapa',
 		icon: '/images/map.png',
 		window: win1
 	});

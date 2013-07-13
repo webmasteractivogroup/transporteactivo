@@ -88,8 +88,9 @@ exports.popup = function(current, id, nombre, latlng) {
 		current.remove(win);
 		current.remove(current.blur);
 		var masInfoWindow = Ti.UI.createWindow({
-			backgroundColor : 'white'
+			backgroundColor : 'white',
 		});
+		masInfoWindow.orientationModes=[Titanium.UI.PORTRAIT];
 		masInfoWindow.title = 'Información de Parada';
 		var Parada = require('ui/common/DisplayParada');
 		var vistaParada = new Parada(nombre, latlng, id);
@@ -159,7 +160,7 @@ exports.popup = function(current, id, nombre, latlng) {
 		left : '10 dp',
 		right : '10 dp',
 		height : Ti.UI.SIZE,
-		top : '10 dp',
+		top : '5 dp',
 		bottom : '10 dp'
 	});
 	var rutasgroupNorte = Ti.UI.createView({
@@ -167,7 +168,7 @@ exports.popup = function(current, id, nombre, latlng) {
 		left : '10 dp',
 		right : '10 dp',
 		height : Ti.UI.SIZE,
-		top : '10 dp',
+		top : '5 dp',
 		bottom : '10 dp'
 	});
 
@@ -265,8 +266,8 @@ exports.popup = function(current, id, nombre, latlng) {
 	frmLog.add(rutasgroupNorte);
 	//btngroup.add(btnInicio);
 	//btngroup.add(btnFinal);
+	btngroup.add(btnVerMas);
 	frmLog.add(btngroup);
-	frmLog.add(btnVerMas);
 	win.add(frmLog);
 	return win;
 }
@@ -274,6 +275,7 @@ function goToRuta(e) {
 	var masInfoWindow = Ti.UI.createWindow({
 		backgroundColor : 'white'
 	});
+	masInfoWindow.orientationModes=[Titanium.UI.PORTRAIT];
 	masInfoWindow.title = 'Información de Ruta';
 	var Ruta = require('ui/common/DisplayRuta');
 	var vistaRuta = new Ruta(e.source.nombre, e.source.tipo, e.source.orient, e.source.id);

@@ -14,6 +14,7 @@ function DisplayRuta(nombre, tipo, sentido, id) {
 		top : '5 dp',
 		left : '5 dp',
 		text : nombre,
+		color : 'black',
 		font : {
 			fontWeight : 'bold',
 			fontSize : '20 dp'
@@ -24,6 +25,7 @@ function DisplayRuta(nombre, tipo, sentido, id) {
 		top : '10 dp',
 		left : '5 dp',
 		text : tipo,
+		color : 'black',
 		font : {
 			fontWeight : 'bold',
 			fontSize : '17 dp'
@@ -41,13 +43,17 @@ function DisplayRuta(nombre, tipo, sentido, id) {
 	var imageBus = Ti.UI.createImageView({
 		image : imagen,
 		top : '-30 dp',
-		right : '30 dp'
+		right : '30 dp',
+		height : '40 dp',
+		width : '80 dp'
+
 	});
 
 	var sentido = Ti.UI.createLabel({
 		top : '10 dp',
 		left : '5 dp',
 		text : sentido,
+		color : 'black',
 		font : {
 			fontWeight : 'bold',
 			fontSize : '17 dp'
@@ -57,6 +63,7 @@ function DisplayRuta(nombre, tipo, sentido, id) {
 		top : '10 dp',
 		left : '5 dp',
 		text : 'Paradas:',
+		color : 'black',
 		font : {
 			fontWeight : 'bold',
 			fontSize : '17 dp'
@@ -70,8 +77,10 @@ function DisplayRuta(nombre, tipo, sentido, id) {
 
 	tableViewParadas.addEventListener('click', function(e) {
 		var masInfoWindow = Ti.UI.createWindow({
-			backgroundColor : 'white'
+			backgroundColor : 'white',
+
 		});
+		masInfoWindow.orientationModes=[Titanium.UI.PORTRAIT];
 		masInfoWindow.title = 'Información de Parada';
 		var Parada = require('ui/common/DisplayParada');
 		var vistaParada = new Parada(e.row.nombre, e.row.latlng, e.row.id);
@@ -128,6 +137,7 @@ function buscarParadas(id, orient) {
 					left : '5 dp',
 					width : '100%',
 					height : 'auto',
+					color : 'black',
 					textAlign : 'left',
 					font : {
 						fontSize : '13 dp'
@@ -135,8 +145,8 @@ function buscarParadas(id, orient) {
 				});
 
 				myView.add(myText);
-				row.nombre= result.nombre_parada;
-				row.latlng = result.lat +';'+result.lng
+				row.nombre = result.nombre_parada;
+				row.latlng = result.lat + ';' + result.lng
 				row.id = result.id;
 				row.add(myView);
 				row.classname = "item";
