@@ -2,7 +2,7 @@
 from rest_framework import serializers
 
 from sgco.models import LineStops
-from .models import MioStops, Busqueda, ParadasPorRuta
+from .models import MioStops, Busqueda
 
 
 class ParadasSerializer(serializers.ModelSerializer):

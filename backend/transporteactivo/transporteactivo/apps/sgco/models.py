@@ -204,6 +204,9 @@ class LineStops(models.Model):
     class Meta:
         db_table = 'LINESTOPS'
 
+    def __unicode__(self):
+        return '%s, %s, %s, %s' % (self.LINEID, self.STOPID, self.ORIENTATION, self.LINEVARIANT)
+
     def get_name_line(self):
         line = Lines.objects.get(LINEID=self.LINEID)
         return line.SHORTNAME

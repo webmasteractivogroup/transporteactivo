@@ -38,6 +38,7 @@ class Busqueda(models.Model):
     extra = models.CharField(max_length=255)
     tipo = models.CharField(max_length=255)
     extra2 = models.CharField(max_length=255)
+    linevariant = models.CharField(max_length=100)
 
     class Meta:
         db_table = 'search'
@@ -45,23 +46,3 @@ class Busqueda(models.Model):
 
     def __unicode__(self):
         return u'%s, %s' % (self.nombre, self.id)
-
-
-class ParadasPorRuta(models.Model):
-    id = models.IntegerField(primary_key=True)
-    lineid = models.IntegerField()
-    stop_start_id = models.IntegerField()
-    stop_start_name = models.CharField(max_length=100)
-    stop_start_lat = models.FloatField()
-    stop_start_lng = models.FloatField()
-    stop_end_id = models.IntegerField()
-    stop_end_name = models.CharField(max_length=100)
-    stop_end_lat = models.FloatField()
-    stop_end_lng = models.FloatField()
-    arcsequence = models.IntegerField()
-    orientation = models.IntegerField()
-    linevariant = models.IntegerField()
-
-    class Meta:
-        db_table = 'paradas_por_ruta'
-        managed = False

@@ -5,7 +5,7 @@ from django.contrib.gis.geos import Point, Polygon
 from rest_framework import viewsets
 # from unidecode import unidecode
 
-from .models import MioStops, Busqueda, ParadasPorRuta
+from .models import MioStops, Busqueda
 from sgco.models import LineStops
 
 from .serializers import ParadasSerializer, RutasPorParadaSerializer, ParadasPorRutaSerializer, BusquedaSerializer
