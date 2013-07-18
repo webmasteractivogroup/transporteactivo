@@ -183,7 +183,7 @@ function update() {
 			title : 'X',
 			nombre : nombre,
 			top : '10dp',
-			left : '30dp',
+			right : '5dp',
 			borderColor : null,
 			style : Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
 			height : '20dp',
