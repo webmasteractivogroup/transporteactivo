@@ -96,7 +96,8 @@ function PlanearViaje() {
 
 			var popUpRuta = require("/ui/common/EmergenteOrigenDestino");
 			isPopUpActive = true;
-			popupWindow = popUpRuta.popup(viewContenedora, evt.annotation.myid, evt.annotation.eltitle, evt.annotation.latlng);
+			
+			popupWindow = popUpRuta.popup(viewContenedora, evt.annotation.myid, evt.annotation.eltitle, evt.annotation.latlng, evt.annotation.tipo);
 			viewContenedora.add(blur);
 			viewContenedora.add(popupWindow);
 
@@ -278,13 +279,14 @@ function getParadas(region) {
 				if (Ti.Platform.osname === 'android') {
 					var pin = MapModule.createAnnotation({
 						latitude : parada.lat,
+						tipo: parada.tipo_parada,
 						longitude : parada.lng,
 						eltitle : parada.nombre,
 						image : imagen,
 						animate : true,
 						myid : parada.id, // Custom property to uniquely identify this annotation.
 						latlng : parada.lat + ';' + parada.lng,
-						classname:'pin'
+						classname:'pin',
 					});
 				} else {
 
@@ -296,7 +298,8 @@ function getParadas(region) {
 						animate : true,
 						myid : parada.id, // Custom property to uniquely identify this annotation.
 						eltitle : parada.nombre,
-						latlng : parada.lat + ';' + parada.lng
+						latlng : parada.lat + ';' + parada.lng,
+						tipo: parada.tipo_parada
 					});
 				}
 

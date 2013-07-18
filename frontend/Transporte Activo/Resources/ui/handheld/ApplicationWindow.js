@@ -1,5 +1,6 @@
 var TwitterFeed = require('ui/common/twitter');
 var Search = require('ui/common/Search');
+var Favoritos = require('ui/common/Favoritos');
 
 function ApplicationWindow(title) {
 	var self = Ti.UI.createWindow({
@@ -51,6 +52,13 @@ function ApplicationWindow(title) {
 	if (title === 'Buscar') {
 		var buscar = new Search();
 		self.add(buscar);
+	};
+	
+	if (title === 'Favoritos') {
+		var favos = new Favoritos();
+		Ti.App.tab3window = favos;
+		self.add(favos);
+		
 	};
 
 	return self;

@@ -5,9 +5,10 @@
 var container;
 var win;
 var shadow;
+var idForComment;
 
-exports.popup = function(current, id, nombre, latlng) {
-
+exports.popup = function(current, id, nombre, latlng,tipo) {
+	idForComment = id;
 	container = current;
 
 	win = Ti.UI.createView({
@@ -90,10 +91,10 @@ exports.popup = function(current, id, nombre, latlng) {
 		var masInfoWindow = Ti.UI.createWindow({
 			backgroundColor : 'white',
 		});
-		masInfoWindow.orientationModes=[Titanium.UI.PORTRAIT];
+		masInfoWindow.orientationModes = [Titanium.UI.PORTRAIT];
 		masInfoWindow.title = 'Información de Parada';
 		var Parada = require('ui/common/DisplayParada');
-		var vistaParada = new Parada(nombre, latlng, id);
+		var vistaParada = new Parada(nombre, latlng, id,tipo);
 		masInfoWindow.add(vistaParada);
 
 		Ti.App.tabPerfiles.open(masInfoWindow);
@@ -112,6 +113,33 @@ exports.popup = function(current, id, nombre, latlng) {
 		style : Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
 	});
 
+	var btnFavs = Ti.UI.createImageView({
+		title : "",
+		left : 0,
+		width : '40dp',
+		height : '40dp',
+		image : '/images/favoritos.png',
+		backgroundColor : 'gray',
+		borderRadius : 0,
+	});
+
+	btnFavs.addEventListener('click', function() {
+		var db = Ti.Database.open('TACTIVO');
+	try{
+	
+	db.execute('INSERT INTO favoritos (id,identif,nombre,tipo,extra,extra2) VALUES (?,?,?,?,?,?)', id, id, nombre, 'p',tipo, latlng);
+	db.close();
+	alert("Parada agregada a favoritos");
+	}catch (exception){
+		
+		alert("Esta parada ya es favorita");
+	}
+	
+	Ti.App.tab3window.fireEvent('actua');
+		
+		
+
+	});
 	btnExit.addEventListener('click', function() {
 		current.isPopUpActive = false;
 		current.remove(win);
@@ -172,6 +200,67 @@ exports.popup = function(current, id, nombre, latlng) {
 		bottom : '10 dp'
 	});
 
+	var btngroup2 = Ti.UI.createView({
+		height : Ti.UI.SIZE,
+		layout : 'horizontal',
+		width : "100%",
+		top : '5 dp',
+		backgroundColor : 'gray'
+	});
+	var voteGood = Ti.UI.createButton({
+		title : "",
+		top : '5dp',
+		bottom : '5dp',
+		left : '5dp',
+		width : '40dp',
+		height : '40 dp',
+		borderRadius : 10,
+		backgroundImage : '/images/carita_verde.png',
+		tipo : 'a'
+	});
+
+	voteGood.addEventListener('click', goToComment);
+
+	var voteMedium = Ti.UI.createButton({
+		title : "",
+		width : '40dp',
+		height : '40 dp',
+		left : '10 dp',
+		borderRadius : 10,
+		backgroundImage : '/images/carita_amarilla.png',
+		tipo : 'n'
+	});
+
+	voteMedium.addEventListener('click', goToComment);
+
+	var voteBad = Ti.UI.createButton({
+		title : "",
+		width : '40dp',
+		height : '40 dp',
+		left : '10 dp',
+		borderRadius : 10,
+		backgroundImage : '/images/carita_roja.png',
+		tipo : 'd'
+	});
+
+	voteBad.addEventListener('click', goToComment);
+
+	var reportaLabel = Ti.UI.createLabel({
+		color : 'white',
+		text : 'Reporta:',
+		font : {
+			fontWeight : 'bold',
+			fontSize : '16 dp',
+		},
+		width : Ti.UI.SIZE,
+		left : '10%',
+
+	});
+	btngroup2.add(reportaLabel);
+	btngroup2.add(voteGood);
+	btngroup2.add(voteMedium);
+	btngroup2.add(voteBad);
+
 	var json, ruta, i;
 
 	var url = "http://transporteactivo.com/api/v1/rutas-por-parada/?parada_id=" + id;
@@ -229,7 +318,8 @@ exports.popup = function(current, id, nombre, latlng) {
 					nombre : ruta.nombre_ruta,
 					tipo : elTipo,
 					orient : or,
-					id : ruta.id_ruta
+					id : ruta.id_ruta,
+					desc: ruta.descripcion
 				});
 
 				rutasquare.addEventListener('click', goToRuta);
@@ -250,14 +340,15 @@ exports.popup = function(current, id, nombre, latlng) {
 		},
 		timeout : 5000
 	});
-
+	
 	Ti.API.log('Rutas por parada');
 
 	xhr.open("GET", url);
 	xhr.send();
 	Ti.API.log('Rutas por parada request enviado');
-
+	
 	shadow.add(labelTitulo);
+	shadow.add(btnFavs);
 	shadow.add(btnExit);
 	frmLog.add(shadow);
 	frmLog.add(labelRutasSur);
@@ -268,6 +359,7 @@ exports.popup = function(current, id, nombre, latlng) {
 	//btngroup.add(btnFinal);
 	btngroup.add(btnVerMas);
 	frmLog.add(btngroup);
+	frmLog.add(btngroup2);
 	win.add(frmLog);
 	return win;
 }
@@ -275,10 +367,10 @@ function goToRuta(e) {
 	var masInfoWindow = Ti.UI.createWindow({
 		backgroundColor : 'white'
 	});
-	masInfoWindow.orientationModes=[Titanium.UI.PORTRAIT];
+	masInfoWindow.orientationModes = [Titanium.UI.PORTRAIT];
 	masInfoWindow.title = 'Información de Ruta';
 	var Ruta = require('ui/common/DisplayRuta');
-	var vistaRuta = new Ruta(e.source.nombre, e.source.tipo, e.source.orient, e.source.id);
+	var vistaRuta = new Ruta(e.source.desc, e.source.tipo, e.source.orient, e.source.id, e.source.nombre);
 	masInfoWindow.add(vistaRuta);
 
 	Ti.App.tabPerfiles.open(masInfoWindow);
@@ -288,4 +380,18 @@ function goToRuta(e) {
 	container.remove(container.blur);
 	Ti.App.tabgroup.setActiveTab(1);
 
+}
+
+function goToComment(e) {
+
+	var masInfoWindow = Ti.UI.createWindow({
+		backgroundColor : 'white',
+	});
+	masInfoWindow.orientationModes = [Titanium.UI.PORTRAIT];
+	masInfoWindow.title = 'Reportes';
+	var newVista = require('ui/common/RetroAlim');
+	var vistaComment = new newVista(idForComment, e.source.tipo, 'miostops');
+	masInfoWindow.add(vistaComment);
+	Ti.App.tabPerfiles.open(masInfoWindow);
+	Ti.App.tabgroup.setActiveTab(1);
 }

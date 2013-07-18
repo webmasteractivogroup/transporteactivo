@@ -97,7 +97,7 @@ function Search() {
 		if (e.row.tipores === 'r') {
 			masInfoWindow.title = 'Información de Ruta';
 			var Ruta = require('ui/common/DisplayRuta');
-			var vistaRuta = new Ruta(e.row.nombre, e.row.tipo, e.row.orientacion, e.row.id);
+			var vistaRuta = new Ruta(e.row.nombre, e.row.tipo, e.row.orientacion, e.row.id, e.row.desc);
 			masInfoWindow.add(vistaRuta);
 
 			Ti.App.tabPerfiles.open(masInfoWindow);
@@ -105,7 +105,7 @@ function Search() {
 		} else {
 			masInfoWindow.title = 'Información de Parada';
 			var Parada = require('ui/common/DisplayParada');
-			var vistaParada = new Parada(e.row.nombre, e.row.latlng, e.row.id);
+			var vistaParada = new Parada(e.row.nombre, e.row.latlng, e.row.id, e.row.tipo);
 			masInfoWindow.add(vistaParada);
 
 			Ti.App.tabPerfiles.open(masInfoWindow);
@@ -174,6 +174,7 @@ function consulta(q) {
 						}
 					});
 
+					row.tipo = result.extra;
 					row.nombre = result.nombre;
 					row.latlng = result.extra2;
 
@@ -228,7 +229,7 @@ function consulta(q) {
 							fontSize : '13 dp'
 						}
 					});
-
+					row.desc= result.nombre;
 					row.nombre = result.extra;
 					myView.add(rutasquare);
 					myView.add(myText);

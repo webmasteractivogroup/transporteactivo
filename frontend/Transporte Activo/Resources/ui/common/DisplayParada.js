@@ -1,5 +1,8 @@
-function DisplayParada(nombre, latlng, id) {
+var idForComment;
 
+function DisplayParada(nombre, latlng, id, tipo) {
+
+	idForComment = id;
 	var latlngs = latlng.split(';');
 	var lat = latlngs[0];
 	var lng = latlngs[1];
@@ -15,7 +18,7 @@ function DisplayParada(nombre, latlng, id) {
 		top : '5 dp',
 		left : '5 dp',
 		text : nombre,
-			color : 'black',
+		color : 'black',
 		font : {
 			fontWeight : 'bold',
 			fontSize : '20 dp'
@@ -23,10 +26,10 @@ function DisplayParada(nombre, latlng, id) {
 	});
 
 	var ubicacionLabel = Ti.UI.createLabel({
-		top : '10 dp',
+		top : '-5 dp',
 		left : '5 dp',
 		text : 'Ubicación',
-			color : 'black',
+		color : 'black',
 		font : {
 			fontWeight : 'bold',
 			fontSize : '17 dp'
@@ -34,12 +37,12 @@ function DisplayParada(nombre, latlng, id) {
 	});
 
 	var imageMap = Ti.UI.createImageView({
-		height:'30%',
-		image : 'http://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&markers=%7C' + lat + ',' + lng + '&size='+Titanium.Platform.displayCaps.platformWidth+'x'+Titanium.Platform.displayCaps.platformHeight*0.3+'&zoom=15&maptype=roadmap&sensor=false',
+		height : '30%',
+		image : 'http://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&markers=%7C' + lat + ',' + lng + '&size=' + Titanium.Platform.displayCaps.platformWidth + 'x' + Titanium.Platform.displayCaps.platformHeight * 0.3 + '&zoom=15&maptype=roadmap&sensor=false',
 		top : '5 dp',
 		right : '5 dp',
 		left : '5 dp',
-		width: Ti.UI.FILL,
+		width : Ti.UI.FILL,
 		preventDefaultImage : true
 	});
 
@@ -85,6 +88,95 @@ function DisplayParada(nombre, latlng, id) {
 		bottom : '10 dp'
 	});
 
+	var btngroup = Ti.UI.createView({
+		height : Ti.UI.SIZE,
+		layout : 'horizontal',
+		width : "100%",
+		top : '5 dp',
+		bottom : '5 dp',
+		backgroundColor : 'gray'
+	});
+	var voteGood = Ti.UI.createButton({
+		title : "",
+		top : '5dp',
+		bottom : '5dp',
+		left : '5dp',
+		width : '40dp',
+		height : '40 dp',
+		borderRadius : 10,
+		backgroundImage : '/images/carita_verde.png',
+		tipo : 'a'
+	});
+
+	voteGood.addEventListener('click', goToComment);
+
+	var voteMedium = Ti.UI.createButton({
+		title : "",
+		width : '40dp',
+		height : '40 dp',
+		left : '10 dp',
+		borderRadius : 10,
+		backgroundImage : '/images/carita_amarilla.png',
+		tipo : 'n'
+	});
+
+	voteMedium.addEventListener('click', goToComment);
+
+	var voteBad = Ti.UI.createButton({
+		title : "",
+		width : '40dp',
+		height : '40 dp',
+		left : '10 dp',
+		borderRadius : 10,
+		backgroundImage : '/images/carita_roja.png',
+		tipo : 'd'
+	});
+
+	voteBad.addEventListener('click', goToComment);
+
+	var reportaLabel = Ti.UI.createLabel({
+		color : 'white',
+		text : 'Reporta:',
+		font : {
+			fontWeight : 'bold',
+			fontSize : '16 dp',
+		},
+		width : Ti.UI.SIZE,
+		left : '15%',
+
+	});
+
+	var btnFavs = Ti.UI.createImageView({
+		title : "",
+		right : '5dp',
+		top : '-20dp',
+		width : '40dp',
+		height : '40dp',
+		image : '/images/favoritos.png',
+		backgroundColor : 'gray',
+		borderRadius : 10,
+	});
+
+	btnFavs.addEventListener('click', function() {
+		var db = Ti.Database.open('TACTIVO');
+		try {
+	db.execute('INSERT INTO favoritos (id,identif,nombre,tipo,extra,extra2) VALUES (?,?,?,?,?,?)', id, id, nombre, 'p',tipo, latlng);
+	db.close();
+	alert("Parada agregada a favoritos");
+	}catch (exception) {
+
+			alert("Esta parada ya es favorita");
+		}
+		
+		Ti.App.tab3window.fireEvent('actua');
+		
+
+	});
+
+	btngroup.add(reportaLabel);
+	btngroup.add(voteGood);
+	btngroup.add(voteMedium);
+	btngroup.add(voteBad);
 	var json, ruta, i;
 
 	var url = "http://transporteactivo.com/api/v1/rutas-por-parada/?parada_id=" + id;
@@ -142,7 +234,9 @@ function DisplayParada(nombre, latlng, id) {
 					nombre : ruta.nombre_ruta,
 					tipo : elTipo,
 					orient : or,
-					id : ruta.id_ruta
+					id : ruta.id_ruta,
+					desc: ruta.descripcion
+					
 				});
 
 				rutasquare.addEventListener('click', goToRuta);
@@ -171,8 +265,10 @@ function DisplayParada(nombre, latlng, id) {
 	Ti.API.log('Rutas por parada request enviado');
 
 	self.add(titulo);
+	self.add(btnFavs);
 	self.add(ubicacionLabel);
 	self.add(imageMap);
+	self.add(btngroup);
 	self.add(labelRutasSur);
 	self.add(rutasgroupSur);
 	self.add(labelRutasNorte);
@@ -182,17 +278,30 @@ function DisplayParada(nombre, latlng, id) {
 
 }
 
+function goToComment(e) {
+
+	var masInfoWindow = Ti.UI.createWindow({
+		backgroundColor : 'white',
+	});
+	masInfoWindow.orientationModes = [Titanium.UI.PORTRAIT];
+	masInfoWindow.title = 'Reportes';
+	var newVista = require('ui/common/RetroAlim');
+	var vistaComment = new newVista(idForComment, e.source.tipo, 'miostops');
+	masInfoWindow.add(vistaComment);
+	Ti.App.tabPerfiles.open(masInfoWindow);
+}
+
 function goToRuta(e) {
 	var masInfoWindow = Ti.UI.createWindow({
 		backgroundColor : 'white',
-		
+
 	});
-	masInfoWindow.orientationModes=[Titanium.UI.PORTRAIT];
+	masInfoWindow.orientationModes = [Titanium.UI.PORTRAIT];
 	masInfoWindow.title = 'Información de Ruta';
 	var Ruta = require('ui/common/DisplayRuta');
-	var vistaRuta = new Ruta(e.source.nombre, e.source.tipo, e.source.orient, e.source.id);
+	var vistaRuta = new Ruta(e.source.nombre, e.source.tipo, e.source.orient, e.source.id,e.source.desc);
 	masInfoWindow.add(vistaRuta);
-	
+
 	Ti.App.tabPerfiles.open(masInfoWindow);
 }
 
