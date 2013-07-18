@@ -16,7 +16,7 @@ class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = ParadasSerializer
 
     def get_queryset(self):
-        queryset = []
+        queryset = self.model.objects.filter(pk__lt=600000, tipo_parada__isnull=False)
 
         north_east_query_string = self.request.QUERY_PARAMS.getlist('ne[]', [])
         south_west_query_string = self.request.QUERY_PARAMS.getlist('sw[]', [])
@@ -39,15 +39,13 @@ class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
             poly = Polygon((north_east, south_east, south_west, north_west, north_east))
 
             if tipo_query_string:
-                queryset = MioStops.objects.filter(tipo_parada__in=tipo_query_string, location__contained=poly)
+                queryset = self.model.objects.filter(tipo_parada__in=tipo_query_string, location__contained=poly)
             else:
-                queryset = MioStops.objects.filter(tipo_parada__isnull=False, location__contained=poly)
+                queryset = self.model.objects.filter(location__contained=poly)
         else:
             # si no recibimos un punto, enviamos TODAS las paradas
             if tipo_query_string:
-                queryset = MioStops.objects.filter(tipo_parada__in=tipo_query_string)
-            else:
-                queryset = MioStops.objects.filter(tipo_parada__isnull=False)
+                queryset = self.model.objects.filter(tipo_parada__in=tipo_query_string)
 
         return queryset
 
