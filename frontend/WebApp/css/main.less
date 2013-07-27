@@ -261,6 +261,10 @@
 		}
 		.ui-header {
 			position: relative !important;
+			.ui-title {
+				text-overflow: initial;
+				overflow: initial;
+			}
 			.ui-btn {
 				height: 100%;
 				width: auto;
@@ -290,6 +294,9 @@
 		.ui-panel-inner {
 			h2 {
 				margin-top: -10px;
+				margin-bottom: 0;
+			}
+			h4 {
 				margin-bottom: 0;
 			}
 		}
@@ -369,11 +376,16 @@
 	// Widgets and other stand-alone custom elements
 		.logo {
 			background: @azul-ciudadanos url(../img/logo.png) 4px center no-repeat;
-			padding-left: 40px;
 			line-height: 44px;
 			color: white;
 			.border-radius(5px);
 			margin-bottom: 20px !important;
+			a {
+				display: block;
+				color: white !important;
+				text-decoration: none;
+				padding-left: 40px;
+			}
 			&.home {
 				text-align: center;
 				padding-left: 0;
@@ -381,6 +393,10 @@
 				background: @azul-ciudadanos url(../img/touch/apple-touch-icon.png) center 5px no-repeat;
 				margin: 0 auto;
 			}
+		}
+		.menu {
+			margin-top: 15px !important;
+			margin-bottom: 15px !important;
 		}
 		.map-canvas {
 			width: 100%;
@@ -497,6 +513,26 @@
 			padding: 7px;
 			text-align: center;
 			width: 300px;
+		}
+		#logo-ciudadanos {
+			// width: 328px;
+			min-height: 31px;
+			background: @azul-ciudadanos url(../img/logo-ciudadanos.png) center center no-repeat;
+			display: block;
+			margin: 0 auto;
+			padding: 10px;
+			.border-radius(5px);
+		}
+		.logo-ciudadanos {
+			.border-radius(5px);
+			background: @azul-ciudadanos;
+			display: block;
+			margin: 5px -5px;
+			width: 100%;
+			padding: 5px;
+		}
+		.contacto {
+			float: right;
 		}
 
 // Helper classes
