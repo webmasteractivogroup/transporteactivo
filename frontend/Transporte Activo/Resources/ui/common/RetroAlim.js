@@ -14,6 +14,7 @@ function RetroAlim(id, tipo, model) {
 		layout : 'vertical',
 		width : Ti.UI.FILL,
 		height : Ti.UI.FILL,
+		bottom :'70dp'
 
 	});
 
@@ -23,7 +24,7 @@ function RetroAlim(id, tipo, model) {
 
 	var reporta = Ti.UI.createView({
 		layout : 'horizontal',
-		top:'-70 dp',
+		top : '-70 dp',
 		width : Ti.UI.FILL,
 		height : "70dp",
 		backgroundColor : 'gray'
@@ -59,7 +60,16 @@ function RetroAlim(id, tipo, model) {
 	});
 
 	send.addEventListener('click', function() {
-		var url = "http://transporteactivo.com/api/v1/calificar/?model=" + model + "&object_id=" + id + "&tipo=" + tipo + "&comentario=" + texto.value;
+	
+	
+	
+		var params = {
+			model : model,
+			object_id : id,
+			tipo : tipo,
+			comentario : texto.value
+		};
+		var url = "http://transporteactivo.com/api/v1/calificar/";
 		Ti.API.log('REQUEST: ' + url);
 		var xhr = Ti.Network.createHTTPClient({
 			onload : function() {
@@ -75,22 +85,22 @@ function RetroAlim(id, tipo, model) {
 				var imagenView = Ti.UI.createImageView({
 					left : '5dp',
 					top : '5dp',
-					bottom: '5dp',
+					bottom : '5dp',
 					height : '60dp',
 					width : '60dp',
 					image : imagen.image
 				})
 
 				var labelComment = Ti.UI.createLabel({
-					top:'10dp',
-					color:'black',
-					bottom:'10dp',
+					top : '10dp',
+					color : 'black',
+					bottom : '10dp',
 					left : '10dp',
 					height : Ti.UI.SIZE,
 					width : Ti.UI.FILL,
 					text : texto.value,
-					font:{
-						fontSize:'14dp'
+					font : {
+						fontSize : '14dp'
 					}
 
 				});
@@ -100,8 +110,8 @@ function RetroAlim(id, tipo, model) {
 
 				rowData[rowData.length] = row;
 				tableView.data = rowData;
-				
-				texto.value ='';
+
+				texto.value = '';
 
 				alert("Reporte agregado!");
 			},
@@ -116,8 +126,8 @@ function RetroAlim(id, tipo, model) {
 
 		Ti.API.log('Eviando reporte');
 
-		xhr.open("GET", url);
-		xhr.send();
+		xhr.open("POST", url);
+		xhr.send(params);
 		Ti.API.log('reporte request enviado');
 	});
 
@@ -135,6 +145,80 @@ function RetroAlim(id, tipo, model) {
 			reporta.top = oldTop;
 		});
 	}
+	
+	var json, com, i;
+	var url = "http://transporteactivo.com/api/v1/calificar/?id=" + id;
+	var xhr = Ti.Network.createHTTPClient({
+		onload : function() {
+
+			Ti.API.log('RESPUESTA: ' + this.responseText);
+
+			json = JSON.parse(this.responseText);
+			for ( i = 0; i < json.length; i++) {
+				com = json[i];
+
+				var color;
+				if (com.tipo === 'positivo') {
+					color = '/images/carita_verde.png';
+				} else if (com.tipo  === 'comentario') {
+					color = '/images/carita_amarilla.png';
+				} else {
+					color = '/images/carita_roja.png';
+				}
+
+var row = Ti.UI.createTableViewRow({
+					height : Ti.UI.SIZE,
+					width : Ti.UI.FILL,
+					layout : 'horizontal'
+				});
+
+				var imagenView = Ti.UI.createImageView({
+					left : '5dp',
+					top : '5dp',
+					bottom : '5dp',
+					height : '60dp',
+					width : '60dp',
+					image : color
+				})
+
+				var labelComment = Ti.UI.createLabel({
+					top : '10dp',
+					color : 'black',
+					bottom : '10dp',
+					left : '10dp',
+					right: '5dp',
+					height : Ti.UI.SIZE,
+					width : Ti.UI.FILL,
+					text : com.comentario,
+					font : {
+						fontSize : '14dp'
+					}
+
+				});
+				
+
+				row.add(imagenView);
+				row.add(labelComment);
+
+				rowData[i] = row;
+			
+
+			}
+				tableView.data = rowData;
+
+		},
+		onerror : function(e) {
+			Ti.API.log("STATUS: " + this.status);
+			Ti.API.log("TEXT:   " + this.responseText);
+			Ti.API.log("ERROR:  " + e.error);
+			alert('No se pudo contactar al servidor, intentelo de nuevo');
+		},
+		timeout : 5000
+	});
+
+
+	xhr.open("GET", url);
+	xhr.send();
 
 	reporta.add(imagen);
 	reporta.add(texto);

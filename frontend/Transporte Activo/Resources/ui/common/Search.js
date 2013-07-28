@@ -100,7 +100,8 @@ function Search() {
 			var vistaRuta = new Ruta(e.row.nombre, e.row.tipo, e.row.orientacion, e.row.id, e.row.desc);
 			masInfoWindow.add(vistaRuta);
 
-			Ti.App.tabPerfiles.open(masInfoWindow);
+			Ti.App.tabActual = Ti.App.tabPerfiles;
+			Ti.App.tabActual.open(masInfoWindow);
 
 		} else {
 			masInfoWindow.title = 'Información de Parada';
@@ -108,7 +109,8 @@ function Search() {
 			var vistaParada = new Parada(e.row.nombre, e.row.latlng, e.row.id, e.row.tipo);
 			masInfoWindow.add(vistaParada);
 
-			Ti.App.tabPerfiles.open(masInfoWindow);
+			Ti.App.tabActual = Ti.App.tabPerfiles;
+			Ti.App.tabActual.open(masInfoWindow);
 
 		}
 
@@ -145,11 +147,11 @@ function consulta(q) {
 				row.tipores = result.tipo;
 				if (result.tipo === 'p') {
 					if (result.extra === '1') {
-						imagen = '/images/marker_icon_troncal.png';
+						imagen = '/images/marker_icon_troncal@2x.png';
 					} else if (result.extra === '2') {
-						imagen = '/images/marker_icon_pretroncal.png';
+						imagen = '/images/marker_icon_pretroncal@2x.png';
 					} else {
-						imagen = '/images/marker_icon_alimentadora.png';
+						imagen = '/images/marker_icon_alimentadora@2x.png';
 					}
 
 					var av_image = Titanium.UI.createImageView({
@@ -157,7 +159,7 @@ function consulta(q) {
 						top : '5 dp',
 						left : '10 dp',
 						height : '30 dp',
-						width : '20 dp',
+						width : '30 dp',
 
 					});
 

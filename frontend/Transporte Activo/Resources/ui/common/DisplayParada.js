@@ -288,7 +288,7 @@ function goToComment(e) {
 	var newVista = require('ui/common/RetroAlim');
 	var vistaComment = new newVista(idForComment, e.source.tipo, 'miostops');
 	masInfoWindow.add(vistaComment);
-	Ti.App.tabPerfiles.open(masInfoWindow);
+	Ti.App.tabActual.open(masInfoWindow);
 }
 
 function goToRuta(e) {
@@ -302,7 +302,7 @@ function goToRuta(e) {
 	var vistaRuta = new Ruta(e.source.nombre, e.source.tipo, e.source.orient, e.source.id,e.source.desc);
 	masInfoWindow.add(vistaRuta);
 
-	Ti.App.tabPerfiles.open(masInfoWindow);
+	Ti.App.tabActual.open(masInfoWindow);
 }
 
 module.exports = DisplayParada;

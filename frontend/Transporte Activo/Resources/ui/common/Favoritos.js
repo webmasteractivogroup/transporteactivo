@@ -33,8 +33,8 @@ function Favoritos() {
 			}, 5000);
 
 			if (borrando === false) {
-				Ti.App.tabPerfiles.open(masInfoWindow);
-				Ti.App.tabgroup.setActiveTab(1);
+				Ti.App.tabActual = Ti.App.tabFavoritos;
+				Ti.App.tabActual.open(masInfoWindow);
 			}
 
 		} else {
@@ -46,8 +46,8 @@ function Favoritos() {
 			setTimeout(function(e) {
 			}, 5000);
 			if (borrando === false) {
-				Ti.App.tabPerfiles.open(masInfoWindow);
-				Ti.App.tabgroup.setActiveTab(1);
+				Ti.App.tabActual = Ti.App.tabFavoritos;
+				Ti.App.tabActual.open(masInfoWindow);
 			}
 		}
 
@@ -89,11 +89,11 @@ function update() {
 		if (tipo === 'p') {
 			extra = ''+parseInt(extra);
 			if (extra === '1') {
-				imagen = '/images/marker_icon_troncal.png';
+				imagen = '/images/marker_icon_troncal@2x.png';
 			} else if (extra === '2') {
-				imagen = '/images/marker_icon_pretroncal.png';
+				imagen = '/images/marker_icon_pretroncal@2x.png';
 			} else {
-				imagen = '/images/marker_icon_alimentadora.png';
+				imagen = '/images/marker_icon_alimentadora@2x.png';
 			}
 
 			var av_image = Titanium.UI.createImageView({
@@ -101,7 +101,7 @@ function update() {
 				top : '5 dp',
 				left : '10 dp',
 				height : '30 dp',
-				width : '20 dp',
+				width : '30 dp',
 
 			});
 

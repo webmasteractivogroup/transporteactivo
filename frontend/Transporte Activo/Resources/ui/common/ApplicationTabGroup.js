@@ -1,10 +1,10 @@
 function ApplicationTabGroup(Window) {
 	//create module instance
-	
+
 	var db = Ti.Database.open('TACTIVO');
 	db.execute('CREATE TABLE IF NOT EXISTS favoritos(id INTEGER PRIMARY KEY, identif INTEGER ,nombre TEXT, tipo TEXT, extra TEXT, extra2 TEXT);');
 	db.close();
-	
+
 	var self = Ti.UI.createTabGroup({
 		navBarHidden : true,
 		barColor : '#0000'
@@ -26,20 +26,23 @@ function ApplicationTabGroup(Window) {
 		window : win2
 	});
 
-	Ti.App.tabPerfiles = tab2;
-
 	var tab3 = Ti.UI.createTab({
 		title : 'Favoritos',
 		icon : '/images/favoritos.png',
 		window : win3
 	});
-	
 
 	var tab4 = Ti.UI.createTab({
 		title : 'Noticias',
 		icon : '/images/news.png',
 		window : win4
 	});
+
+	Ti.App.tabActual;
+	Ti.App.tabPerfiles = tab2;
+	Ti.App.tabMapa = tab1;
+	Ti.App.tabFavoritos = tab3;
+
 
 	win1.containingTab = tab1;
 	win2.containingTab = tab2;
@@ -50,8 +53,6 @@ function ApplicationTabGroup(Window) {
 	self.addTab(tab2);
 	self.addTab(tab3);
 	self.addTab(tab4);
-
-	
 
 	return self;
 };

@@ -153,7 +153,8 @@ function DisplayRuta(nombre, tipo, sentido, id, desc) {
 		var vistaParada = new Parada(e.row.nombre, e.row.latlng);   // Falta mandar id y tipo
 		masInfoWindow.add(vistaParada);
 
-		Ti.App.tabPerfiles.open(masInfoWindow);
+		
+	Ti.App.tabActual.open(masInfoWindow);
 	});
 
 	var or;
@@ -283,7 +284,7 @@ function goToComment(e) {
 	var newVista = require('ui/common/RetroAlim');
 	var vistaComment = new newVista(idForComment, e.source.tipo, 'lines');
 	masInfoWindow.add(vistaComment);
-	Ti.App.tabPerfiles.open(masInfoWindow);
+	Ti.App.tabActual.open(masInfoWindow);
 }
 
 module.exports = DisplayRuta;
