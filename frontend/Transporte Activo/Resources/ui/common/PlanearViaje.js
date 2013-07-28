@@ -260,11 +260,11 @@ function getParadas(region) {
 
 				if (dpi >= 240) {
 					if (parada.tipo_parada === 1) {
-						imagen = '/images/marker_icon_troncal_high.png';
+						imagen = '/images/marker_icon_troncal@2x.png';
 					} else if (parada.tipo_parada === 2) {
-						imagen = '/images/marker_icon_pretroncal_high.png';
+						imagen = '/images/marker_icon_pretroncal@2x.png';
 					} else {
-						imagen = '/images/marker_icon_alimentadora_high.png';
+						imagen = '/images/marker_icon_alimentadora@2x.png';
 					}
 				} else {
 					if (parada.tipo_parada === 1) {

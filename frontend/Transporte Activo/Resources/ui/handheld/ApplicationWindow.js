@@ -35,13 +35,13 @@ function ApplicationWindow(title) {
 
 					break;
 			}
-		}else{
+		} else {
 			var Mapview = require('ui/common/PlanearViaje');
-					var mapview = new Mapview();
-					self.add(mapview);
-			
+			var mapview = new Mapview();
+			self.add(mapview);
+
 		}
-		
+
 	};
 
 	if (title === 'Noticias') {
@@ -53,14 +53,26 @@ function ApplicationWindow(title) {
 		var buscar = new Search();
 		self.add(buscar);
 	};
-	
+
 	if (title === 'Favoritos') {
 		var favos = new Favoritos();
 		Ti.App.tab3window = favos;
 		self.add(favos);
-		
+
 	};
 
+	var btnMenu = Ti.UI.createButton({
+		title : 'menú',
+
+	});
+	btnMenu.addEventListener('click', function(e) {
+		// button was clicked
+		var MenuWindow = require('ui/common/Menu');
+		var wtbo = new MenuWindow();
+		wtbo.open();
+	});
+
+	self.rightNavButton = btnMenu;
 	return self;
 };
 

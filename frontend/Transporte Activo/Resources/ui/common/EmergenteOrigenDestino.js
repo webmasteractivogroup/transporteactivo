@@ -7,7 +7,7 @@ var win;
 var shadow;
 var idForComment;
 
-exports.popup = function(current, id, nombre, latlng,tipo) {
+exports.popup = function(current, id, nombre, latlng, tipo) {
 	idForComment = id;
 	container = current;
 
@@ -86,19 +86,18 @@ exports.popup = function(current, id, nombre, latlng,tipo) {
 
 	btnVerMas.addEventListener('click', function() {
 
-		current.remove(win);
-		current.remove(current.blur);
+	
 		var masInfoWindow = Ti.UI.createWindow({
 			backgroundColor : 'white',
 		});
 		masInfoWindow.orientationModes = [Titanium.UI.PORTRAIT];
 		masInfoWindow.title = 'Información de Parada';
 		var Parada = require('ui/common/DisplayParada');
-		var vistaParada = new Parada(nombre, latlng, id,tipo);
+		var vistaParada = new Parada(nombre, latlng, id, tipo);
 		masInfoWindow.add(vistaParada);
 
-		Ti.App.tabPerfiles.open(masInfoWindow);
-		Ti.App.tabgroup.setActiveTab(1);
+		Ti.App.tabActual = Ti.App.tabMapa;
+		Ti.App.tabActual.open(masInfoWindow);
 
 	});
 
@@ -125,19 +124,17 @@ exports.popup = function(current, id, nombre, latlng,tipo) {
 
 	btnFavs.addEventListener('click', function() {
 		var db = Ti.Database.open('TACTIVO');
-	try{
-	
-	db.execute('INSERT INTO favoritos (id,identif,nombre,tipo,extra,extra2) VALUES (?,?,?,?,?,?)', id, id, nombre, 'p',tipo, latlng);
-	db.close();
-	alert("Parada agregada a favoritos");
-	}catch (exception){
-		
-		alert("Esta parada ya es favorita");
-	}
-	
-	Ti.App.tab3window.fireEvent('actua');
-		
-		
+		try {
+
+			db.execute('INSERT INTO favoritos (id,identif,nombre,tipo,extra,extra2) VALUES (?,?,?,?,?,?)', id, id, nombre, 'p', tipo, latlng);
+			db.close();
+			alert("Parada agregada a favoritos");
+		} catch (exception) {
+
+			alert("Esta parada ya es favorita");
+		}
+
+		Ti.App.tab3window.fireEvent('actua');
 
 	});
 	btnExit.addEventListener('click', function() {
@@ -319,7 +316,7 @@ exports.popup = function(current, id, nombre, latlng,tipo) {
 					tipo : elTipo,
 					orient : or,
 					id : ruta.id_ruta,
-					desc: ruta.descripcion
+					desc : ruta.descripcion
 				});
 
 				rutasquare.addEventListener('click', goToRuta);
@@ -340,13 +337,13 @@ exports.popup = function(current, id, nombre, latlng,tipo) {
 		},
 		timeout : 5000
 	});
-	
+
 	Ti.API.log('Rutas por parada');
 
 	xhr.open("GET", url);
 	xhr.send();
 	Ti.API.log('Rutas por parada request enviado');
-	
+
 	shadow.add(labelTitulo);
 	shadow.add(btnFavs);
 	shadow.add(btnExit);
@@ -373,12 +370,10 @@ function goToRuta(e) {
 	var vistaRuta = new Ruta(e.source.desc, e.source.tipo, e.source.orient, e.source.id, e.source.nombre);
 	masInfoWindow.add(vistaRuta);
 
-	Ti.App.tabPerfiles.open(masInfoWindow);
+	Ti.App.tabActual = Ti.App.tabMapa;
+	Ti.App.tabActual.open(masInfoWindow);
 
-	container.isPopUpActive = false;
-	container.remove(win);
-	container.remove(container.blur);
-	Ti.App.tabgroup.setActiveTab(1);
+	
 
 }
 
@@ -392,6 +387,6 @@ function goToComment(e) {
 	var newVista = require('ui/common/RetroAlim');
 	var vistaComment = new newVista(idForComment, e.source.tipo, 'miostops');
 	masInfoWindow.add(vistaComment);
-	Ti.App.tabPerfiles.open(masInfoWindow);
-	Ti.App.tabgroup.setActiveTab(1);
+	Ti.App.tabActual = Ti.App.tabMapa;
+	Ti.App.tabActual.open(masInfoWindow);
 }

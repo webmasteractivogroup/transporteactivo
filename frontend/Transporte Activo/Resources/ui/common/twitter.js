@@ -34,7 +34,7 @@ function TwitterFeed() {
 		text : 'Cargando Tweets',
 		left : '5 dp',
 		top : '15 dp',
-		colo: 'white',
+		color: 'white',
 		backgroundColor : 'black',
 		width : Ti.UI.SIZE,
 		height : 'auto',
