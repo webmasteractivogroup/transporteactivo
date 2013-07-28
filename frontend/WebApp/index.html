@@ -89,7 +89,6 @@
 						<p>Paradas de calle donde se detienen únicamente buses alimentadores.</p>
 					</li>
 				</ul>
-
 			</section>
 			<footer data-role="footer">
 				<nav data-role="navbar">
@@ -282,6 +281,44 @@
 				</nav>
 			</footer>
 		</article><!-- #ruta -->
+
+		<article data-role="page" id="favoritos">
+			<header data-role="header">
+				<a href="#menu-panel-favoritos" data-icon="custom" data-iconpos="notext" class="show-lines">Menú</a>
+				<h1>Favoritos</h1>
+			</header>
+			<section data-role="content">
+				<h2>Rutas</h2>
+				<ul id="rutas-favoritas" data-role="listview" data-inset="true"></ul>
+				<h2>Paradas</h2>
+				<ul id="paradas-favoritas" data-role="listview" data-inset="true"></ul>
+			</section>
+			<footer data-role="footer">
+				<nav data-role="navbar">
+					<ul>
+						<li><a href="#mapa" data-icon="custom" class="map">Mapa</a></li>
+						<li><a href="#buscar" data-icon="custom" class="magnify">Buscar</a></li>
+						<li><a href="#favoritos" data-icon="custom" class="star" class="bullhorn ui-btn-active ui-state-persist">Favoritos</a></li>
+						<li><a href="#noticias" data-icon="custom">Noticias</a></li>
+					</ul>
+				</nav>
+			</footer>
+			<aside data-role="panel" data-position="left" data-display="reveal" id="menu-panel-favoritos">
+				<h2 class="logo"><a href="#inicio">Transporte Activo</a></h2>
+				<ul data-role="listview" data-icon="custom" class="menu dark">
+					<li class="house"><a href="#inicio">Inicio</a></li>
+					<li class="map"><a href="#mapa">Mapa</a></li>
+					<li class="magnify"><a href="#buscar">Buscar</a></li>
+					<li class="star"><a href="#favoritos" class="ui-btn-active ui-state-persist">Favoritos</a></li>
+					<li class="bullhorn"><a href="#noticias">Noticias</a></li>
+					<li class="id-card"><a href="#acerca-de">Acerca de</a></li>
+				</ul>
+
+				<h4>Una iniciativa de</h4>
+				<a class="logo-ciudadanos" href="http://ciudadanosactivos.com" target="_blank"><img src="img/logo-ciudadanos.png"></a>
+				<a href="http://ciudadanosactivos.com/contactenos/" target="_blank" class="contacto">Contáctenos</a>
+			</aside><!-- #menu-panel-favoritos -->
+		</article><!-- #favoritos -->
 
 		<article data-role="page" id="noticias">
 			<header data-role="header">

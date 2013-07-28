@@ -348,7 +348,8 @@ window.ta = {
 					temp.splice( $.inArray(ta.search.parada.id.toString(), temp), 1 ); //remove element
 					toast('Eliminada de Favoritos');
 				}
-				localStorage["tipo"] = temp;
+				// localStorage[tipo] = temp.join(',');
+				localStorage[tipo] = temp;
 			} else {
 				toast('Lo sentimos, tu navegador no soporta esta función.');
 			}
@@ -604,6 +605,11 @@ $(document).on("pageshow", "#ruta", function(event) {
 	else {
 		jQuery.mobile.changePage("#buscar");
 	}
+});
+
+$(document).on("pageshow", "#favoritos", function(event) {
+	$('#paradas-favoritas').html(localStorage['paradasf']);
+	$('#rutas-favoritas').html(localStorage['rutasf']);
 });
 
 $(window).on('orientationchange resize pageshow', function(event) {
