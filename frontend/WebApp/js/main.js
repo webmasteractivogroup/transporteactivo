@@ -333,6 +333,27 @@ window.ta = {
 		ruta: null
 	},
 
+	favs: {
+		toggleFav: function($button, tipo) {
+			if (Modernizr.localstorage) {
+				if (localStorage[tipo] == null) { localStorage[tipo] = ''; }
+				temp = localStorage[tipo].split(',');
+
+				$button.toggleClass('yellow');
+				if ($button.hasClass('yellow')) {
+					temp.push(ta.search.parada.id.toString());
+					toast('Agregada a Favoritos');
+				} else {
+					temp.splice( $.inArray(ta.search.parada.id.toString(), temp), 1 ); //remove element
+					toast('Eliminada de Favoritos');
+				}
+				localStorage["tipo"] = temp;
+			} else {
+				toast('Lo sentimos, tu navegador no soporta esta función.');
+			}
+		}
+	},
+
 	init: function() {
 		this.map.init();
 		this.geoLocation.findLocation();
@@ -449,12 +470,7 @@ $(document).on("pageinit", "#buscar", function(event) {
 $(document).on("pageinit", "#parada", function(event) {
 	$('#parada')
 		.on('click', '.add-fav', function () {
-			$(this).toggleClass('yellow');
-			if ($(this).hasClass('yellow')) {
-				toast('Agregada a Favoritos');
-			} else {
-				toast('Eliminada de Favoritos');
-			}
+			ta.favs.toggleFav($(this), "paradasf");
 		});
 });
 
@@ -500,6 +516,14 @@ $(document).on("pageshow", "#parada", function(event) {
 				}
 			}
 		});
+
+		// is favorite?
+		paradasf = localStorage["paradasf"].split(',');
+		if ($.inArray(parada.id.toString(), paradasf) != -1) {
+			$('#parada .add-fav').addClass('yellow');
+		} else {
+			$('#parada .add-fav').removeClass('yellow');
+		}
 	}
 	else {
 		jQuery.mobile.changePage("#buscar");
@@ -515,12 +539,7 @@ $(document).on("pageinit", "#ruta", function(event) {
 			$(this).find('h3 .ui-btn-text').text('Ver Paradas');
 		})
 		.on('click', '.add-fav', function () {
-			$(this).toggleClass('yellow');
-			if ($(this).hasClass('yellow')) {
-				toast('Agregada a Favoritos');
-			} else {
-				toast('Eliminada de Favoritos');
-			}
+			ta.favs.toggleFav($(this), "rutasf");
 		});
 });
 
