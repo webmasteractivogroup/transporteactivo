@@ -51,6 +51,45 @@
 			<section data-role="content">
 				<h2 class="logo home">Transporte Activo</h2>
 				<p>Información y participación ciudadana para el sistema de transporte <strong>Masivo Integrado de Occidente, MIO</strong> de la ciudad de Santiago de Cali.</p>
+
+				<h2>Convenciones</h2>
+				<h3>Tipos de Bus</h3>
+				<ul data-role="listview" data-inset="true" id="tipos-bus">
+					<li>
+						<img src="img/bus_articulado.png" />
+						<h4>Articulado</h4>
+						<p>Buses con rutas expresas (E) y troncales (T).<br>Se detienen únicamente en estaciones.</p>
+					</li>
+					<li>
+						<img src="img/bus_padron.png" />
+						<h4>Padrón</h4>
+						<p>Buses con rutas padronas (P).<br>Se detienen en estaciones y paradas de calle.</p>
+					</li>
+					<li>
+						<img src="img/bus_alimentador.png" />
+						<h4>Alimentador</h4>
+						<p>Buses con rutas auxiliares (A).<br>Se detienen únicamente en paradas de calle.</p>
+					</li>
+				</ul>
+				<h3>Tipos de Parada</h3>
+				<ul data-role="listview" data-inset="true" id="tipos-parada">
+					<li>
+						<img src="img/stop_troncal.png" />
+						<h4>Troncales</h4>
+						<p>Estaciones donde se detienen buses articulados y padrones.</p>
+					</li>
+					<li>
+						<img src="img/stop_pretroncal.png" />
+						<h4>Pretroncal</h4>
+						<p>Paradas de calle donde se detienen buses padrones y alimentadores.</p>
+					</li>
+					<li>
+						<img src="img/stop_auxiliar.png" />
+						<h4>Auxiliar</h4>
+						<p>Paradas de calle donde se detienen únicamente buses alimentadores.</p>
+					</li>
+				</ul>
+
 			</section>
 			<footer data-role="footer">
 				<nav data-role="navbar">
@@ -347,7 +386,7 @@
 
 		<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?key=AIzaSyBWdIbq64kbz8B83nx9TS3u5NqiIYFK9r0&amp;sensor=true&amp;language=es-ES"></script>
 		<script src="js/vendor/jquery-1.9.1.min.js"></script>
-		<script src="js/helper.js"></script>
+		<script src="js/helpers.js"></script>
 		<script src="js/main.js"></script>
 		<script src="js/vendor/jquery.mobile-1.3.1.min.js"></script>
 		<!-- // <script src="js/vendor/purl.js"></script> -->

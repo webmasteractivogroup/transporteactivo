@@ -150,7 +150,7 @@ window.ta = {
 				url: 'img/stop_pretroncal.png',
 			},
 			3: {
-				url: 'img/stop_alimentadora.png',
+				url: 'img/stop_auxiliar.png',
 			}
 			// 1: {
 			// 	url: 'img/stops_sprite_small.png',
@@ -289,12 +289,13 @@ window.ta = {
 				data: data,
 				dataType: "JSON",
 				// async: false,
-				// beforeSend: function(jqXHR, settings) {
-				// 	$.mobile.loading('show', {text: 'Cargando estaciones cercanas...'});
-				// },
-				// complete: function(jqXHR, settings) {
-				// 	$.mobile.loading('hide');
-				// },
+				beforeSend: function(jqXHR, settings) {
+					// $.mobile.loading('show', {text: 'Cargando estaciones cercanas...'});
+					$.mobile.loading('show');
+				},
+				complete: function(jqXHR, settings) {
+					$.mobile.loading('hide');
+				},
 				success: function(data, textStatus, jqXHR) {
 					if (textStatus === "success") {
 						//remove the current markers from the map and their reference to the stop
@@ -311,7 +312,7 @@ window.ta = {
 					// console.log(textStatus);
 					// console.log(errorThrown);
 					//ocultarIndicadorAjax();
-					toast("Error cargando las paradas cercanas");
+					toast("Error cargando las paradas cercanas.");
 				}
 			});
 		},
@@ -419,6 +420,15 @@ $(document).on("pageinit", "#buscar", function(event) {
 				crossDomain: true,
 				data: {
 					q: $input.val()
+				},
+				beforeSend: function(jqXHR, settings) {
+					$.mobile.loading('show');
+				},
+				complete: function(jqXHR, settings) {
+					$.mobile.loading('hide');
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					toast("Error cargando los resultados de búsqueda.");
 				},
 				success: function(data, textStatus, jqXHR) {
 					$.each(data, function (i, val) {

@@ -224,7 +224,8 @@
 
 	// Constants
 		@troncal-color: #2E2482;
-		@pretroncal-color: #E4004F;
+		// @pretroncal-color: #E4004F;
+		@pretroncal-color: @troncal-color;
 		@alimentadora-color: #BBBB00;
 		@azul-ciudadanos: #1abbee;
 
@@ -451,7 +452,7 @@
 				background-repeat: no-repeat;
 				&.tipo_1 { background-image: url(../img/stop_troncal.png); }
 				&.tipo_2 { background-image: url(../img/stop_pretroncal.png); }
-				&.tipo_3 { background-image: url(../img/stop_alimentadora.png); }
+				&.tipo_3 { background-image: url(../img/stop_auxiliar.png); }
 			}
 		}
 		a.control {
@@ -533,6 +534,22 @@
 		}
 		.contacto {
 			float: right;
+		}
+		#tipos-parada, #tipos-bus {
+			h4 { margin-bottom: 0.25em; }
+			p {
+				white-space: initial;
+				overflow: initial;
+				line-height: 1.1em;
+			}
+		}
+		#tipos-parada {
+			li { padding: 0 10px 0 36px; }
+			img { margin: 10px 7px; }
+		}
+		#tipos-bus {
+			li { padding: 0 10px 0 95px; }
+			img { margin: 16px 7px; }
 		}
 
 // Helper classes
