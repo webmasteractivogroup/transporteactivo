@@ -42,7 +42,7 @@ class ParadasPorRutaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = LineStops
-        fields = ('id_parada', 'nombre_parada', 'lat', 'lng')
+        fields = ('id', 'nombre', 'lat', 'lng')
 
 
 class BusquedaSerializer(serializers.ModelSerializer):
