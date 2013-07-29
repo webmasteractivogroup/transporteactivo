@@ -35,8 +35,8 @@ class ParadasPorRutaSerializer(serializers.ModelSerializer):
     """
         Este serializer define las paradas que tiene una ruta especifica
     """
-    id_parda = serializers.Field(source='STOPID.STOPID')
-    nombre_parda = serializers.Field(source='STOPID.LONGNAME')
+    id = serializers.Field(source='STOPID.STOPID')
+    nombre = serializers.Field(source='STOPID.LONGNAME')
     lat = serializers.Field(source='STOPID.DECIMALLATITUDE')
     lng = serializers.Field(source='STOPID.DECIMALLONGITUDE')
 
