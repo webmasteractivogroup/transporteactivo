@@ -39,13 +39,13 @@ class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
             poly = Polygon((north_east, south_east, south_west, north_west, north_east))
 
             if tipo_query_string:
-                queryset = self.model.objects.filter(tipo_parada__in=tipo_query_string, location__contained=poly)
+                queryset = queryset.filter(tipo_parada__in=tipo_query_string, location__contained=poly)
             else:
-                queryset = self.model.objects.filter(location__contained=poly)
+                queryset = queryset.filter(location__contained=poly)
         else:
             # si no recibimos un punto, enviamos TODAS las paradas
             if tipo_query_string:
-                queryset = self.model.objects.filter(tipo_parada__in=tipo_query_string)
+                queryset = queryset.filter(tipo_parada__in=tipo_query_string)
 
         return queryset
 
