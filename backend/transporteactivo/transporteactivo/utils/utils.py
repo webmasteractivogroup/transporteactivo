@@ -5,6 +5,8 @@ from datetime import datetime
 
 from django.conf import settings
 from django.utils import timezone
+from django.db import DatabaseError
+from django.db import connection
 
 from sgco import models
 
@@ -13,7 +15,7 @@ s_format = '%m/%d/%Y'
 tz = timezone.get_current_timezone()
 
 PROJECT_DIR = getattr(settings, 'PROJECT_DIR', '')
-DATA_DIR = os.path.join(PROJECT_DIR, 'sgco_tables', 'planversion40')
+DATA_DIR = os.path.join(PROJECT_DIR, 'sgco_tables', 'planversion46')
 ####################################################################################
 #  PLANVERSIONS
 
@@ -34,10 +36,14 @@ def load_plan_versions():
         except ValueError:
             CREATIONDATE = datetime.strptime(r[2], s_format)
         CREATIONDATE = timezone.make_aware(CREATIONDATE, tz)
-        models.PlanVersions.objects.create(PLANVERSIONID=PLANVERSIONID, ACTIVATIONDATE=ACTIVATIONDATE.date(), CREATIONDATE=CREATIONDATE)
+        try:
+            models.PlanVersions.objects.create(PLANVERSIONID=PLANVERSIONID, ACTIVATIONDATE=ACTIVATIONDATE.date(), CREATIONDATE=CREATIONDATE)
+        except DatabaseError:
+            connection._rollback()
+            continue
     print(models.PlanVersions.objects.count())
 ####################################################################################
-PLANVERSIONID = models.PlanVersions.objects.get(pk=40)
+PLANVERSIONID = models.PlanVersions.objects.get(pk=46)
 
 # SCHEDULEPROFILES
 
