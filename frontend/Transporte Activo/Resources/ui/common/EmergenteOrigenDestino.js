@@ -6,10 +6,13 @@ var container;
 var win;
 var shadow;
 var idForComment;
+var isFavorito;
 
 exports.popup = function(current, id, nombre, latlng, tipo) {
 	idForComment = id;
 	container = current;
+
+	isFavorite(id);
 
 	win = Ti.UI.createView({
 		left : '20 dp',
@@ -86,7 +89,6 @@ exports.popup = function(current, id, nombre, latlng, tipo) {
 
 	btnVerMas.addEventListener('click', function() {
 
-	
 		var masInfoWindow = Ti.UI.createWindow({
 			backgroundColor : 'white',
 		});
@@ -102,7 +104,7 @@ exports.popup = function(current, id, nombre, latlng, tipo) {
 	});
 
 	var btnExit = Ti.UI.createButton({
-		title : "x",
+		title : "X",
 		right : 0,
 		width : "15%",
 		height : '40 dp',
@@ -112,12 +114,19 @@ exports.popup = function(current, id, nombre, latlng, tipo) {
 		style : Titanium.UI.iPhone.SystemButtonStyle.PLAIN,
 	});
 
+	var laImagen;
+	if (isFavorito === true) {
+		laImagen = '/images/si_favorito.png';
+	} else {
+		laImagen = '/images/favoritos.png';
+	};
+
 	var btnFavs = Ti.UI.createImageView({
 		title : "",
 		left : 0,
 		width : '40dp',
 		height : '40dp',
-		image : '/images/favoritos.png',
+		image : laImagen,
 		backgroundColor : 'gray',
 		borderRadius : 0,
 	});
@@ -125,10 +134,20 @@ exports.popup = function(current, id, nombre, latlng, tipo) {
 	btnFavs.addEventListener('click', function() {
 		var db = Ti.Database.open('TACTIVO');
 		try {
-
-			db.execute('INSERT INTO favoritos (id,identif,nombre,tipo,extra,extra2) VALUES (?,?,?,?,?,?)', id, id, nombre, 'p', tipo, latlng);
+			if (isFavorito === true) {
+				db.execute('DELETE FROM favoritos WHERE id=?', id);
+				alert("Parada eliminada de favoritos");
+				btnFavs.image = '/images/favoritos.png';
+				isFavorito=false;
+			} else {
+				db.execute('INSERT INTO favoritos (id,identif,nombre,tipo,extra,extra2,linev) VALUES (?,?,?,?,?,?,?)', id, id, nombre, 'p', tipo, latlng,'0');
+				isFavorito=true;
+				btnFavs.image = '/images/si_favorito.png';
+				alert("Parada agregada a favoritos");
+			};
+			
 			db.close();
-			alert("Parada agregada a favoritos");
+			
 		} catch (exception) {
 
 			alert("Esta parada ya es favorita");
@@ -316,7 +335,8 @@ exports.popup = function(current, id, nombre, latlng, tipo) {
 					tipo : elTipo,
 					orient : or,
 					id : ruta.id_ruta,
-					desc : ruta.descripcion
+					desc : ruta.descripcion,
+					lineV: ruta.linevariant
 				});
 
 				rutasquare.addEventListener('click', goToRuta);
@@ -367,14 +387,28 @@ function goToRuta(e) {
 	masInfoWindow.orientationModes = [Titanium.UI.PORTRAIT];
 	masInfoWindow.title = 'Información de Ruta';
 	var Ruta = require('ui/common/DisplayRuta');
-	var vistaRuta = new Ruta(e.source.desc, e.source.tipo, e.source.orient, e.source.id, e.source.nombre);
+	var vistaRuta = new Ruta(e.source.desc, e.source.tipo, e.source.orient, e.source.id, e.source.nombre,e.source.lineV);
 	masInfoWindow.add(vistaRuta);
 
 	Ti.App.tabActual = Ti.App.tabMapa;
 	Ti.App.tabActual.open(masInfoWindow);
 
-	
+}
 
+function isFavorite(id) {
+	Ti.API.info("CHECKING FAVS");
+	isFavorito = false;
+	var db = Ti.Database.open('TACTIVO');
+	var datos = db.execute('SELECT id FROM favoritos');
+	var i = 0;
+	while (datos.isValidRow()) {
+		var elid = datos.fieldByName('id');
+		if (elid === id) {
+			isFavorito = true;
+		}
+		datos.next();
+	}
+	db.close();
 }
 
 function goToComment(e) {

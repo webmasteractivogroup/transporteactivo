@@ -1,7 +1,11 @@
 var idForComment;
+var isFavorito;
 
 function DisplayParada(nombre, latlng, id, tipo) {
+	
+	isFavorite(id);
 
+	
 	idForComment = id;
 	var latlngs = latlng.split(';');
 	var lat = latlngs[0];
@@ -38,7 +42,7 @@ function DisplayParada(nombre, latlng, id, tipo) {
 
 	var imageMap = Ti.UI.createImageView({
 		height : '30%',
-		image : 'http://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&markers=%7C' + lat + ',' + lng + '&size=' + Titanium.Platform.displayCaps.platformWidth + 'x' + Titanium.Platform.displayCaps.platformHeight * 0.3 + '&zoom=15&maptype=roadmap&sensor=false',
+		image : 'http://maps.googleapis.com/maps/api/staticmap?center=' + lat + ',' + lng + '&markers=%7C' + lat + ',' + lng + '&size=' + Titanium.Platform.displayCaps.platformWidth + 'x' + parseInt(Titanium.Platform.displayCaps.platformHeight * 0.3) + '&zoom=15&maptype=roadmap&sensor=false',
 		top : '5 dp',
 		right : '5 dp',
 		left : '5 dp',
@@ -146,13 +150,20 @@ function DisplayParada(nombre, latlng, id, tipo) {
 
 	});
 
+	var laImagen;
+	if (isFavorito === true) {
+		laImagen = '/images/si_favorito.png';
+	} else {
+		laImagen = '/images/favoritos.png';
+	};
+
 	var btnFavs = Ti.UI.createImageView({
 		title : "",
 		right : '5dp',
 		top : '-20dp',
 		width : '40dp',
 		height : '40dp',
-		image : '/images/favoritos.png',
+		image : laImagen,
 		backgroundColor : 'gray',
 		borderRadius : 10,
 	});
@@ -160,16 +171,27 @@ function DisplayParada(nombre, latlng, id, tipo) {
 	btnFavs.addEventListener('click', function() {
 		var db = Ti.Database.open('TACTIVO');
 		try {
-	db.execute('INSERT INTO favoritos (id,identif,nombre,tipo,extra,extra2) VALUES (?,?,?,?,?,?)', id, id, nombre, 'p',tipo, latlng);
-	db.close();
-	alert("Parada agregada a favoritos");
-	}catch (exception) {
+			if (isFavorito === true) {
+				db.execute('DELETE FROM favoritos WHERE id=?', id);
+				alert("Parada eliminada de favoritos");
+				btnFavs.image = '/images/favoritos.png';
+				isFavorito=false;
+			} else {
+				Ti.API.info("EL TIPO DE PARADA " + tipo);
+				db.execute('INSERT INTO favoritos (id,identif,nombre,tipo,extra,extra2,linev) VALUES (?,?,?,?,?,?,?)', id, id, nombre, 'p', tipo, latlng,'0');
+				isFavorito=true;
+				btnFavs.image = '/images/si_favorito.png';
+				alert("Parada agregada a favoritos");
+			};
+			
+			db.close();
+			
+		} catch (exception) {
 
 			alert("Esta parada ya es favorita");
 		}
-		
+
 		Ti.App.tab3window.fireEvent('actua');
-		
 
 	});
 
@@ -235,8 +257,9 @@ function DisplayParada(nombre, latlng, id, tipo) {
 					tipo : elTipo,
 					orient : or,
 					id : ruta.id_ruta,
-					desc: ruta.descripcion
-					
+					desc : ruta.descripcion,
+					lineV: ruta.linevariant
+
 				});
 
 				rutasquare.addEventListener('click', goToRuta);
@@ -299,10 +322,27 @@ function goToRuta(e) {
 	masInfoWindow.orientationModes = [Titanium.UI.PORTRAIT];
 	masInfoWindow.title = 'Información de Ruta';
 	var Ruta = require('ui/common/DisplayRuta');
-	var vistaRuta = new Ruta(e.source.nombre, e.source.tipo, e.source.orient, e.source.id,e.source.desc);
+	var vistaRuta = new Ruta(e.source.desc, e.source.tipo, e.source.orient, e.source.id, e.source.nombre,e.source.lineV);
 	masInfoWindow.add(vistaRuta);
 
 	Ti.App.tabActual.open(masInfoWindow);
+}
+
+function isFavorite(id) {
+	Ti.API.info("CHECKING FAVS");
+	isFavorito = false;
+	var db = Ti.Database.open('TACTIVO');
+	var datos = db.execute('SELECT id FROM favoritos');
+	var i = 0;
+	while (datos.isValidRow()) {
+		var elid = datos.fieldByName('id');
+		if (parseInt(elid) === parseInt(id)) {
+			isFavorito = true;
+			Ti.API.info("SI ES FAVORITO");
+		}
+		datos.next();
+	}
+	db.close();
 }
 
 module.exports = DisplayParada;

@@ -22,11 +22,12 @@ function Favoritos() {
 			backgroundColor : 'white',
 		});
 
-		Ti.API.info('ROW TIPO =' + e.row.tipores);
+		
 		if (e.row.tipores === 'r') {
 			masInfoWindow.title = 'Información de Ruta';
 			var Ruta = require('ui/common/DisplayRuta');
-			var vistaRuta = new Ruta(e.row.nombre, e.row.tipo, e.row.orientacion, e.row.id);
+			Ti.API.info('LINEV FAVS'+e.row.lineV);
+			var vistaRuta = new Ruta(e.row.nombre, e.row.tipo, e.row.orientacion, e.row.id, e.row.desc, parseInt(e.row.lineV));
 			masInfoWindow.add(vistaRuta);
 
 			setTimeout(function(e) {
@@ -40,7 +41,7 @@ function Favoritos() {
 		} else {
 			masInfoWindow.title = 'Información de Parada';
 			var Parada = require('ui/common/DisplayParada');
-			var vistaParada = new Parada(e.row.nombre, e.row.latlng, e.row.id);
+			var vistaParada = new Parada(e.row.nombre, e.row.latlng, e.row.id, e.row.tipo);
 			masInfoWindow.add(vistaParada);
 
 			setTimeout(function(e) {
@@ -62,7 +63,7 @@ function Favoritos() {
 function update() {
 	rowData = [];
 	var db = Ti.Database.open('TACTIVO');
-	var datos = db.execute('SELECT id,identif,nombre,tipo,extra,extra2 FROM favoritos');
+	var datos = db.execute('SELECT id,identif,nombre,tipo,extra,extra2,linev FROM favoritos');
 	var i = 0;
 	while (datos.isValidRow()) {
 		var id = datos.fieldByName('id');
@@ -71,6 +72,8 @@ function update() {
 		var tipo = datos.fieldByName('tipo');
 		var extra = datos.fieldByName('extra');
 		var extra2 = datos.fieldByName('extra2');
+		var lineV = datos.fieldByName('linev');
+		
 		datos.next();
 
 		var row = Ti.UI.createTableViewRow({
@@ -84,10 +87,11 @@ function update() {
 
 		
 		
-		Ti.API.info('EXTRA'+extra);
+		
 		row.tipores = tipo;
 		if (tipo === 'p') {
 			extra = ''+parseInt(extra);
+			row.tipo=extra;
 			if (extra === '1') {
 				imagen = '/images/marker_icon_troncal@2x.png';
 			} else if (extra === '2') {
@@ -120,6 +124,7 @@ function update() {
 
 			row.nombre = nombre;
 			row.latlng = extra2;
+			
 
 			myView.add(av_image);
 			myView.add(myText);
@@ -174,8 +179,10 @@ function update() {
 			});
 
 			row.nombre = extra;
+			row.lineV = lineV;
 			myView.add(rutasquare);
 			myView.add(myText);
+			row.desc = nombre;
 		}
 
 		

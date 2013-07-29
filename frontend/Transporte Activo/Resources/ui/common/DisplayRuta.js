@@ -1,11 +1,15 @@
 var data = [];
 var tableViewParadas;
 var idForComment;
+var isFavorito;
 
-function DisplayRuta(nombre, tipo, sentido, id, desc) {
+function DisplayRuta(nombre, tipo, sentido, id, desc, lineV) {
 	idForComment = id;
+	
 
-	Ti.API.info("EL NOMBRE "+ nombre);
+	Ti.API.info("EL NOMBRE " + nombre);
+	Ti.API.info("EL VARIANT " + lineV);
+	Ti.API.info("EL DESC " + desc);
 	var self = Ti.UI.createView({
 		layout : 'vertical',
 		width : Ti.UI.FILL,
@@ -16,7 +20,7 @@ function DisplayRuta(nombre, tipo, sentido, id, desc) {
 	var titulo = Ti.UI.createLabel({
 		top : '5 dp',
 		left : '5 dp',
-		width: "70%",
+		width : "70%",
 		text : nombre,
 		color : 'black',
 		font : {
@@ -150,11 +154,11 @@ function DisplayRuta(nombre, tipo, sentido, id, desc) {
 		masInfoWindow.orientationModes = [Titanium.UI.PORTRAIT];
 		masInfoWindow.title = 'Información de Parada';
 		var Parada = require('ui/common/DisplayParada');
-		var vistaParada = new Parada(e.row.nombre, e.row.latlng);   // Falta mandar id y tipo
+		var vistaParada = new Parada(e.row.nombre, e.row.latlng,e.row.id);
+		// Falta mandar id y tipo
 		masInfoWindow.add(vistaParada);
 
-		
-	Ti.App.tabActual.open(masInfoWindow);
+		Ti.App.tabActual.open(masInfoWindow);
 	});
 
 	var or;
@@ -163,39 +167,55 @@ function DisplayRuta(nombre, tipo, sentido, id, desc) {
 	} else {
 		or = 1;
 	}
-	
+
+    var primary = id + '' + or;
+	isFavorite(primary);
+	var laImagen;
+	if (isFavorito === true) {
+		laImagen = '/images/si_favorito.png';
+	} else {
+		laImagen = '/images/favoritos.png';
+	};
+
 	var btnFavs = Ti.UI.createImageView({
 		title : "",
 		right : '5dp',
 		top : '-25dp',
 		width : '40dp',
 		height : '40dp',
-		image : '/images/favoritos.png',
+		image : laImagen,
 		backgroundColor : 'gray',
 		borderRadius : 10,
 	});
 
-	var primary = id+''+or;
+	
 	btnFavs.addEventListener('click', function() {
 		var db = Ti.Database.open('TACTIVO');
 		try {
-	db.execute('INSERT INTO favoritos (id,identif,nombre,tipo,extra,extra2) VALUES (?,?,?,?,?,?)', primary, id, desc, 'r',nombre, or);
-	db.close();
-	alert("Ruta agregada a favoritos");
-	}catch (exception) {
+			if (isFavorito === true) {
+				db.execute('DELETE FROM favoritos WHERE id=?', primary);
+				alert("Parada eliminada de favoritos");
+				btnFavs.image = '/images/favoritos.png';
+				isFavorito = false;
+			} else {
+				Ti.API.info("RUTA AGREGADA, LINE VARIANT: "+ lineV);
+				db.execute('INSERT INTO favoritos (id,identif,nombre,tipo,extra,extra2,linev) VALUES (?,?,?,?,?,?,?)', primary, id, desc, 'r', nombre, or,lineV);
+				btnFavs.image = '/images/si_favorito.png';
+				alert("Parada agregada a favoritos");
+			};
+
+			db.close();
+
+		} catch (exception) {
 
 			alert("Esta parada ya es favorita");
 		}
-		
+
 		Ti.App.tab3window.fireEvent('actua');
-		
 
 	});
-	
-	
-	buscarParadas(id, or);
-	
-	
+
+	buscarParadas(id,or,lineV);
 
 	self.add(titulo);
 	self.add(btnFavs);
@@ -210,8 +230,9 @@ function DisplayRuta(nombre, tipo, sentido, id, desc) {
 
 }
 
-function buscarParadas(id, orient) {
-	var url = "http://transporteactivo.com/api/v1/paradas-por-ruta/?ruta_id=" + id + "&orientacion=" + orient;
+function buscarParadas(id, orient,lineV) {
+	data=[];
+	var url = "http://transporteactivo.com/api/v1/paradas-por-ruta/?ruta_id=" + id + "&orientacion=" + orient+"&linevariant="+lineV;
 	Ti.API.log('URL: ' + url);
 	var json, result, i;
 
@@ -234,7 +255,7 @@ function buscarParadas(id, orient) {
 				});
 
 				var myText = Ti.UI.createLabel({
-					text : result.nombre_parada,
+					text : result.nombre,
 					top : '10 dp',
 					left : '5 dp',
 					width : '100%',
@@ -247,7 +268,7 @@ function buscarParadas(id, orient) {
 				});
 
 				myView.add(myText);
-				row.nombre = result.nombre_parada;
+				row.nombre = result.nombre;
 				row.latlng = result.lat + ';' + result.lng
 				row.id = result.id;
 				row.add(myView);
@@ -285,6 +306,23 @@ function goToComment(e) {
 	var vistaComment = new newVista(idForComment, e.source.tipo, 'lines');
 	masInfoWindow.add(vistaComment);
 	Ti.App.tabActual.open(masInfoWindow);
+}
+
+function isFavorite(id) {
+	Ti.API.info("CHECKING FAVS");
+	isFavorito = false;
+	var db = Ti.Database.open('TACTIVO');
+	var datos = db.execute('SELECT id FROM favoritos');
+	var i = 0;
+	while (datos.isValidRow()) {
+		var elid = datos.fieldByName('id');
+	if (parseInt(elid) === parseInt(id)) {
+			isFavorito = true;
+			Ti.API.info("SI ES FAVORITO");
+		}
+		datos.next();
+	}
+	db.close();
 }
 
 module.exports = DisplayRuta;
