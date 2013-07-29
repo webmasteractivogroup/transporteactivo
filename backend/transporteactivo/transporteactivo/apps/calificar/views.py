@@ -34,7 +34,7 @@ class CalificarViewSet(mixins.CreateModelMixin, mixins.ListModelMixin, viewsets.
         obj.comment = comentario
 
     def post_save(self, obj, created=True):
-        obj.total_approve = self.model.objects.filter(approval_type='a').count()
-        obj.total_neutral = self.model.objects.filter(approval_type='n').count()
-        obj.total_disapprove = self.model.objects.filter(approval_type='d').count()
+        obj.total_approve = self.model.objects.filter(approval_type='a', object_id=obj.pk).count()
+        obj.total_neutral = self.model.objects.filter(approval_type='n', object_id=obj.pk).count()
+        obj.total_disapprove = self.model.objects.filter(approval_type='d', object_id=obj.pk).count()
         obj.save()
