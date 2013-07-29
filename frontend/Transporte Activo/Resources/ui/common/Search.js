@@ -97,7 +97,7 @@ function Search() {
 		if (e.row.tipores === 'r') {
 			masInfoWindow.title = 'Información de Ruta';
 			var Ruta = require('ui/common/DisplayRuta');
-			var vistaRuta = new Ruta(e.row.nombre, e.row.tipo, e.row.orientacion, e.row.id, e.row.desc);
+			var vistaRuta = new Ruta(e.row.nombre, e.row.tipo, e.row.orientacion, e.row.id, e.row.desc,e.row.lineV);
 			masInfoWindow.add(vistaRuta);
 
 			Ti.App.tabActual = Ti.App.tabPerfiles;
@@ -232,6 +232,7 @@ function consulta(q) {
 						}
 					});
 					row.desc= result.nombre;
+					row.lineV = result.linevariant;
 					row.nombre = result.extra;
 					myView.add(rutasquare);
 					myView.add(myText);

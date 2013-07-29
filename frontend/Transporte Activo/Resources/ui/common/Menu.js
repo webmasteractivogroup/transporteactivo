@@ -5,6 +5,7 @@ function Menu() {
 		backgroundColor : 'white'
 
 	});
+	self.orientationModes = [Ti.UI.PORTRAIT];
 
 	var logo = Ti.UI.createView({
 		layout : 'horizontal',
@@ -17,16 +18,16 @@ function Menu() {
 		top : '10dp'
 
 	});
+	
 	var box = Ti.UI.createView({
 
 		backgroundColor : '#1abbee',
 		borderRadius : '5',
 		width : Ti.UI.FILL,
-		height : Ti.UI.FILL,
+		height : '115dp',
 		left : '10dp',
 		right : '10dp',
 		top : '85dp',
-		bottom : '60dp'
 	});
 	var imagen = Ti.UI.createImageView({
 		width : '60dp',
@@ -46,15 +47,15 @@ function Menu() {
 	logo.add(texto);
 	
 	var mensaje = Ti.UI.createLabel({
-		text : 'Somos ciudadanos colaborando para mejorar las ciudades! Colabora tu tambien',
+		text : 'Somos ciudadanos colaborando para mejorar las ciudades! Colabora tu también',
 		left : '15dp',
 		right : '15dp',
-		top : '200 dp',
+		top : '220 dp',
 		textAlign : 'center',
 		font : {
-			fontSize : '18dp'
+			fontSize : '16dp'
 		},
-		color : 'white'
+		color : 'black'
 	});
 
 
@@ -75,7 +76,7 @@ function Menu() {
 		width : Ti.UI.FILL,
 		right : '15dp',
 		left : '15dp',
-		top : '140dp'
+		top : '60dp',
 	});
 
 	tutorial_button.addEventListener('click', function() {
@@ -89,16 +90,62 @@ function Menu() {
 		width : Ti.UI.FILL,
 		right : '15dp',
 		left : '15dp',
-		top : '90dp'
+		top : '10dp'
+	});
+acerca_nos_button.addEventListener('click', function() {
+		var AcercaDeWindow = require('ui/common/AcercaDe');
+		var wtbo = new AcercaDeWindow();
+		wtbo.open();
+	});
+	
+	
+var texto2 = Ti.UI.createLabel({
+		text : 'Una iniciativa de',
+		left:'10dp',
+		color : 'black',
+		textAlign : 'left',
+		font : {
+			fontSize : '16dp',
+			fontWeight : 'bold'
+		},
+		top:'290 dp'
+	});	
+	
+
+	
+  var box2 = Ti.UI.createView({
+
+		backgroundColor : '#1abbee',
+		borderRadius : '5',
+		width : Ti.UI.FILL,
+		height : '40dp',
+		left : '10dp',
+		right : '10dp',
+		top : '310dp',
 	});
 
-	acerca_nos_button.addEventListener('click', function() {
-		// EVENTO ACERCA DE
+	var ciuds = Ti.UI.createImageView({
+		width :Ti.UI.FILL,
+		height : '30dp',
+		left:'10dp',
+		right:'10dp',
+		image : '/images/logo-ciudadanos.png'
 	});
+	box2.addEventListener('click', function() {
+
+	    
+		Titanium.Platform.openURL('http://www.ciudadanosactivos.com'); 
+
+	});
+	box2.add(ciuds);
+	
 	self.add(box);
 	self.add(mensaje);
-	self.add(tutorial_button);
-	self.add(acerca_nos_button);
+	self.add(texto2);
+	self.add(box2);
+	box.add(tutorial_button);
+	box.add(acerca_nos_button);
+	
 
 	self.add(logo);
 	self.add(volver);

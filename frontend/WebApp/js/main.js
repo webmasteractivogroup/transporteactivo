@@ -238,19 +238,28 @@ window.ta = {
 					dataType: "JSON",
 					success: function(data, textStatus, jqXHR) {
 						if (textStatus === "success") {
-							var html_list = {};
-							// construct the html for each routes list, grouped by orientation
+							// var html_list = {};
+							// // construct the html for each routes list, grouped by orientation
+							// for (i = 0; i < data.length; ++i) {
+							// 	val = data[i];
+							// 	html_list[val.orientacion] = html_list[val.orientacion] || '';
+							// 	tipo = val.nombre_ruta.substring(0, 1);
+							// 	html_list[val.orientacion] += '<a href="#ruta" data-id="'+val.id_ruta+'" data-nombre="'+val.nombre_ruta+'" data-descripcion="' + val.descripcion + '" data-orientacion="'+val.orientacion+'" data-linevariant="'+val.linevariant+'" data-role="button" data-mini="true" class="'+tipo+'" title="'+val.descripcion+'">'+val.nombre_ruta+'</a>';
+							// }
+							// var html = '';
+							// // add opening and closing tags for the lists
+							// for (var k in html_list) {
+							// 	html += '<h4>Sentido '+ta.orientaciones[k]+'</h4><div data-role="controlgroup" data-type="horizontal">' + html_list[k] + '</div>';
+							// }
+							html_list = '';
 							for (i = 0; i < data.length; ++i) {
 								val = data[i];
-								html_list[val.orientacion] = html_list[val.orientacion] || '';
 								tipo = val.nombre_ruta.substring(0, 1);
-								html_list[val.orientacion] += '<a href="#ruta" data-id="'+val.id_ruta+'" data-nombre="'+val.nombre_ruta+'" data-descripcion="' + val.descripcion + '" data-orientacion="'+val.orientacion+'" data-role="button" data-mini="true" class="'+tipo+'" title="'+val.descripcion+'">'+val.nombre_ruta+'</a>';
+								html_list += '<a href="#ruta" data-id="'+val.id_ruta+'" data-nombre="'+val.nombre_ruta+'" data-orientacion="'+val.orientacion+'" data-linevariant="'+val.linevariant+'" data-role="button" data-mini="true" class="'+tipo+'">'+val.nombre_ruta+'</a>';
+								html = '<div data-role="controlgroup" data-type="horizontal">' + html_list + '</div>';
 							}
-							var html = '';
-							// add opening and closing tags for the lists
-							for (var k in html_list) {
-								html += '<h4>Sentido '+ta.orientaciones[k]+'</h4><div data-role="controlgroup" data-type="horizontal">' + html_list[k] + '</div>';
-							}
+							$("#parada").find('.routes').html(html).trigger('create');
+
 							// console.log(html_list);
 							ta.search.parada = {id: marker.stop.id, nombre: marker.getTitle(), position: marker.getPosition(), icon: marker.getIcon().url};
 							ta.map.$infoPopup
@@ -260,7 +269,8 @@ window.ta = {
 										id: jQuery(this).data('id'),
 										nombre: jQuery(this).data('nombre'),
 										orientacion: jQuery(this).data('orientacion'),
-										descripcion: jQuery(this).data('descripcion')
+										descripcion: jQuery(this).data('descripcion'),
+										linevariant: jQuery(this).data('linevariant')
 									};
 								});
 						}
@@ -342,10 +352,18 @@ window.ta = {
 
 				$button.toggleClass('yellow');
 				if ($button.hasClass('yellow')) {
-					temp.push(ta.search.parada.id.toString());
+					if (tipo == 'paradasf') {
+						temp.push(ta.search.parada.id.toString());
+					} else if (tipo == 'rutasf') {
+						temp.push(ta.search.ruta.id.toString());
+					}
 					toast('Agregada a Favoritos');
 				} else {
-					temp.splice( $.inArray(ta.search.parada.id.toString(), temp), 1 ); //remove element
+					if (tipo == 'paradasf') {
+						temp.splice( $.inArray(ta.search.parada.id.toString(), temp), 1 ); //remove element
+					} else if (tipo == 'rutasf') {
+						temp.splice( $.inArray(ta.search.ruta.id.toString(), temp), 1 ); //remove element
+					}
 					toast('Eliminada de Favoritos');
 				}
 				// localStorage[tipo] = temp.join(',');
@@ -362,275 +380,318 @@ window.ta = {
 	}
 };
 
-$(document).on('pageinit', '#mapa', function(event){
-	window.ta.init();
+// Mapa page
+	$(document).on('pageinit', '#mapa', function(event){
+		window.ta.init();
 
-	// when the map finishes loading
-	google.maps.event.addListenerOnce(ta.map.map, 'idle', function() {
-		// load the stops nearby to the center of the map
-		ta.map.loadVisibleStops();
-
-		// add the custom controls
-		ta.map.map.controls[google.maps.ControlPosition.TOP_LEFT].push($('a.control.location').get(0));
-		$('a.control.location').addClass('visible').click(function(){ta.geoLocation.findLocation();});
-	});
-
-	// every time the map is moved/dragged or the zoom changed
-	google.maps.event.addListener(ta.map.map, 'bounds_changed', function() {
-		if (ta.map.ajaxTimeout) {
-			window.clearTimeout(ta.map.ajaxTimeout);
-		}
-		ta.map.ajaxTimeout = window.setTimeout(function() {
-			// uncheck and disable some stop types in order to avoid showing too many markers
-			if (ta.map.map.getZoom() <= 13){
-				$('#ver-alimentadoras').prop("disabled", true).checkboxradio( "refresh" );
-				$('#ver-pretroncales').prop("disabled", true).checkboxradio( "refresh" );
-			}
-			else if (ta.map.map.getZoom() == 14){
-				$('#ver-alimentadoras').prop("disabled", true).checkboxradio( "refresh" );
-				$('#ver-pretroncales').prop("disabled", false).checkboxradio( "refresh" );
-			}
-			else {
-				$('#ver-alimentadoras').prop("disabled", false).checkboxradio( "refresh" );
-				$('#ver-pretroncales').prop("disabled", false).checkboxradio( "refresh" );
-			}
-
+		// when the map finishes loading
+		google.maps.event.addListenerOnce(ta.map.map, 'idle', function() {
+			// load the stops nearby to the center of the map
 			ta.map.loadVisibleStops();
-		}, 250);
+
+			// add the custom controls
+			ta.map.map.controls[google.maps.ControlPosition.TOP_LEFT].push($('a.control.location').get(0));
+			$('a.control.location').addClass('visible').click(function(){ta.geoLocation.findLocation();});
+		});
+
+		// every time the map is moved/dragged or the zoom changed
+		google.maps.event.addListener(ta.map.map, 'bounds_changed', function() {
+			if (ta.map.ajaxTimeout) {
+				window.clearTimeout(ta.map.ajaxTimeout);
+			}
+			ta.map.ajaxTimeout = window.setTimeout(function() {
+				// uncheck and disable some stop types in order to avoid showing too many markers
+				if (ta.map.map.getZoom() <= 13){
+					$('#ver-alimentadoras').prop("disabled", true).checkboxradio( "refresh" );
+					$('#ver-pretroncales').prop("disabled", true).checkboxradio( "refresh" );
+				}
+				else if (ta.map.map.getZoom() == 14){
+					$('#ver-alimentadoras').prop("disabled", true).checkboxradio( "refresh" );
+					$('#ver-pretroncales').prop("disabled", false).checkboxradio( "refresh" );
+				}
+				else {
+					$('#ver-alimentadoras').prop("disabled", false).checkboxradio( "refresh" );
+					$('#ver-pretroncales').prop("disabled", false).checkboxradio( "refresh" );
+				}
+
+				ta.map.loadVisibleStops();
+			}, 250);
+		});
+
+		// every time the map options are changed, refresh the markers
+		$("#map-options input[type='checkbox']").bind( "change", function(event, ui) {
+			ta.map.loadVisibleStops();
+		});
 	});
 
-	// every time the map options are changed, refresh the markers
-	$("#map-options input[type='checkbox']").bind( "change", function(event, ui) {
-		ta.map.loadVisibleStops();
+// Buscar page
+	$(document).on("pageinit", "#buscar", function(event) {
+		$("#autocomplete").on("listviewbeforefilter", function (e, data) {
+			var $ul = $(this),
+				$input = $(data.input),
+				value = $input.val(),
+				html = "";
+			$ul.html("");
+			if (value && value.length >= 2) {
+				// $ul.html("<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>");
+				$ul.listview("refresh");
+				$.ajax({
+					url: ta.BASE_URL+"api/v1/buscar/",
+					dataType: "json",
+					crossDomain: true,
+					data: {
+						q: $input.val()
+					},
+					beforeSend: function(jqXHR, settings) {
+						$.mobile.loading('show');
+					},
+					complete: function(jqXHR, settings) {
+						$.mobile.loading('hide');
+					},
+					error: function(jqXHR, textStatus, errorThrown) {
+						toast("Error cargando los resultados de búsqueda.");
+					},
+					success: function(data, textStatus, jqXHR) {
+						$.each(data, function (i, val) {
+							html += '<li data-tipo="' + val.tipo + '">';
+							if (val.tipo == 'p') { //paradas
+								html += '<a href="#parada" data-id="' + val.id + '" data-position="' + val.extra2 + '">';
+								html += '<span class="stop icon tipo_' + val.extra + '"></span>';
+								html += val.nombre;
+							} else { //ruta
+								html += '<a href="#ruta" data-id="' + val.id + '" data-nombre="' + val.nombre + '" data-descripcion="' + val.extra + '" data-orientacion="' + val.extra2 + '"  data-linevariant="' + val.linevariant + '" class="routes">';
+								tipo_ruta = val.nombre.substring(0, 1);
+								html += '<span class="' + tipo_ruta + '">' + val.nombre + '</span> ' + val.extra + ' (' + ta.orientaciones[val.extra2] + ')';
+							}
+							html += '</a>';
+							html += "</li>";
+						});
+						$ul.html(html);
+						$ul.listview("refresh");
+						$ul.trigger("updatelayout");
+					}
+				});
+			}
+		});
+		$('#autocomplete').on('click', 'a', function(event) {
+			tipo = jQuery(this).closest("li").data('tipo');
+			switch(tipo) {
+				case 'r': //ruta
+					ta.search.ruta = {
+										id: jQuery(this).data('id'),
+										nombre: jQuery(this).data('nombre'),
+										descripcion: jQuery(this).data('descripcion'),
+										orientacion: jQuery(this).data('orientacion'),
+										linevariant: jQuery(this).data('linevariant')
+									};
+					break;
+				case 'p': //parada
+					coords = jQuery(this).data('position').split(';');
+					position = new google.maps.LatLng(parseFloat(coords[0]), parseFloat(coords[1]));
+					ta.search.parada = {
+										id: jQuery(this).data('id'),
+										nombre: jQuery(this).text(),
+										position: position
+									};
+					//TODO: ADD ICON URL
+					break;
+			}
+		});
 	});
-});
 
-$(document).on("pageinit", "#buscar", function(event) {
-	$("#autocomplete").on("listviewbeforefilter", function (e, data) {
-		var $ul = $(this),
-			$input = $(data.input),
-			value = $input.val(),
-			html = "";
-		$ul.html("");
-		if (value && value.length >= 2) {
-			$ul.html("<li><div class='ui-loader'><span class='ui-icon ui-icon-loading'></span></div></li>");
-			$ul.listview("refresh");
+// Parada page
+	$(document).on("pageinit", "#parada", function(event) {
+		$('#parada')
+			.on('click', '.add-fav', function () {
+				ta.favs.toggleFav($(this), "paradasf");
+			});
+	});
+
+	$(document).on("pageshow", "#parada", function(event) {
+		parada = ta.search.parada;
+		if (parada) {
+			// change the page title
+			$("#parada").find('h1').html(parada.nombre);
+
+			// set the static map
+			if (parada.position) {
+				$staticmap = $("#parada").find('.staticmap');
+				url = "http://maps.googleapis.com/maps/api/staticmap?";
+				url += "center=" + parada.position.lat() + "," + parada.position.lng();
+				url += "&markers=icon:" + ta.BASE_URL + "static/" + parada.icon + "%7C" + parada.position.lat() + "," + parada.position.lng();
+				url += "&size=" + $staticmap.width() + "x" + Math.round($staticmap.width()/3);
+				url += "&zoom=15&maptype=roadmap&sensor=false";
+				$staticmap.html("<img src='"+url+"'/>");
+			}
+
+			// load and display the routes
 			$.ajax({
-				url: ta.BASE_URL+"api/v1/buscar/",
-				dataType: "json",
-				crossDomain: true,
-				data: {
-					q: $input.val()
-				},
-				beforeSend: function(jqXHR, settings) {
-					$.mobile.loading('show');
-				},
-				complete: function(jqXHR, settings) {
-					$.mobile.loading('hide');
-				},
-				error: function(jqXHR, textStatus, errorThrown) {
-					toast("Error cargando los resultados de búsqueda.");
-				},
+				url: ta.BASE_URL+"api/v1/rutas-por-parada/",
+				type: "get",
+				data: {parada_id: parada.id},
+				dataType: "JSON",
 				success: function(data, textStatus, jqXHR) {
-					$.each(data, function (i, val) {
-						html += '<li data-tipo="' + val.tipo + '">';
-						if (val.tipo == 'p') { //paradas
-							html += '<a href="#parada" data-id="' + val.id + '" data-position="' + val.extra2 + '">';
-							html += '<span class="stop icon tipo_' + val.extra + '"></span>';
-							html += val.nombre;
-						} else { //ruta
-							html += '<a href="#ruta" data-id="' + val.id + '" data-nombre="' + val.nombre + '" data-descripcion="' + val.extra + '" data-orientacion="' + val.extra2 + '" class="routes">';
-							tipo_ruta = val.nombre.substring(0, 1);
-							html += '<span class="' + tipo_ruta + '">' + val.nombre + '</span> ' + val.extra + ' (' + ta.orientaciones[val.extra2] + ')';
+					if (textStatus === "success") {
+						// var html_list = {};
+						// // construct the html for each routes list, grouped by orientation
+						// for (i = 0; i < data.length; ++i) {
+						// 	val = data[i];
+						// 	html_list[val.orientacion] = html_list[val.orientacion] || '';
+						// 	tipo = val.nombre_ruta.substring(0, 1);
+						// 	html_list[val.orientacion] += '<a href="#ruta" data-id="'+val.id_ruta+'" data-nombre="'+val.nombre_ruta+'" data-orientacion="'+val.orientacion+'" data-linevariant="'+val.linevariant+'" data-role="button" data-mini="true" class="'+tipo+'">'+val.nombre_ruta+'</a>';
+						// }
+						// var html = '';
+						// // add opening and closing tags for the lists
+						// for (var k in html_list) {
+						// 	html += '<h3>Sentido '+ta.orientaciones[k]+'</h3><div data-role="controlgroup" data-type="horizontal">' + html_list[k] + '</div>';
+						// }
+						html_list = '';
+						for (i = 0; i < data.length; ++i) {
+							val = data[i];
+							tipo = val.nombre_ruta.substring(0, 1);
+							html_list += '<a href="#ruta" data-id="'+val.id_ruta+'" data-nombre="'+val.nombre_ruta+'" data-orientacion="'+val.orientacion+'" data-linevariant="'+val.linevariant+'" data-role="button" data-mini="true" class="'+tipo+'">'+val.nombre_ruta+'</a>';
+							html = '<div data-role="controlgroup" data-type="horizontal">' + html_list + '</div>';
 						}
-						html += '</a>';
-						html += "</li>";
-					});
-					$ul.html(html);
-					$ul.listview("refresh");
-					$ul.trigger("updatelayout");
+						$("#parada").find('.routes').html(html).trigger('create');
+					}
 				}
 			});
+
+			// is favorite?
+			paradasf = localStorage["paradasf"].split(',');
+			if ($.inArray(parada.id.toString(), paradasf) != -1) {
+				$('#parada .add-fav').addClass('yellow');
+			} else {
+				$('#parada .add-fav').removeClass('yellow');
+			}
+		}
+		else {
+			jQuery.mobile.changePage("#buscar");
 		}
 	});
-	$('#autocomplete').on('click', 'a', function(event) {
-		tipo = jQuery(this).closest("li").data('tipo');
-		switch(tipo) {
-			case 'r': //ruta
-				ta.search.ruta = {
-									id: jQuery(this).data('id'),
-									nombre: jQuery(this).data('nombre'),
-									descripcion: jQuery(this).data('descripcion'),
-									orientacion: jQuery(this).data('orientacion')
-								};
-				break;
-			case 'p': //parada
-				coords = jQuery(this).data('position').split(';');
-				position = new google.maps.LatLng(parseFloat(coords[0]), parseFloat(coords[1]));
-				ta.search.parada = {
+
+// Ruta page
+	$(document).on("pageinit", "#ruta", function(event) {
+		$('#ruta')
+			.on('expand', '.ui-collapsible', function () {
+				$(this).find('h3 .ui-btn-text').text('Ocultar Paradas');
+			})
+			.on('collapse', '.ui-collapsible', function () {
+				$(this).find('h3 .ui-btn-text').text('Ver Paradas');
+			})
+			.on('click', '.add-fav', function () {
+				ta.favs.toggleFav($(this), "rutasf");
+			});
+	});
+
+	$(document).on("pageshow", "#ruta", function(event) {
+		ruta = ta.search.ruta;
+		if (ruta) {
+			tipo = ruta.nombre.substring(0,1);
+			$("#ruta")
+				.find('h1').html(ruta.nombre).end()
+				.find('.type').html("Tipo: " + ta.buses_names[tipo] + "<img src='"+ta.buses_icons[tipo]+"' />").end()
+				.find('.description').html(ruta.descripcion).end();
+				// .find('.orientation').html("Sentido: " + ta.orientaciones[ruta.orientacion]);
+
+			// load and display the stops
+			$.ajax({
+				url: ta.BASE_URL+"api/v1/paradas-por-ruta/",
+				type: "get",
+				data: {ruta_id: ruta.id, orientacion: ruta.orientacion, linevariant: ruta.linevariant},
+				dataType: "JSON",
+				success: function(data, textStatus, jqXHR) {
+					if (textStatus === "success") {
+						// console.log(data);
+						var html = '<ul data-role="listview">';
+						// construct the html list for stops
+						for (i = 0; i < data.length; ++i) {
+							parada = data[i];
+							html += '<li><a href="#parada" data-id="' + parada.id + '" data-lat="' + parada.lat + '" data-lng="' + parada.lng + '">';
+							html += '<span class="stop icon tipo_' + parada.extra + '"></span>';
+							html += parada.nombre;
+							html += '</a></li>';
+						}
+						html += '</ul>';
+						$("#ruta .stops")
+							.html(html).trigger('create')
+							.on('click', 'a', function(){
+								position = new google.maps.LatLng(
+												parseFloat(jQuery(this).data('lat')),
+												parseFloat(jQuery(this).data('lng'))
+								);
+								ta.search.parada = {
 									id: jQuery(this).data('id'),
 									nombre: jQuery(this).text(),
-									position: position
+									position: position//,
+									// icon: marker.getIcon().url
 								};
-				//TODO: ADD ICON URL
-				break;
+							});
+						// todo: set parada ID and ICON
+					}
+				}
+			});
+
+			// is favorite?
+			rutasf = localStorage["rutasf"].split(',');
+			if ($.inArray(ruta.id.toString(), rutasf) != -1) {
+				$('#ruta .add-fav').addClass('yellow');
+			} else {
+				$('#ruta .add-fav').removeClass('yellow');
+			}
+		}
+		else {
+			jQuery.mobile.changePage("#buscar");
 		}
 	});
-});
 
-$(document).on("pageinit", "#parada", function(event) {
-	$('#parada')
-		.on('click', '.add-fav', function () {
-			ta.favs.toggleFav($(this), "paradasf");
-		});
-});
-
-$(document).on("pageshow", "#parada", function(event) {
-	parada = ta.search.parada;
-	if (parada) {
-		// change the page title
-		$("#parada").find('h1').html(parada.nombre);
-
-		// set the static map
-		if (parada.position) {
-			$staticmap = $("#parada").find('.staticmap');
-			url = "http://maps.googleapis.com/maps/api/staticmap?";
-			url += "center=" + parada.position.lat() + "," + parada.position.lng();
-			url += "&markers=icon:" + ta.BASE_URL + "static/" + parada.icon + "%7C" + parada.position.lat() + "," + parada.position.lng();
-			url += "&size=" + $staticmap.width() + "x" + Math.round($staticmap.width()/3);
-			url += "&zoom=15&maptype=roadmap&sensor=false";
-			$staticmap.html("<img src='"+url+"'/>");
-		}
-
-		// load and display the routes
-		$.ajax({
-			url: ta.BASE_URL+"api/v1/rutas-por-parada/",
-			type: "get",
-			data: {parada_id: parada.id},
-			dataType: "JSON",
-			success: function(data, textStatus, jqXHR) {
-				if (textStatus === "success") {
-					var html_list = {};
-					// construct the html for each routes list, grouped by orientation
-					for (i = 0; i < data.length; ++i) {
-						val = data[i];
-						html_list[val.orientacion] = html_list[val.orientacion] || '';
-						tipo = val.nombre_ruta.substring(0, 1);
-						html_list[val.orientacion] += '<a href="#ruta" data-id="'+val.id_ruta+'" data-nombre="'+val.nombre_ruta+'" data-orientacion="'+val.orientacion+'" data-role="button" data-mini="true" class="'+tipo+'">'+val.nombre_ruta+'</a>';
-					}
-					var html = '';
-					// add opening and closing tags for the lists
-					for (var k in html_list) {
-						html += '<h3>Sentido '+ta.orientaciones[k]+'</h3><div data-role="controlgroup" data-type="horizontal">' + html_list[k] + '</div>';
-					}
-					$("#parada").find('.routes').html(html).trigger('create');
-				}
-			}
-		});
-
-		// is favorite?
+// Favoritos page
+	$(document).on("pageshow", "#favoritos", function(event) {
+		$ul = $('#paradas-favoritas');
 		paradasf = localStorage["paradasf"].split(',');
-		if ($.inArray(parada.id.toString(), paradasf) != -1) {
-			$('#parada .add-fav').addClass('yellow');
-		} else {
-			$('#parada .add-fav').removeClass('yellow');
-		}
-	}
-	else {
-		jQuery.mobile.changePage("#buscar");
-	}
-});
 
-$(document).on("pageinit", "#ruta", function(event) {
-	$('#ruta')
-		.on('expand', '.ui-collapsible', function () {
-			$(this).find('h3 .ui-btn-text').text('Ocultar Paradas');
-		})
-		.on('collapse', '.ui-collapsible', function () {
-			$(this).find('h3 .ui-btn-text').text('Ver Paradas');
-		})
-		.on('click', '.add-fav', function () {
-			ta.favs.toggleFav($(this), "rutasf");
-		});
-});
+		// $.each(paradasf, function (i, val) {
+		// 	html += '<li data-tipo="' + val.tipo + '">';
+		// 	if (val.tipo == 'p') { //paradas
+		// 		html += '<a href="#parada" data-id="' + val.id + '" data-position="' + val.extra2 + '">';
+		// 		html += '<span class="stop icon tipo_' + val.extra + '"></span>';
+		// 		html += val.nombre;
+		// 	} else { //ruta
+		// 		html += '<a href="#ruta" data-id="' + val.id + '" data-nombre="' + val.nombre + '" data-descripcion="' + val.extra + '" data-orientacion="' + val.extra2 + '" class="routes">';
+		// 		tipo_ruta = val.nombre.substring(0, 1);
+		// 		html += '<span class="' + tipo_ruta + '">' + val.nombre + '</span> ' + val.extra + ' (' + ta.orientaciones[val.extra2] + ')';
+		// 	}
+		// 	html += '</a>';
+		// 	html += "</li>";
+		// });
+		// $ul.html(html);
+		// $ul.listview("refresh");
+		// $ul.trigger("updatelayout");
 
-$(document).on("pageshow", "#ruta", function(event) {
-	ruta = ta.search.ruta;
-	if (ruta) {
-		tipo = ruta.nombre.substring(0,1);
-		$("#ruta")
-			.find('h1').html(ruta.nombre).end()
-			.find('.type').html("Tipo: " + ta.buses_names[tipo] + "<img src='"+ta.buses_icons[tipo]+"' />").end()
-			.find('.description').html(ruta.descripcion).end()
-			.find('.orientation').html("Sentido: " + ta.orientaciones[ruta.orientacion]);
+		$('#paradas-favoritas').html(localStorage['paradasf']);
+		$('#rutas-favoritas').html(localStorage['rutasf']);
+	});
 
-		// load and display the stops
-		$.ajax({
-			url: ta.BASE_URL+"api/v1/paradas-por-ruta/",
-			type: "get",
-			data: {ruta_id: ruta.id, orientacion: ruta.orientacion},
-			dataType: "JSON",
-			success: function(data, textStatus, jqXHR) {
-				if (textStatus === "success") {
-					// console.log(data);
-					var html = '<ul data-role="listview">';
-					// construct the html list for stops
-					for (i = 0; i < data.length; ++i) {
-						parada = data[i];
-						html += '<li><a href="#parada" data-id="' + parada.id + '" data-lat="' + parada.lat + '" data-lng="' + parada.lng + '">';
-						html += '<span class="stop icon tipo_' + parada.extra + '"></span>';
-						html += parada.nombre_parada;
-						html += '</a></li>';
-					}
-					html += '</ul>';
-					$("#ruta .stops")
-						.html(html).trigger('create')
-						.on('click', 'a', function(){
-							position = new google.maps.LatLng(
-											parseFloat(jQuery(this).data('lat')),
-											parseFloat(jQuery(this).data('lng'))
-							);
-							ta.search.parada = {
-								id: jQuery(this).data('id'),
-								nombre: jQuery(this).text(),
-								position: position//,
-								// icon: marker.getIcon().url
-							};
-						});
-					// todo: set parada ID and ICON
-				}
+// All pages
+	$(window).on('orientationchange resize pageshow', function(event) {
+		if ($.mobile.activePage) {
+			// fix the content height
+			fixgeometry();
+
+			switch($.mobile.activePage.attr('id')) {
+				case 'mapa':
+					// resize the map to fit the content, minus the search form
+					$('.map-canvas').height($(".ui-content:visible").height()-$(".planear-viaje").height());
+					google.maps.event.trigger(ta.map.map, "resize");
+					break;
+				case 'noticias':
+					$content = $("#noticias .ui-content");
+					height = $content.height();
+					width = $content.width();
+
+					showTwitter('twitter-metrocali', {width: width, height: height, element: $content});
+
+					break;
 			}
-		});
-	}
-	else {
-		jQuery.mobile.changePage("#buscar");
-	}
-});
-
-$(document).on("pageshow", "#favoritos", function(event) {
-	$('#paradas-favoritas').html(localStorage['paradasf']);
-	$('#rutas-favoritas').html(localStorage['rutasf']);
-});
-
-$(window).on('orientationchange resize pageshow', function(event) {
-	if ($.mobile.activePage) {
-		// fix the content height
-		fixgeometry();
-
-		switch($.mobile.activePage.attr('id')) {
-			case 'mapa':
-				// resize the map to fit the content, minus the search form
-				$('.map-canvas').height($(".ui-content:visible").height()-$(".planear-viaje").height());
-				google.maps.event.trigger(ta.map.map, "resize");
-				break;
-			case 'noticias':
-				$content = $("#noticias .ui-content");
-				height = $content.height();
-				width = $content.width();
-
-				showTwitter('twitter-metrocali', {width: width, height: height, element: $content});
-
-				break;
 		}
-	}
-});
+	});

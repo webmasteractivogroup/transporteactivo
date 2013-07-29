@@ -2,7 +2,8 @@ function ApplicationTabGroup(Window) {
 	//create module instance
 
 	var db = Ti.Database.open('TACTIVO');
-	db.execute('CREATE TABLE IF NOT EXISTS favoritos(id INTEGER PRIMARY KEY, identif INTEGER ,nombre TEXT, tipo TEXT, extra TEXT, extra2 TEXT);');
+	
+	db.execute('CREATE TABLE IF NOT EXISTS favoritos(id INTEGER PRIMARY KEY, identif INTEGER ,nombre TEXT, tipo TEXT, extra TEXT, extra2 TEXT,linev TEXT);');
 	db.close();
 
 	var self = Ti.UI.createTabGroup({

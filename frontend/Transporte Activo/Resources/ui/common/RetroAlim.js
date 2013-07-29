@@ -3,18 +3,20 @@ var rowData = [];
 
 function RetroAlim(id, tipo, model) {
 
-	var self = Ti.UI.createView({
-		layout : 'vertical',
-		width : Ti.UI.FILL,
-		height : Ti.UI.FILL,
-		top : 0
-
-	});
+	var self = Ti.UI.createScrollView({ 
+   contentWidth:'auto', 
+   contentHeight:'auto', 
+   top:0, 
+   showVerticalScrollIndicator:true, 
+   showHorizontalScrollIndicator:true,
+   layout:'vertical'
+});
+ 
 	var comments = Ti.UI.createView({
 		layout : 'vertical',
 		width : Ti.UI.FILL,
 		height : Ti.UI.FILL,
-		bottom :'70dp'
+		bottom :'15%'
 
 	});
 
@@ -24,9 +26,9 @@ function RetroAlim(id, tipo, model) {
 
 	var reporta = Ti.UI.createView({
 		layout : 'horizontal',
-		top : '-70 dp',
+		top : '-15%',
 		width : Ti.UI.FILL,
-		height : "70dp",
+		height : "15%",
 		backgroundColor : 'gray'
 
 	});
@@ -45,18 +47,20 @@ function RetroAlim(id, tipo, model) {
 	}
 
 	texto = Ti.UI.createTextArea({
-		width : "60%",
-		height : '70dp',
+		width : "55%",
+		height : '100%',
 		borderStyle : Ti.UI.INPUT_BORDERSTYLE_ROUNDED,
 		color : '#336699',
 		borderWidth : 2,
 		borderColor : '#bbb',
 		borderRadius : 5,
+		top:'0dp'
 	});
 
 	var send = Ti.UI.createButton({
 		title : 'Envíar',
-		width : "20%"
+		width : Ti.UI.FILL,
+		height : Ti.UI.FILL,
 	});
 
 	send.addEventListener('click', function() {
@@ -130,21 +134,8 @@ function RetroAlim(id, tipo, model) {
 		xhr.send(params);
 		Ti.API.log('reporte request enviado');
 	});
+	
 
-	var oldTop = -70;
-	var newTop = -70 - 170;
-
-	if (Ti.Platform.osname != 'android') {
-		// SLIDE SCREEN UP WHEN ENTERING TITLE
-		texto.addEventListener('focus', function() {
-			reporta.top = newTop;
-		});
-
-		// SLIDE SCREEN BACK TO ORIGINAL POSITION
-		texto.addEventListener('blur', function() {
-			reporta.top = oldTop;
-		});
-	}
 	
 	var json, com, i;
 	var url = "http://transporteactivo.com/api/v1/calificar/?id=" + id;
@@ -223,7 +214,6 @@ var row = Ti.UI.createTableViewRow({
 	reporta.add(imagen);
 	reporta.add(texto);
 	reporta.add(send);
-
 	self.add(comments);
 	self.add(reporta);
 	return self;
