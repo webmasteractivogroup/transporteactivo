@@ -238,19 +238,28 @@ window.ta = {
 					dataType: "JSON",
 					success: function(data, textStatus, jqXHR) {
 						if (textStatus === "success") {
-							var html_list = {};
-							// construct the html for each routes list, grouped by orientation
+							// var html_list = {};
+							// // construct the html for each routes list, grouped by orientation
+							// for (i = 0; i < data.length; ++i) {
+							// 	val = data[i];
+							// 	html_list[val.orientacion] = html_list[val.orientacion] || '';
+							// 	tipo = val.nombre_ruta.substring(0, 1);
+							// 	html_list[val.orientacion] += '<a href="#ruta" data-id="'+val.id_ruta+'" data-nombre="'+val.nombre_ruta+'" data-descripcion="' + val.descripcion + '" data-orientacion="'+val.orientacion+'" data-linevariant="'+val.linevariant+'" data-role="button" data-mini="true" class="'+tipo+'" title="'+val.descripcion+'">'+val.nombre_ruta+'</a>';
+							// }
+							// var html = '';
+							// // add opening and closing tags for the lists
+							// for (var k in html_list) {
+							// 	html += '<h4>Sentido '+ta.orientaciones[k]+'</h4><div data-role="controlgroup" data-type="horizontal">' + html_list[k] + '</div>';
+							// }
+							html_list = '';
 							for (i = 0; i < data.length; ++i) {
 								val = data[i];
-								html_list[val.orientacion] = html_list[val.orientacion] || '';
 								tipo = val.nombre_ruta.substring(0, 1);
-								html_list[val.orientacion] += '<a href="#ruta" data-id="'+val.id_ruta+'" data-nombre="'+val.nombre_ruta+'" data-descripcion="' + val.descripcion + '" data-orientacion="'+val.orientacion+'" data-linevariant="'+val.linevariant+'" data-role="button" data-mini="true" class="'+tipo+'" title="'+val.descripcion+'">'+val.nombre_ruta+'</a>';
+								html_list += '<a href="#ruta" data-id="'+val.id_ruta+'" data-nombre="'+val.nombre_ruta+'" data-orientacion="'+val.orientacion+'" data-linevariant="'+val.linevariant+'" data-role="button" data-mini="true" class="'+tipo+'">'+val.nombre_ruta+'</a>';
+								html = '<div data-role="controlgroup" data-type="horizontal">' + html_list + '</div>';
 							}
-							var html = '';
-							// add opening and closing tags for the lists
-							for (var k in html_list) {
-								html += '<h4>Sentido '+ta.orientaciones[k]+'</h4><div data-role="controlgroup" data-type="horizontal">' + html_list[k] + '</div>';
-							}
+							$("#parada").find('.routes').html(html).trigger('create');
+
 							// console.log(html_list);
 							ta.search.parada = {id: marker.stop.id, nombre: marker.getTitle(), position: marker.getPosition(), icon: marker.getIcon().url};
 							ta.map.$infoPopup
@@ -523,18 +532,25 @@ window.ta = {
 				dataType: "JSON",
 				success: function(data, textStatus, jqXHR) {
 					if (textStatus === "success") {
-						var html_list = {};
-						// construct the html for each routes list, grouped by orientation
+						// var html_list = {};
+						// // construct the html for each routes list, grouped by orientation
+						// for (i = 0; i < data.length; ++i) {
+						// 	val = data[i];
+						// 	html_list[val.orientacion] = html_list[val.orientacion] || '';
+						// 	tipo = val.nombre_ruta.substring(0, 1);
+						// 	html_list[val.orientacion] += '<a href="#ruta" data-id="'+val.id_ruta+'" data-nombre="'+val.nombre_ruta+'" data-orientacion="'+val.orientacion+'" data-linevariant="'+val.linevariant+'" data-role="button" data-mini="true" class="'+tipo+'">'+val.nombre_ruta+'</a>';
+						// }
+						// var html = '';
+						// // add opening and closing tags for the lists
+						// for (var k in html_list) {
+						// 	html += '<h3>Sentido '+ta.orientaciones[k]+'</h3><div data-role="controlgroup" data-type="horizontal">' + html_list[k] + '</div>';
+						// }
+						html_list = '';
 						for (i = 0; i < data.length; ++i) {
 							val = data[i];
-							html_list[val.orientacion] = html_list[val.orientacion] || '';
 							tipo = val.nombre_ruta.substring(0, 1);
-							html_list[val.orientacion] += '<a href="#ruta" data-id="'+val.id_ruta+'" data-nombre="'+val.nombre_ruta+'" data-orientacion="'+val.orientacion+'" data-linevariant="'+val.linevariant+'" data-role="button" data-mini="true" class="'+tipo+'">'+val.nombre_ruta+'</a>';
-						}
-						var html = '';
-						// add opening and closing tags for the lists
-						for (var k in html_list) {
-							html += '<h3>Sentido '+ta.orientaciones[k]+'</h3><div data-role="controlgroup" data-type="horizontal">' + html_list[k] + '</div>';
+							html_list += '<a href="#ruta" data-id="'+val.id_ruta+'" data-nombre="'+val.nombre_ruta+'" data-orientacion="'+val.orientacion+'" data-linevariant="'+val.linevariant+'" data-role="button" data-mini="true" class="'+tipo+'">'+val.nombre_ruta+'</a>';
+							html = '<div data-role="controlgroup" data-type="horizontal">' + html_list + '</div>';
 						}
 						$("#parada").find('.routes').html(html).trigger('create');
 					}
@@ -575,8 +591,8 @@ window.ta = {
 			$("#ruta")
 				.find('h1').html(ruta.nombre).end()
 				.find('.type').html("Tipo: " + ta.buses_names[tipo] + "<img src='"+ta.buses_icons[tipo]+"' />").end()
-				.find('.description').html(ruta.descripcion).end()
-				.find('.orientation').html("Sentido: " + ta.orientaciones[ruta.orientacion]);
+				.find('.description').html(ruta.descripcion).end();
+				// .find('.orientation').html("Sentido: " + ta.orientaciones[ruta.orientacion]);
 
 			// load and display the stops
 			$.ajax({
