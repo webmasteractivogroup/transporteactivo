@@ -2,10 +2,9 @@ var idForComment;
 var isFavorito;
 
 function DisplayParada(nombre, latlng, id, tipo) {
-	
+
 	isFavorite(id);
 
-	
 	idForComment = id;
 	var latlngs = latlng.split(';');
 	var lat = latlngs[0];
@@ -51,9 +50,9 @@ function DisplayParada(nombre, latlng, id, tipo) {
 	});
 
 	Ti.API.info(imageMap.image);
-	var labelRutasSur = Ti.UI.createLabel({
+	var labelRutas = Ti.UI.createLabel({
 		color : 'black',
-		text : 'Rutas Norte -> Sur',
+		text : 'Rutas',
 		font : {
 			fontWeight : 'bold',
 			fontSize : '16 dp',
@@ -63,27 +62,7 @@ function DisplayParada(nombre, latlng, id, tipo) {
 		top : '3 dp'
 	});
 
-	var labelRutasNorte = Ti.UI.createLabel({
-		color : 'black',
-		text : 'Rutas Sur -> Norte',
-		font : {
-			fontWeight : 'bold',
-			fontSize : '16 dp',
-		},
-		width : Ti.UI.SIZE,
-		left : '10 dp',
-		top : '3 dp'
-	});
-
-	var rutasgroupSur = Ti.UI.createView({
-		layout : 'horizontal',
-		left : '10 dp',
-		right : '10 dp',
-		height : Ti.UI.SIZE,
-		top : '5 dp',
-		bottom : '10 dp'
-	});
-	var rutasgroupNorte = Ti.UI.createView({
+	var rutasgroup = Ti.UI.createView({
 		layout : 'horizontal',
 		left : '10 dp',
 		right : '10 dp',
@@ -175,17 +154,17 @@ function DisplayParada(nombre, latlng, id, tipo) {
 				db.execute('DELETE FROM favoritos WHERE id=?', id);
 				alert("Parada eliminada de favoritos");
 				btnFavs.image = '/images/favoritos.png';
-				isFavorito=false;
+				isFavorito = false;
 			} else {
 				Ti.API.info("EL TIPO DE PARADA " + tipo);
-				db.execute('INSERT INTO favoritos (id,identif,nombre,tipo,extra,extra2,linev) VALUES (?,?,?,?,?,?,?)', id, id, nombre, 'p', tipo, latlng,'0');
-				isFavorito=true;
+				db.execute('INSERT INTO favoritos (id,identif,nombre,tipo,extra,extra2,linev) VALUES (?,?,?,?,?,?,?)', id, id, nombre, 'p', tipo, latlng, '0');
+				isFavorito = true;
 				btnFavs.image = '/images/si_favorito.png';
 				alert("Parada agregada a favoritos");
 			};
-			
+
 			db.close();
-			
+
 		} catch (exception) {
 
 			alert("Esta parada ya es favorita");
@@ -232,14 +211,7 @@ function DisplayParada(nombre, latlng, id, tipo) {
 
 					elTipo = 'Tipo: Articulado';
 				}
-				var or;
-				if (ruta.orientacion === '0') {
-					or = 'Sentido: Norte -> Sur';
 
-				} else {
-					or = 'Sentido: Sur -> Norte';
-
-				}
 				var rutasquare = Ti.UI.createLabel({
 					color : 'white',
 					width : '50 dp',
@@ -255,20 +227,14 @@ function DisplayParada(nombre, latlng, id, tipo) {
 					textAlign : Ti.UI.TEXT_ALIGNMENT_CENTER,
 					nombre : ruta.nombre_ruta,
 					tipo : elTipo,
-					orient : or,
+					orient : ruta.orientacion,
 					id : ruta.id_ruta,
 					desc : ruta.descripcion,
-					lineV: ruta.linevariant
+					lineV : ruta.linevariant
 
 				});
-
 				rutasquare.addEventListener('click', goToRuta);
-
-				if (ruta.orientacion === 0) {
-					rutasgroupSur.add(rutasquare);
-				} else {
-					rutasgroupNorte.add(rutasquare)
-				}
+				rutasgroup.add(rutasquare);
 			}
 
 		},
@@ -292,10 +258,8 @@ function DisplayParada(nombre, latlng, id, tipo) {
 	self.add(ubicacionLabel);
 	self.add(imageMap);
 	self.add(btngroup);
-	self.add(labelRutasSur);
-	self.add(rutasgroupSur);
-	self.add(labelRutasNorte);
-	self.add(rutasgroupNorte);
+	self.add(labelRutas);
+	self.add(rutasgroup);
 
 	return self;
 
@@ -322,7 +286,7 @@ function goToRuta(e) {
 	masInfoWindow.orientationModes = [Titanium.UI.PORTRAIT];
 	masInfoWindow.title = 'Información de Ruta';
 	var Ruta = require('ui/common/DisplayRuta');
-	var vistaRuta = new Ruta(e.source.desc, e.source.tipo, e.source.orient, e.source.id, e.source.nombre,e.source.lineV);
+	var vistaRuta = new Ruta(e.source.desc, e.source.tipo, e.source.orient, e.source.id, e.source.nombre, e.source.lineV);
 	masInfoWindow.add(vistaRuta);
 
 	Ti.App.tabActual.open(masInfoWindow);

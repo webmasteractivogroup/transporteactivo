@@ -5,7 +5,6 @@ var isFavorito;
 
 function DisplayRuta(nombre, tipo, sentido, id, desc, lineV) {
 	idForComment = id;
-	
 
 	Ti.API.info("EL NOMBRE " + nombre);
 	Ti.API.info("EL VARIANT " + lineV);
@@ -57,16 +56,7 @@ function DisplayRuta(nombre, tipo, sentido, id, desc, lineV) {
 
 	});
 
-	var sentido = Ti.UI.createLabel({
-		top : '10 dp',
-		left : '5 dp',
-		text : sentido,
-		color : 'black',
-		font : {
-			fontWeight : 'bold',
-			fontSize : '17 dp'
-		}
-	});
+	
 	var paradas = Ti.UI.createLabel({
 		top : '10 dp',
 		left : '5 dp',
@@ -154,21 +144,16 @@ function DisplayRuta(nombre, tipo, sentido, id, desc, lineV) {
 		masInfoWindow.orientationModes = [Titanium.UI.PORTRAIT];
 		masInfoWindow.title = 'Información de Parada';
 		var Parada = require('ui/common/DisplayParada');
-		var vistaParada = new Parada(e.row.nombre, e.row.latlng,e.row.id);
+		var vistaParada = new Parada(e.row.nombre, e.row.latlng, e.row.id);
 		// Falta mandar id y tipo
 		masInfoWindow.add(vistaParada);
 
 		Ti.App.tabActual.open(masInfoWindow);
 	});
 
-	var or;
-	if (sentido === 'Sentido: Norte -> Sur') {
-		or = 0;
-	} else {
-		or = 1;
-	}
+	var or = sentido;
 
-    var primary = id + '' + or;
+	var primary = id + '' + or;
 	isFavorite(primary);
 	var laImagen;
 	if (isFavorito === true) {
@@ -188,7 +173,6 @@ function DisplayRuta(nombre, tipo, sentido, id, desc, lineV) {
 		borderRadius : 10,
 	});
 
-	
 	btnFavs.addEventListener('click', function() {
 		var db = Ti.Database.open('TACTIVO');
 		try {
@@ -198,10 +182,11 @@ function DisplayRuta(nombre, tipo, sentido, id, desc, lineV) {
 				btnFavs.image = '/images/favoritos.png';
 				isFavorito = false;
 			} else {
-				Ti.API.info("RUTA AGREGADA, LINE VARIANT: "+ lineV);
-				db.execute('INSERT INTO favoritos (id,identif,nombre,tipo,extra,extra2,linev) VALUES (?,?,?,?,?,?,?)', primary, id, desc, 'r', nombre, or,lineV);
+				Ti.API.info("RUTA AGREGADA, LINE VARIANT: " + lineV);
+				db.execute('INSERT INTO favoritos (id,identif,nombre,tipo,extra,extra2,linev) VALUES (?,?,?,?,?,?,?)', primary, id, desc, 'r', nombre, or, lineV);
 				btnFavs.image = '/images/si_favorito.png';
 				alert("Parada agregada a favoritos");
+				isFavorito = true;
 			};
 
 			db.close();
@@ -215,13 +200,12 @@ function DisplayRuta(nombre, tipo, sentido, id, desc, lineV) {
 
 	});
 
-	buscarParadas(id,or,lineV);
+	buscarParadas(id, or, lineV);
 
 	self.add(titulo);
 	self.add(btnFavs);
 	self.add(tipoLabel);
 	self.add(imageBus);
-	self.add(sentido);
 	self.add(btngroup);
 	self.add(paradas);
 	self.add(tableViewParadas);
@@ -230,9 +214,9 @@ function DisplayRuta(nombre, tipo, sentido, id, desc, lineV) {
 
 }
 
-function buscarParadas(id, orient,lineV) {
-	data=[];
-	var url = "http://transporteactivo.com/api/v1/paradas-por-ruta/?ruta_id=" + id + "&orientacion=" + orient+"&linevariant="+lineV;
+function buscarParadas(id, orient, lineV) {
+	data = [];
+	var url = "http://transporteactivo.com/api/v1/paradas-por-ruta/?ruta_id=" + id + "&orientacion=" + orient + "&linevariant=" + lineV;
 	Ti.API.log('URL: ' + url);
 	var json, result, i;
 
@@ -316,7 +300,7 @@ function isFavorite(id) {
 	var i = 0;
 	while (datos.isValidRow()) {
 		var elid = datos.fieldByName('id');
-	if (parseInt(elid) === parseInt(id)) {
+		if (parseInt(elid) === parseInt(id)) {
 			isFavorito = true;
 			Ti.API.info("SI ES FAVORITO");
 		}

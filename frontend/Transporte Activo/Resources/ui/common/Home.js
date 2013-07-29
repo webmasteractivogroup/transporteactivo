@@ -4,6 +4,7 @@ function Home() {
 		width : Ti.UI.FILL,
 		height : Ti.UI.FILL,
 		backgroundColor : '#1abbee',
+	
 
 	});
 	self.orientationModes = [Ti.UI.PORTRAIT];
@@ -18,13 +19,16 @@ function Home() {
 	});
 
 	var scroll = Ti.UI.createScrollView({
+		left:'5dp',
+		right:'5dp',
 		contentWidth : 'auto',
 		contentHeight : 'auto',
 		showVerticalScrollIndicator : true,
 		height : '58%',
-		width : '100%',
+		width : Ti.UI.FILL,
 		top : '20%',
-		backgroundColor : 'white'
+		backgroundColor : 'white',
+		borderRadius:'4'
 	});
 
 	if (Ti.Platform.osname === 'android') {

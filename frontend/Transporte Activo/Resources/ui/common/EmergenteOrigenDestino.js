@@ -175,9 +175,9 @@ exports.popup = function(current, id, nombre, latlng, tipo) {
 		height : shadow.height,
 		left : 0
 	});
-	var labelRutasSur = Ti.UI.createLabel({
+	var labelRutas = Ti.UI.createLabel({
 		color : 'black',
-		text : 'Rutas Norte -> Sur',
+		text : 'Rutas',
 		font : {
 			fontWeight : 'bold',
 			fontSize : '16 dp',
@@ -187,19 +187,8 @@ exports.popup = function(current, id, nombre, latlng, tipo) {
 		top : '3 dp'
 	});
 
-	var labelRutasNorte = Ti.UI.createLabel({
-		color : 'black',
-		text : 'Rutas Sur -> Norte',
-		font : {
-			fontWeight : 'bold',
-			fontSize : '16 dp',
-		},
-		width : Ti.UI.SIZE,
-		left : '10 dp',
-		top : '3 dp'
-	});
 
-	var rutasgroupSur = Ti.UI.createView({
+	var rutasgroup = Ti.UI.createView({
 		layout : 'horizontal',
 		left : '10 dp',
 		right : '10 dp',
@@ -207,16 +196,8 @@ exports.popup = function(current, id, nombre, latlng, tipo) {
 		top : '5 dp',
 		bottom : '10 dp'
 	});
-	var rutasgroupNorte = Ti.UI.createView({
-		layout : 'horizontal',
-		left : '10 dp',
-		right : '10 dp',
-		height : Ti.UI.SIZE,
-		top : '5 dp',
-		bottom : '10 dp'
-	});
-
-	var btngroup2 = Ti.UI.createView({
+	
+	var grupoReporta = Ti.UI.createView({
 		height : Ti.UI.SIZE,
 		layout : 'horizontal',
 		width : "100%",
@@ -272,10 +253,10 @@ exports.popup = function(current, id, nombre, latlng, tipo) {
 		left : '10%',
 
 	});
-	btngroup2.add(reportaLabel);
-	btngroup2.add(voteGood);
-	btngroup2.add(voteMedium);
-	btngroup2.add(voteBad);
+	grupoReporta.add(reportaLabel);
+	grupoReporta.add(voteGood);
+	grupoReporta.add(voteMedium);
+	grupoReporta.add(voteBad);
 
 	var json, ruta, i;
 
@@ -310,14 +291,7 @@ exports.popup = function(current, id, nombre, latlng, tipo) {
 
 					elTipo = 'Tipo: Articulado';
 				}
-				var or;
-				if (ruta.orientacion === '0') {
-					or = 'Sentido: Norte -> Sur';
-
-				} else {
-					or = 'Sentido: Sur -> Norte';
-
-				}
+				
 				var rutasquare = Ti.UI.createLabel({
 					color : 'white',
 					width : '50 dp',
@@ -333,19 +307,21 @@ exports.popup = function(current, id, nombre, latlng, tipo) {
 					textAlign : Ti.UI.TEXT_ALIGNMENT_CENTER,
 					nombre : ruta.nombre_ruta,
 					tipo : elTipo,
-					orient : or,
+					orient : ruta.orientacion,
 					id : ruta.id_ruta,
 					desc : ruta.descripcion,
 					lineV: ruta.linevariant
 				});
 
 				rutasquare.addEventListener('click', goToRuta);
-
-				if (ruta.orientacion === 0) {
+				rutasgroup.add(rutasquare);
+				//// SENTIDO SUR-NORTE
+				/*if (ruta.orientacion === 0) {
 					rutasgroupSur.add(rutasquare);
 				} else {
-					rutasgroupNorte.add(rutasquare)
-				}
+					rutasgroupNorte.add(rutasquare);
+				}*/
+				
 			}
 
 		},
@@ -368,15 +344,13 @@ exports.popup = function(current, id, nombre, latlng, tipo) {
 	shadow.add(btnFavs);
 	shadow.add(btnExit);
 	frmLog.add(shadow);
-	frmLog.add(labelRutasSur);
-	frmLog.add(rutasgroupSur);
-	frmLog.add(labelRutasNorte);
-	frmLog.add(rutasgroupNorte);
+	frmLog.add(labelRutas);
+	frmLog.add(rutasgroup);
 	//btngroup.add(btnInicio);
 	//btngroup.add(btnFinal);
 	btngroup.add(btnVerMas);
 	frmLog.add(btngroup);
-	frmLog.add(btngroup2);
+	frmLog.add(grupoReporta);
 	win.add(frmLog);
 	return win;
 }

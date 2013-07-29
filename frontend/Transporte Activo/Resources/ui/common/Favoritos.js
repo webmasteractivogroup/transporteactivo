@@ -22,11 +22,10 @@ function Favoritos() {
 			backgroundColor : 'white',
 		});
 
-		
 		if (e.row.tipores === 'r') {
 			masInfoWindow.title = 'Información de Ruta';
 			var Ruta = require('ui/common/DisplayRuta');
-			Ti.API.info('LINEV FAVS'+e.row.lineV);
+			Ti.API.info('LINEV FAVS' + e.row.lineV);
 			var vistaRuta = new Ruta(e.row.nombre, e.row.tipo, e.row.orientacion, e.row.id, e.row.desc, parseInt(e.row.lineV));
 			masInfoWindow.add(vistaRuta);
 
@@ -73,7 +72,7 @@ function update() {
 		var extra = datos.fieldByName('extra');
 		var extra2 = datos.fieldByName('extra2');
 		var lineV = datos.fieldByName('linev');
-		
+
 		datos.next();
 
 		var row = Ti.UI.createTableViewRow({
@@ -85,13 +84,10 @@ function update() {
 			layout : 'horizontal'
 		});
 
-		
-		
-		
 		row.tipores = tipo;
 		if (tipo === 'p') {
-			extra = ''+parseInt(extra);
-			row.tipo=extra;
+			extra = '' + parseInt(extra);
+			row.tipo = extra;
 			if (extra === '1') {
 				imagen = '/images/marker_icon_troncal@2x.png';
 			} else if (extra === '2') {
@@ -124,7 +120,6 @@ function update() {
 
 			row.nombre = nombre;
 			row.latlng = extra2;
-			
 
 			myView.add(av_image);
 			myView.add(myText);
@@ -158,13 +153,13 @@ function update() {
 			});
 			var adding;
 			if (extra2 === '0') {
-				row.orientacion = 'Sentido: Norte -> Sur';
+
 				adding = 'Norte -> Sur';
 			} else {
-				row.orientacion = 'Sentido: Sur -> Norte';
+				
 				adding = 'Sur -> Norte';
 			}
-
+			row.orientacion = extra2;
 			var myText = Ti.UI.createLabel({
 				text : extra + ' (' + adding + ')',
 				top : '10 dp',
@@ -185,7 +180,6 @@ function update() {
 			row.desc = nombre;
 		}
 
-		
 		var bt = Ti.UI.createButton({
 			title : 'X',
 			nombre : nombre,
@@ -223,11 +217,11 @@ function update() {
 			});
 		});
 
-var myView2 = Ti.UI.createView({
-			left:'250dp'
+		var myView2 = Ti.UI.createView({
+			left : '250dp'
 		});
-		
-		 myView2.add(bt);
+
+		myView2.add(bt);
 
 		row.id = "" + identif;
 		row.add(myView);

@@ -212,12 +212,13 @@ function consulta(q) {
 					});
 					var adding;
 					if (result.extra2 === '0') {
-						row.orientacion = 'Sentido: Norte -> Sur';
+						
 						adding = 'Norte -> Sur';
 					} else {
-						row.orientacion = 'Sentido: Sur -> Norte';
+						
 						adding = 'Sur -> Norte';
 					}
+					row.orientacion = result.extra2;
 
 					var myText = Ti.UI.createLabel({
 						text : result.extra + ' (' + adding + ')',
