@@ -374,6 +374,45 @@ window.ta = {
 		}
 	},
 
+	ratings: {
+		// model: [miostops|lines]
+		// tipo: [a|n|d] (aprueba, comentario, desaprueba)
+		rate: function(object_id, model, tipo, comentario) {
+			$.ajax({
+				url: ta.BASE_URL+"api/v1/calificar/",
+				type: "post",
+				data: {object_id: object_id, model: model, tipo: tipo, comentario: comentario},
+				success: function(data, textStatus, jqXHR) {
+					if (textStatus === "success") {
+						toast("Reporte enviado con éxito.");
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					toast("Ocurrió un error enviando el reporte.");
+				},
+
+			});
+		},
+		getRates: function(id, model, tipo) {
+			$.ajax({
+				url: ta.BASE_URL+"api/v1/calificar/",
+				type: "get",
+				data: {id: id, model: model, tipo: tipo},
+				success: function(data, textStatus, jqXHR) {
+					if (textStatus === "success") {
+						// toast("Reporte enviado con éxito.");
+						alert(data);
+						console.log(data);
+					}
+				},
+				error: function(jqXHR, textStatus, errorThrown) {
+					// toast("Ocurrió un error enviando el reporte.");
+				},
+
+			});
+		}
+	},
+
 	init: function() {
 		this.map.init();
 		this.geoLocation.findLocation();

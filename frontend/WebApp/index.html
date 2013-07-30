@@ -241,6 +241,23 @@
 				<section class="routes"></section>
 				<!-- <h3>Próximas rutas</h3> -->
 				<!-- <section class="nextroutes"></section> -->
+
+				<h2>Participación Ciudadana</h2>
+				<form id="rate-route" class="rate">
+					<!-- TODO: fill this value with the current route id -->
+					<input type="hidden" name="object_id" value="2101">
+					<input type="hidden" name="model" value="miostops">
+					<fieldset data-role="controlgroup" data-type="horizontal">
+						<input type="radio" name="tipo" id="ptipo-a" value="a"  />
+						<label for="ptipo-a"><img src="img/carita_verde.png" alt="Aprueba">Aprueba</label>
+						<input type="radio" name="tipo" id="ptipo-n" value="n"  />
+						<label for="ptipo-n"><img src="img/carita_amarilla.png" alt="Neutral">Neutral</label>
+						<input type="radio" name="tipo" id="ptipo-d" value="d"  />
+						<label for="ptipo-d"><img src="img/carita_roja.png" alt="Desaprueba">Desaprueba</label>
+					</fieldset>
+					<textarea name="comentario" placeholder="Comentario"></textarea>
+					<input type="submit" value="Enviar opinión">
+				</form>
 			</section>
 			<footer data-role="footer">
 				<nav data-role="navbar">
@@ -269,6 +286,23 @@
 					<h3>Ver Paradas</h3>
 					<section class="stops"></section>
 				</div>
+
+				<h2>Participación Ciudadana</h2>
+				<form id="rate-route" class="rate">
+					<!-- TODO: fill this value with the current route id -->
+					<input type="hidden" name="object_id" value="2101">
+					<input type="hidden" name="model" value="lines">
+					<fieldset data-role="controlgroup" data-type="horizontal">
+						<input type="radio" name="tipo" id="rtipo-a" value="a"  />
+						<label for="rtipo-a"><img src="img/carita_verde.png" alt="Aprueba">Aprueba</label>
+						<input type="radio" name="tipo" id="rtipo-n" value="n"  />
+						<label for="rtipo-n"><img src="img/carita_amarilla.png" alt="Neutral">Neutral</label>
+						<input type="radio" name="tipo" id="rtipo-d" value="d"  />
+						<label for="rtipo-d"><img src="img/carita_roja.png" alt="Desaprueba">Desaprueba</label>
+					</fieldset>
+					<textarea name="comentario" placeholder="Comentario"></textarea>
+					<input type="submit" value="Enviar opinión">
+				</form>
 			</section>
 			<footer data-role="footer">
 				<nav data-role="navbar">
