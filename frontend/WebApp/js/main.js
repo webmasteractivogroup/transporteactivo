@@ -558,11 +558,13 @@ window.ta = {
 			});
 
 			// is favorite?
-			paradasf = localStorage["paradasf"].split(',');
-			if ($.inArray(parada.id.toString(), paradasf) != -1) {
-				$('#parada .add-fav').addClass('yellow');
-			} else {
-				$('#parada .add-fav').removeClass('yellow');
+			if (localStorage["paradasf"]) {
+				paradasf = localStorage["paradasf"].split(',');
+				if ($.inArray(parada.id.toString(), paradasf) != -1) {
+					$('#parada .add-fav').addClass('yellow');
+				} else {
+					$('#parada .add-fav').removeClass('yellow');
+				}
 			}
 		}
 		else {
@@ -633,11 +635,13 @@ window.ta = {
 			});
 
 			// is favorite?
-			rutasf = localStorage["rutasf"].split(',');
-			if ($.inArray(ruta.id.toString(), rutasf) != -1) {
-				$('#ruta .add-fav').addClass('yellow');
-			} else {
-				$('#ruta .add-fav').removeClass('yellow');
+			if (localStorage["rutasf"]) {
+				rutasf = localStorage["rutasf"].split(',');
+				if ($.inArray(ruta.id.toString(), rutasf) != -1) {
+					$('#ruta .add-fav').addClass('yellow');
+				} else {
+					$('#ruta .add-fav').removeClass('yellow');
+				}
 			}
 		}
 		else {
