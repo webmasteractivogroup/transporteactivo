@@ -150,7 +150,7 @@ window.ta = {
 				url: 'img/stop_pretroncal.png',
 			},
 			3: {
-				url: 'img/stop_auxiliar.png',
+				url: 'img/stop_alimentadora.png',
 			}
 			// 1: {
 			// 	url: 'img/stops_sprite_small.png',
