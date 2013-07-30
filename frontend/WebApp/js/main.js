@@ -651,8 +651,8 @@ window.ta = {
 
 // Favoritos page
 	$(document).on("pageshow", "#favoritos", function(event) {
-		$ul = $('#paradas-favoritas');
-		paradasf = localStorage["paradasf"].split(',');
+		// $ul = $('#paradas-favoritas');
+		// paradasf = localStorage["paradasf"].split(',');
 
 		// $.each(paradasf, function (i, val) {
 		// 	html += '<li data-tipo="' + val.tipo + '">';
