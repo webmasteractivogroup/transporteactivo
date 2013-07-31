@@ -3,20 +3,20 @@ var rowData = [];
 
 function RetroAlim(id, tipo, model) {
 
-	var self = Ti.UI.createScrollView({ 
-   contentWidth:'auto', 
-   contentHeight:'auto', 
-   top:0, 
-   showVerticalScrollIndicator:true, 
-   showHorizontalScrollIndicator:true,
-   layout:'vertical'
-});
- 
+	var self = Ti.UI.createScrollView({
+		contentWidth : 'auto',
+		contentHeight : 'auto',
+		top : 0,
+		showVerticalScrollIndicator : true,
+		showHorizontalScrollIndicator : true,
+		layout : 'vertical'
+	});
+
 	var comments = Ti.UI.createView({
 		layout : 'vertical',
 		width : Ti.UI.FILL,
 		height : Ti.UI.FILL,
-		bottom :'15%'
+		bottom : '15%'
 
 	});
 
@@ -54,7 +54,7 @@ function RetroAlim(id, tipo, model) {
 		borderWidth : 2,
 		borderColor : '#bbb',
 		borderRadius : 5,
-		top:'0dp'
+		top : '0dp'
 	});
 
 	var send = Ti.UI.createButton({
@@ -64,9 +64,7 @@ function RetroAlim(id, tipo, model) {
 	});
 
 	send.addEventListener('click', function() {
-	
-	
-	
+
 		var params = {
 			model : model,
 			object_id : id,
@@ -134,9 +132,7 @@ function RetroAlim(id, tipo, model) {
 		xhr.send(params);
 		Ti.API.log('reporte request enviado');
 	});
-	
 
-	
 	var json, com, i;
 	var url = "http://transporteactivo.com/api/v1/calificar/?id=" + id;
 	var xhr = Ti.Network.createHTTPClient({
@@ -151,13 +147,13 @@ function RetroAlim(id, tipo, model) {
 				var color;
 				if (com.tipo === 'positivo') {
 					color = '/images/carita_verde.png';
-				} else if (com.tipo  === 'comentario') {
+				} else if (com.tipo === 'comentario') {
 					color = '/images/carita_amarilla.png';
 				} else {
 					color = '/images/carita_roja.png';
 				}
 
-var row = Ti.UI.createTableViewRow({
+				var row = Ti.UI.createTableViewRow({
 					height : Ti.UI.SIZE,
 					width : Ti.UI.FILL,
 					layout : 'horizontal'
@@ -165,8 +161,7 @@ var row = Ti.UI.createTableViewRow({
 
 				var imagenView = Ti.UI.createImageView({
 					left : '5dp',
-					top : '5dp',
-					bottom : '5dp',
+					top : '10dp',
 					height : '60dp',
 					width : '60dp',
 					image : color
@@ -175,27 +170,25 @@ var row = Ti.UI.createTableViewRow({
 				var labelComment = Ti.UI.createLabel({
 					top : '10dp',
 					color : 'black',
-					bottom : '10dp',
 					left : '10dp',
-					right: '5dp',
+					bottom : '5dp',
+					right : '5dp',
 					height : Ti.UI.SIZE,
-					width : Ti.UI.FILL,
+					width : '70%',
 					text : com.comentario,
 					font : {
 						fontSize : '14dp'
 					}
 
 				});
-				
 
 				row.add(imagenView);
 				row.add(labelComment);
 
 				rowData[i] = row;
-			
 
 			}
-				tableView.data = rowData;
+			tableView.data = rowData;
 
 		},
 		onerror : function(e) {
@@ -207,15 +200,22 @@ var row = Ti.UI.createTableViewRow({
 		timeout : 5000
 	});
 
-
 	xhr.open("GET", url);
 	xhr.send();
 
 	reporta.add(imagen);
 	reporta.add(texto);
 	reporta.add(send);
-	self.add(comments);
-	self.add(reporta);
+	
+	if (tipo != 0) {
+		self.add(comments);
+		self.add(reporta);
+		
+	}else{
+		comments.bottom =0;
+		self.add(comments);
+	}
+
 	return self;
 }
 

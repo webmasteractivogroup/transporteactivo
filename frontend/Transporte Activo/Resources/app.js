@@ -37,8 +37,12 @@ if (Ti.version < 1.8 ) {
 	}
 	
 	*/
+	
+	
 	var Home = require('ui/common/Home');
 	new Home().open();
+	
+	
 	
 })();
 

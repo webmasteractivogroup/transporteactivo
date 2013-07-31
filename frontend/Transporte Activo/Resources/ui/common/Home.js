@@ -1,10 +1,12 @@
+var times = 0;
+
 function Home() {
 
+	
 	var self = Ti.UI.createWindow({
 		width : Ti.UI.FILL,
 		height : Ti.UI.FILL,
 		backgroundColor : '#1abbee',
-	
 
 	});
 	self.orientationModes = [Ti.UI.PORTRAIT];
@@ -19,8 +21,8 @@ function Home() {
 	});
 
 	var scroll = Ti.UI.createScrollView({
-		left:'5dp',
-		right:'5dp',
+		left : '5dp',
+		right : '5dp',
 		contentWidth : 'auto',
 		contentHeight : 'auto',
 		showVerticalScrollIndicator : true,
@@ -28,12 +30,12 @@ function Home() {
 		width : Ti.UI.FILL,
 		top : '20%',
 		backgroundColor : 'white',
-		borderRadius:'4'
+		borderRadius : '4'
 	});
 
 	if (Ti.Platform.osname === 'android') {
 		if (Titanium.Platform.displayCaps.platformHeight > 800) {
-			scroll.contentHeight= Titanium.Platform.displayCaps.platformHeight+100;
+			scroll.contentHeight = Titanium.Platform.displayCaps.platformHeight + 100;
 		} else {
 			scroll.contentHeight = Titanium.Platform.displayCaps.platformHeight + Titanium.Platform.displayCaps.platformHeight * 0.7;
 		};
@@ -208,7 +210,6 @@ function Home() {
 		},
 		left : '10dp',
 		width : '50%',
-		height : '20dp',
 		height : '20dp'
 	});
 	var rowRole3 = Ti.UI.createLabel({
@@ -451,7 +452,14 @@ function Home() {
 				activity.invalidateOptionsMenu();
 			});
 		}
-		tabGroup.open();
+
+		if (times < 1) {
+			times++;
+		
+
+			tabGroup.open();
+				
+		}
 
 	});
 
@@ -466,6 +474,8 @@ function Home() {
 	tutorial_button.addEventListener('click', function() {
 
 		////  EVENTO TUTORIAL
+		var Tutorial = require('ui/common/Tutorial');
+						Tutorial.play('L1rH1teIgxs');
 
 	});
 
