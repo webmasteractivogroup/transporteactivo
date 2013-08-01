@@ -26,10 +26,7 @@ class ScheduleProfiles(models.Model):
         db_table = 'SCHEDULEPROFILES'
 
 
-class Stops(models.Model):
-    """
-        Registra la entidad "Parada" y sus principales atributos, se guardan todas las paradas por cada planeación.
-    """
+class StopsAbstract(models.Model):
     STOPID = models.IntegerField(primary_key=True)
     PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
     SHORTNAME = models.CharField(max_length=10)
@@ -39,6 +36,14 @@ class Stops(models.Model):
     DECIMALLONGITUDE = models.FloatField(null=True)
     DECIMALLATITUDE = models.FloatField(null=True)
 
+    class Meta:
+        abstract = True
+
+
+class Stops(StopsAbstract):
+    """
+        Registra la entidad "Parada" y sus principales atributos, se guardan todas las paradas por cada planeación.
+    """
     class Meta:
         db_table = 'STOPS'
 
@@ -104,7 +109,7 @@ class ScheduleTypes(models.Model):
     SCHEDULETYPEID = models.IntegerField(primary_key=True)
     PLANVERSIONID = models.ForeignKey(PlanVersions, db_column=u'PLANVERSIONID')
     SHORTNAME = models.CharField(max_length=10)
-    DESCRIPTION = models.CharField(max_length=20)
+    DESCRIPTION = models.CharField(max_length=50)
 
     class Meta:
         db_table = 'SCHEDULETYPES'

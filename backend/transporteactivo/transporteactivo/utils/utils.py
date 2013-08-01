@@ -16,6 +16,8 @@ tz = timezone.get_current_timezone()
 
 PROJECT_DIR = getattr(settings, 'PROJECT_DIR', '')
 DATA_DIR = os.path.join(PROJECT_DIR, 'sgco_tables', 'planversion46')
+PLANVERSIONID = models.PlanVersions.objects.get(pk=46)
+
 ####################################################################################
 #  PLANVERSIONS
 
@@ -41,10 +43,7 @@ def load_plan_versions():
         except DatabaseError:
             connection._rollback()
             continue
-    print(models.PlanVersions.objects.count())
 ####################################################################################
-PLANVERSIONID = models.PlanVersions.objects.get(pk=46)
-
 # SCHEDULEPROFILES
 
 
@@ -60,7 +59,7 @@ def load_schedule_profiles():
         DESCRIPTION = r[2]
         REGISTERDATE = timezone.make_aware(datetime.strptime(r[4], l_format), tz)
         models.ScheduleProfiles.objects.create(SCHEDULEPROFILEID=SCHEDULEPROFILEID, SHORTNAME=SHORTNAME, DESCRIPTION=DESCRIPTION,
-                                        PLANVERSIONID=PLANVERSIONID, REGISTERDATE=REGISTERDATE)
+                                               PLANVERSIONID=PLANVERSIONID, REGISTERDATE=REGISTERDATE)
     print(models.ScheduleProfiles.objects.count())
 ####################################################################################
 # STOPS
@@ -97,8 +96,8 @@ def load_arcs():
 
     for r in results:
         ARCID = int(r[0])
-        STOPS_STOPID_START = int(r[2])
-        STOPS_STOPID_END = int(r[3])
+        STOPS_STOPID_START = models.Stops.objects.get(pk=int(r[2]))
+        STOPS_STOPID_END = models.Stops.objects.get(pk=int(r[3]))
         STARTPOINT = unicode(r[4], 'latin-1')
         ENDPOINT = unicode(r[5], 'latin-1')
         DESCRIPTION = unicode(r[6], 'latin-1')
@@ -107,7 +106,7 @@ def load_arcs():
         except ValueError:
             ARCLENGTH = 0
         models.Arcs.objects.create(ARCID=ARCID, PLANVERSIONID=PLANVERSIONID, STOPS_STOPID_START=STOPS_STOPID_START, STOPS_STOPID_END=STOPS_STOPID_END,
-                            STARTPOINT=STARTPOINT, ENDPOINT=ENDPOINT, DESCRIPTION=DESCRIPTION, ARCLENGTH=ARCLENGTH)
+                                   STARTPOINT=STARTPOINT, ENDPOINT=ENDPOINT, DESCRIPTION=DESCRIPTION, ARCLENGTH=ARCLENGTH)
     print(models.Arcs.objects.count())
 ####################################################################################
 # SCHEDULETYPES
@@ -172,14 +171,14 @@ def load_line_arcs():
     results = results[1:]
     for r in results:
         LINEARCID = int(r[0])
-        LINEID = int(r[1])
-        ARCID = int(r[2])
+        LINEID = models.Lines.objects.get(pk=int(r[1]))
+        ARCID = models.Arcs.objects.get(pk=int(r[2]))
         ARCSEQUENCE = int(r[3])
         ORIENTATION = int(r[4])
         LINEVARIANT = int(r[6])
         REGISTERDATE = timezone.make_aware(datetime.strptime(r[7], l_format), tz)
         models.LinesArcs.objects.create(LINEARCID=LINEARCID, LINEID=LINEID, ARCID=ARCID, ARCSEQUENCE=ARCSEQUENCE, ORIENTATION=ORIENTATION,
-                                 LINEVARIANT=LINEVARIANT, REGISTERDATE=REGISTERDATE, PLANVERSIONID=PLANVERSIONID)
+                                        LINEVARIANT=LINEVARIANT, REGISTERDATE=REGISTERDATE, PLANVERSIONID=PLANVERSIONID)
     print(models.LinesArcs.objects.count())
 ####################################################################################
 # TASKS
@@ -211,8 +210,8 @@ def load_line_stops():
         LINESTOPID = int(r[0])
         STOPSEQUENCE = int(r[1])
         ORIENTATION = int(r[2])
-        LINEID = int(r[3])
-        STOPID = int(r[4])
+        LINEID = models.Lines.objects.get(pk=int(r[3]))
+        STOPID = models.Stops.objects.get(pk=int(r[4]))
         LINEVARIANT = int(r[6])
         REGISTERDATE = timezone.make_aware(datetime.strptime(r[7], l_format), tz)
         LINEVARIANTTYPE = int(r[8])

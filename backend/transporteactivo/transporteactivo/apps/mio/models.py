@@ -2,10 +2,10 @@
 from django.contrib.gis.db import models
 from django.contrib.gis.geos import Point
 
-from sgco.models import Stops
+from sgco.models import StopsAbstract
 
 
-class MioStops(Stops):
+class MioStops(StopsAbstract):
     """Parada que extiende el modelo de parada entregado por metrocali"""
     location = models.PointField(null=True)
     tipo_parada = models.IntegerField(null=True)

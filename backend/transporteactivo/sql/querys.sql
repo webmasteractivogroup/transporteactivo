@@ -68,33 +68,32 @@ GROUP BY ls."STOPID";
 
 
 -- Query que crea la vista para el autocompletado
-CREATE OR REPLACE VIEW search AS
-SELECT s."STOPID" AS id, s."LONGNAME" AS nombre, CAST(ms.tipo_parada AS varchar) AS extra, 'p' as tipo
-FROM "STOPS" s
-JOIN mio_miostops ms ON ms.stops_ptr_id = s."STOPID"
-UNION
-SELECT l."LINEID" AS id, l."SHORTNAME" AS nombre, l."DESCRIPTION" AS extra, 'r' as tipo
-FROM "LINES" l
-ORDER BY tipo DESC, nombre;
+-- CREATE OR REPLACE VIEW search AS
+-- SELECT s."STOPID" AS id, s."LONGNAME" AS nombre, CAST(ms.tipo_parada AS varchar) AS extra, 'p' as tipo
+-- FROM "STOPS" s
+-- JOIN mio_miostops ms ON ms.stops_ptr_id = s."STOPID"
+-- UNION
+-- SELECT l."LINEID" AS id, l."SHORTNAME" AS nombre, l."DESCRIPTION" AS extra, 'r' as tipo
+-- FROM "LINES" l
+-- ORDER BY tipo DESC, nombre;
 
--- Modificacion query Busqueda
-CREATE OR REPLACE VIEW search AS
-SELECT s."STOPID" AS id, s."LONGNAME" AS nombre, CAST(ms.tipo_parada AS varchar) AS extra, 'p' as tipo,
-       CAST(s."DECIMALLATITUDE" AS varchar)  || ';' || CAST(s."DECIMALLONGITUDE" AS varchar) AS extra2
-FROM "STOPS" s
-JOIN mio_miostops ms ON ms.stops_ptr_id = s."STOPID"
-UNION
-SELECT l."LINEID" AS id, l."SHORTNAME" AS nombre, l."DESCRIPTION" AS extra, 'r' as tipo, CAST(larcs."ORIENTATION" AS varchar) as extra2
-FROM "LINES" l
-JOIN "LINESARCS" larcs ON larcs."LINEID" = l."LINEID"
-ORDER BY tipo DESC, nombre;
+-- -- Modificacion query Busqueda
+-- CREATE OR REPLACE VIEW search AS
+-- SELECT s."STOPID" AS id, s."LONGNAME" AS nombre, CAST(ms.tipo_parada AS varchar) AS extra, 'p' as tipo,
+--        CAST(s."DECIMALLATITUDE" AS varchar)  || ';' || CAST(s."DECIMALLONGITUDE" AS varchar) AS extra2
+-- FROM "STOPS" s
+-- JOIN mio_miostops ms ON ms.stops_ptr_id = s."STOPID"
+-- UNION
+-- SELECT l."LINEID" AS id, l."SHORTNAME" AS nombre, l."DESCRIPTION" AS extra, 'r' as tipo, CAST(larcs."ORIENTATION" AS varchar) as extra2
+-- FROM "LINES" l
+-- JOIN "LINESARCS" larcs ON larcs."LINEID" = l."LINEID"
+-- ORDER BY tipo DESC, nombre;
 
 -- Modificacion Busqueda usando linevariant
 CREATE OR REPLACE VIEW search AS
-SELECT s."STOPID" AS id, s."LONGNAME" AS nombre, CAST(ms.tipo_parada AS varchar) AS extra, 'p' as tipo,
-       CAST(s."DECIMALLATITUDE" AS varchar)  || ';' || CAST(s."DECIMALLONGITUDE" AS varchar) AS extra2, s."SHORTNAME" as linevariant
-FROM "STOPS" s
-JOIN mio_miostops ms ON ms.stops_ptr_id = s."STOPID"
+SELECT ms."STOPID" AS id, ms."LONGNAME" AS nombre, CAST(ms.tipo_parada AS varchar) AS extra, 'p' as tipo,
+       CAST(ms."DECIMALLATITUDE" AS varchar)  || ';' || CAST(ms."DECIMALLONGITUDE" AS varchar) AS extra2, ms."SHORTNAME" as linevariant
+FROM mio_miostops ms
 UNION
 SELECT lstops."LINEID" AS id , l."SHORTNAME" AS nombre,  l."DESCRIPTION" AS extra, 'r' as tipo, CAST(lstops."ORIENTATION" as varchar) as extra2, 
 CAST(MIN(lstops."LINEVARIANT") as varchar) AS linevariant
