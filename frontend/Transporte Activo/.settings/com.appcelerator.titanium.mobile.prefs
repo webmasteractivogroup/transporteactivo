@@ -1,8 +1,9 @@
+android/ATTR_MINIFY=true
 android/ATTR_PROJECT_NAME=Transporte Activo
 android/abi=armeabi
 android/distribute_path=/Users/Fiebiger/Documents/Titanium_Studio_Workspace/transporteactivo/frontend/AndroidStoreData
 android/keystore_alias=transporteActivo
-android/keystore_password=obama123
+android/keystore_password=
 android/keystore_path=/Users/Fiebiger/Dropbox/TransporteActivo/APP NATIVA KEY/ciudKey.keystore
 android/recent_output=/Users/Fiebiger/Documents/Titanium_Studio_Workspace/transporteactivo/frontend/AndroidStoreData
 android/sdk_version=Google APIs (Android 2.2)

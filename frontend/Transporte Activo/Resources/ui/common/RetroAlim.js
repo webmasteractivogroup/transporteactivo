@@ -2,6 +2,7 @@ var texto;
 var rowData = [];
 
 function RetroAlim(id, tipo, model) {
+	var rowData = [];
 
 	var self = Ti.UI.createScrollView({
 		contentWidth : 'auto',
@@ -81,34 +82,54 @@ function RetroAlim(id, tipo, model) {
 				var row = Ti.UI.createTableViewRow({
 					height : Ti.UI.SIZE,
 					width : Ti.UI.FILL,
-					layout : 'horizontal'
+
 				});
 
-				var imagenView = Ti.UI.createImageView({
-					left : '5dp',
+				var container = Ti.UI.createView({
+					width : 'auto',
+					height : Ti.UI.SIZE,
 					top : '5dp',
 					bottom : '5dp',
+					layout : 'horizontal'
+
+				});
+				var imagenView = Ti.UI.createImageView({
+					left : '5dp',
 					height : '60dp',
 					width : '60dp',
 					image : imagen.image
 				})
+				if (Ti.Platform.osname === 'android') {
+					var labelComment = Ti.UI.createLabel({
 
-				var labelComment = Ti.UI.createLabel({
-					top : '10dp',
-					color : 'black',
-					bottom : '10dp',
-					left : '10dp',
-					height : Ti.UI.SIZE,
-					width : Ti.UI.FILL,
-					text : texto.value,
-					font : {
-						fontSize : '14dp'
-					}
+						color : 'black',
+						left : '10dp',
+						right : '5dp',
+						height : Ti.UI.SIZE,
+						width : '70%',
+						text : texto.value,
+						font : {
+							fontSize : '14dp'
+						}
+					});
+				} else {
+					var labelComment = Ti.UI.createLabel({
 
-				});
+						color : 'black',
+						left : '10dp',
+						right : '5dp',
+						height : Ti.UI.SIZE,
+						width : Ti.UI.FILL,
+						text : texto.value,
+						font : {
+							fontSize : '14dp'
+						}
+					});
+				}
 
-				row.add(imagenView);
-				row.add(labelComment);
+				container.add(imagenView);
+				container.add(labelComment);
+				row.add(container);
 
 				rowData[rowData.length] = row;
 				tableView.data = rowData;
@@ -156,35 +177,54 @@ function RetroAlim(id, tipo, model) {
 				var row = Ti.UI.createTableViewRow({
 					height : Ti.UI.SIZE,
 					width : Ti.UI.FILL,
-					layout : 'horizontal'
 				});
 
+				var container = Ti.UI.createView({
+					width : 'auto',
+					height : Ti.UI.SIZE,
+					top : '5dp',
+					bottom : '5dp',
+					layout : 'horizontal'
+
+				});
 				var imagenView = Ti.UI.createImageView({
 					left : '5dp',
-					top : '10dp',
+
 					height : '60dp',
 					width : '60dp',
 					image : color
-				})
-
-				var labelComment = Ti.UI.createLabel({
-					top : '10dp',
-					color : 'black',
-					left : '10dp',
-					bottom : '5dp',
-					right : '5dp',
-					height : Ti.UI.SIZE,
-					width : '70%',
-					text : com.comentario,
-					font : {
-						fontSize : '14dp'
-					}
-
 				});
+				if (Ti.Platform.osname === 'android') {
+					var labelComment = Ti.UI.createLabel({
 
-				row.add(imagenView);
-				row.add(labelComment);
+						color : 'black',
+						left : '10dp',
+						right : '5dp',
+						height : Ti.UI.SIZE,
+						width : '70%',
+						text : com.comentario,
+						font : {
+							fontSize : '14dp'
+						}
+					});
+				} else {
+					var labelComment = Ti.UI.createLabel({
 
+						color : 'black',
+						left : '10dp',
+						right : '5dp',
+						height : Ti.UI.SIZE,
+						width : Ti.UI.FILL,
+						text : com.comentario,
+						font : {
+							fontSize : '14dp'
+						}
+					});
+				}
+
+				container.add(imagenView);
+				container.add(labelComment);
+				row.add(container);
 				rowData[i] = row;
 
 			}
@@ -206,13 +246,13 @@ function RetroAlim(id, tipo, model) {
 	reporta.add(imagen);
 	reporta.add(texto);
 	reporta.add(send);
-	
+
 	if (tipo != 0) {
 		self.add(comments);
 		self.add(reporta);
-		
-	}else{
-		comments.bottom =0;
+
+	} else {
+		comments.bottom = 0;
 		self.add(comments);
 	}
 
