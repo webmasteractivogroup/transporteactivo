@@ -51,6 +51,11 @@ window.ta = {
 		P: "img/bus_padron.png",
 		A: "img/bus_alimentador.png"
 	},
+	faces_images: {
+		positivo: "img/carita_verde.png",
+		negativo: "img/carita_amarilla.png",
+		neutro: "img/carita_roja.png"
+	},
 	buses_names: {
 		E: "Expreso (Articulado)",
 		T: "Articulado",
@@ -398,22 +403,29 @@ window.ta = {
 				},
 			});
 		},
-		getRates: function(id, model, tipo) {
+		getRatings: function($ratings, id, model, tipo) {
 			$.ajax({
 				url: ta.BASE_URL+"api/v1/calificar/",
 				type: "get",
 				data: {id: id, model: model, tipo: tipo},
 				success: function(data, textStatus, jqXHR) {
 					if (textStatus === "success") {
-						// toast("Reporte enviado con éxito.");
-						alert(data);
-						console.log(data);
+						html = '';
+						$.each(data, function (i, val) {
+							html += '<li>';
+							html += '<img src="' + ta.faces_images[val.tipo] + '" alt="Aprueba">';
+							html += val.comentario;
+							html += "</li>";
+						});
+						$ratings
+							.html(html)
+							.listview("refresh")
+							.trigger("updatelayout");
 					}
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
 					// toast("Ocurrió un error enviando el reporte.");
 				},
-
 			});
 		}
 	},
@@ -624,8 +636,8 @@ window.ta = {
 			}
 
 			// fill rate popup
-			$("#parada-popup")
-				.find('input[name=object_id]').val(parada.id);
+			ta.ratings.getRatings($("#parada-popup .ratings"), parada.id, 'miostops');
+			$("#parada-popup").find('input[name=object_id]').val(parada.id);
 		}
 		else {
 			jQuery.mobile.changePage("#buscar");
@@ -719,8 +731,8 @@ window.ta = {
 			}
 
 			// fill rate popup
-			$("#ruta-popup")
-				.find('input[name=object_id]').val(ruta.id);
+			ta.ratings.getRatings($("#ruta-popup .ratings"), ruta.id, 'lines');
+			$("#ruta-popup").find('input[name=object_id]').val(ruta.id);
 		}
 		else {
 			jQuery.mobile.changePage("#buscar");
