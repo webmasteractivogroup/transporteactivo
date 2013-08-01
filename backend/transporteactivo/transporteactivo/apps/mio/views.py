@@ -85,21 +85,11 @@ class BusquedaViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = BusquedaSerializer
 
     def get_queryset(self):
-        queryset = []
+        queryset = self.model.objects.filter(id__lt=600000)
         q = self.request.QUERY_PARAMS.get('q', None)
-
         if q:
-            # try:
-            #   query = r'(^|.*\s)%s.*' % unidecode(q)
-            #   querystring = """   SELECT s.*
-            #                       FROM search s
-            #                       WHERE unaccent(s.nombre || ' ' || s.extra) ~* %s"""
-            #   queryset = Busqueda.objects.raw(querystring, [query])
-            # except DatabaseError, e:
             query = r'(^|.*\s)%s.*' % q
-            queryset = self.model.objects.filter(nombre__iregex=query)
-                # raise e
-
+            queryset = queryset.filter(nombre__iregex=query)
         return queryset
 
 
