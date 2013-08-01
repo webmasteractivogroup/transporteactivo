@@ -98,7 +98,7 @@ UNION
 SELECT lstops."LINEID" AS id , l."SHORTNAME" AS nombre,  l."DESCRIPTION" AS extra, 'r' as tipo, CAST(lstops."ORIENTATION" as varchar) as extra2, 
 CAST(MIN(lstops."LINEVARIANT") as varchar) AS linevariant
 FROM "LINESTOPS" lstops
-INNER JOIN "LINES" l ON (lstops."LINEID" = l."LINEID") GROUP BY l."SHORTNAME", lstops."LINEID", l."DESCRIPTION", lstops."ORIENTATION" 
+INNER JOIN "LINES" l ON (lstops."LINEID" = l."LINEID" AND l."SHORTNAME" NOT LIKE 'R%') GROUP BY l."SHORTNAME", lstops."LINEID", l."DESCRIPTION", lstops."ORIENTATION" 
 ORDER BY tipo DESC, nombre;
 
 

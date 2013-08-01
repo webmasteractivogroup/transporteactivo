@@ -50,10 +50,10 @@ class RutasPorParadaViewSet(viewsets.ReadOnlyModelViewSet):
     serializer_class = RutasPorParadaSerializer
 
     def get_queryset(self):
-        queryset = []
+        queryset = self.model.objects.exclude(LINEID__SHORTNAME__istartswith='R')
         parada_id = self.request.QUERY_PARAMS.get('parada_id', None)
         if parada_id:
-            queryset = self.model.objects.filter(STOPID=parada_id, LINEVARIANTTYPE=1).distinct('LINEID')
+            queryset = queryset.filter(STOPID=parada_id, LINEVARIANTTYPE=1).distinct('LINEID')
         return queryset
 
 
