@@ -23,9 +23,6 @@ class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
         tipo_query_string = self.request.QUERY_PARAMS.getlist('tipo[]', [])
 
         if south_west_query_string and north_east_query_string:
-            # si recibimos dos puntos, enviamos las paradas filtradas dentro de esos 2 puntos
-
-            # completar el polígono y construirlo
             north_east_lat = float(north_east_query_string[0])
             north_east_lng = float(north_east_query_string[1])
             south_west_lat = float(south_west_query_string[0])
@@ -43,10 +40,8 @@ class ParadasCercanasViewSet(viewsets.ReadOnlyModelViewSet):
             else:
                 queryset = queryset.filter(location__contained=poly)
         else:
-            # si no recibimos un punto, enviamos TODAS las paradas
             if tipo_query_string:
                 queryset = queryset.filter(tipo_parada__in=tipo_query_string)
-
         return queryset
 
 
@@ -57,11 +52,8 @@ class RutasPorParadaViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         queryset = []
         parada_id = self.request.QUERY_PARAMS.get('parada_id', None)
-
         if parada_id:
-            queryset = self.model.objects.filter(STOPID=parada_id).distinct('LINEID')
-            # TODO: Evaluar la necesidad del distinct
-
+            queryset = self.model.objects.filter(STOPID=parada_id, LINEVARIANTTYPE=1).distinct('LINEID')
         return queryset
 
 
@@ -100,9 +92,7 @@ class BusquedaParadasViewSet(viewsets.ReadOnlyModelViewSet):
     def get_queryset(self):
         queryset = []
         q = self.request.QUERY_PARAMS.get('q', None)
-
         if q:
             query = r'(^|.*\s)%s.*' % q
             queryset = MioStops.objects.filter(nombre__iregex=query)
-
         return queryset
