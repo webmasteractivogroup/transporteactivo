@@ -1,4 +1,55 @@
-﻿-- Query que crea la vista con los stoptype generados.
+SELECT distinct(ls."STOPID"), s."SHORTNAME", s."LONGNAME"
+FROM "LINESTOPS" ls
+JOIN "LINES" l ON ls."LINEID" = l."LINEID"
+JOIN "STOPS" s ON ls."STOPID" = s."STOPID"
+WHERE l."SHORTNAME" ~ '^E';
+
+
+
+--- Donde solo paran los expresos
+SELECT distinct(ls."STOPID"), s."LONGNAME", substring(l."SHORTNAME" from 1 for 1) as "STOPTYPE"
+FROM "LINESTOPS" ls
+JOIN "LINES" l ON ls."LINEID" = l."LINEID"
+JOIN "STOPS" s ON ls."STOPID" = s."STOPID"
+WHERE l."SHORTNAME" LIKE 'E%'
+ORDER BY ls."STOPID";
+
+
+---- otra
+SELECT distinct(ls."STOPID"),
+      case substring(l."SHORTNAME" from 1 for 1)
+          when 'E' then 1
+          when 'T' then 1
+          when 'P' then 2
+          when 'A' then 3
+      end as "STOPTYPE",
+      s."LONGNAME"
+FROM "LINESTOPS" ls
+JOIN "LINES" l ON ls."LINEID" = l."LINEID"
+JOIN "STOPS" s ON ls."STOPID" = s."STOPID"
+WHERE l."SHORTNAME" NOT LIKE 'R%'
+ORDER BY ls."STOPID";
+
+
+
+CREATE VIEW stop_types AS
+SELECT distinct(ls."STOPID"),
+     	min(case substring(l."SHORTNAME" from 1 for 1)
+              when 'E' then 1
+              when 'T' then 1
+              when 'P' then 2
+              when 'A' then 3
+        end) as "STOPTYPE"
+FROM "LINESTOPS" ls
+JOIN "LINES" l ON ls."LINEID" = l."LINEID"
+JOIN "STOPS" s ON ls."STOPID" = s."STOPID"
+WHERE l."SHORTNAME" NOT LIKE 'R%'
+GROUP BY ls."STOPID";
+
+
+
+
+-- Query que crea la vista con los stoptype generados.
 CREATE OR REPLACE VIEW stop_types AS
 SELECT  distinct(ls."STOPID"),
     min(case substring(l."SHORTNAME" from 1 for 1)
