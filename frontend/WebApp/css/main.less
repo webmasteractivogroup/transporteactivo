@@ -314,6 +314,35 @@
 			border-top: none;
 			border-bottom: none;
 		}
+		.ui-popup-container {
+			min-width: 66%;
+		}
+		.ui-popup {
+			h2 {
+				margin-right: auto;
+				margin-left: auto;
+				padding: 0 45px;
+			}
+			h3, h4 {
+				margin: 0;
+				padding: 0;
+			}
+			.ui-content {
+				height: auto !important;
+				max-width: 320px;
+			}
+			.ui-btn-left {
+				display: none;
+			}
+		}
+		.ui-controlgroup-horizontal {
+			.ui-checkbox, .ui-radio {
+				.ui-btn-inner {
+					padding: .6em 0;
+				}
+			}
+		}
+
 
 	// Specific pages layouts
 		#inicio {
@@ -355,14 +384,14 @@
 				margin-top: 0;
 			}
 		}
-		#parada, #ruta {
-			h2, h3 {
-				margin: 0.5em 0 0.25em;
-				&:first-child {
-					margin-top: 0;
-				}
-			}
-		}
+		// #parada, #ruta {
+		// 	h2, h3 {
+		// 		margin: 0.5em 0 0.25em;
+		// 		&:first-child {
+		// 			margin-top: 0;
+		// 		}
+		// 	}
+		// }
 		#ruta {
 			.type {
 				line-height: 40px;
@@ -418,24 +447,6 @@
 			height: 100%;
 			img {
 				max-width: initial; // fixes broken infowindow layout
-			}
-		}
-		.ui-popup-container {
-			min-width: 66%;
-		}
-		#info-popup {
-			h2 {
-				margin-right: auto;
-				margin-left: auto;
-				padding: 0 45px;
-			}
-			h3, h4 {
-				margin: 0;
-				padding: 0;
-			}
-			.ui-content {
-				height: auto !important;
-				max-width: 320px;
 			}
 		}
 		.routes {

@@ -377,7 +377,12 @@ window.ta = {
 	ratings: {
 		// model: [miostops|lines]
 		// tipo: [a|n|d] (aprueba, comentario, desaprueba)
-		rate: function(object_id, model, tipo, comentario) {
+		rate: function($form) {
+			object_id = $form.find('[name=object_id]').val();
+			model = $form.find('[name=model]').val();
+			tipo = $form.find('[name=tipo]').val();
+			comentario = $form.find('[name=comentario]').val();
+
 			$.ajax({
 				url: ta.BASE_URL+"api/v1/calificar/",
 				type: "post",
@@ -385,12 +390,12 @@ window.ta = {
 				success: function(data, textStatus, jqXHR) {
 					if (textStatus === "success") {
 						toast("Reporte enviado con éxito.");
+						$form.get(0).reset();
 					}
 				},
 				error: function(jqXHR, textStatus, errorThrown) {
 					toast("Ocurrió un error enviando el reporte.");
 				},
-
 			});
 		},
 		getRates: function(id, model, tipo) {
@@ -544,6 +549,18 @@ window.ta = {
 			.on('click', '.add-fav', function () {
 				ta.favs.toggleFav($(this), "paradasf");
 			});
+
+		// associate rate button to popup
+		$('#reportar-parada').click(function(){
+			$('#parada-popup').popup('open');
+		});
+		// reset form
+		$('#parada-popup form').get(0).reset();
+		// override submit
+		$('#parada-popup form').submit(function(){
+			ta.ratings.rate($(this));
+			// return false;
+		});
 	});
 
 	$(document).on("pageshow", "#parada", function(event) {
@@ -605,6 +622,10 @@ window.ta = {
 					$('#parada .add-fav').removeClass('yellow');
 				}
 			}
+
+			// fill rate popup
+			$("#parada-popup")
+				.find('input[name=object_id]').val(parada.id);
 		}
 		else {
 			jQuery.mobile.changePage("#buscar");
@@ -623,6 +644,20 @@ window.ta = {
 			.on('click', '.add-fav', function () {
 				ta.favs.toggleFav($(this), "rutasf");
 			});
+
+		// associate rate button to popup
+		$('#reportar-ruta').click(function(){
+			$('#ruta-popup').popup('open');
+		});
+		// reset form
+		$('#ruta-popup form').get(0).reset();
+		// override submit
+		$('#ruta-popup form').submit(function(){
+			ta.ratings.rate($(this));
+			// return false;
+		});
+
+
 	});
 
 	$(document).on("pageshow", "#ruta", function(event) {
@@ -682,6 +717,10 @@ window.ta = {
 					$('#ruta .add-fav').removeClass('yellow');
 				}
 			}
+
+			// fill rate popup
+			$("#ruta-popup")
+				.find('input[name=object_id]').val(ruta.id);
 		}
 		else {
 			jQuery.mobile.changePage("#buscar");
