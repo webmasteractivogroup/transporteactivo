@@ -18,7 +18,7 @@ function Menu() {
 		top : '10dp'
 
 	});
-	
+
 	var box = Ti.UI.createView({
 
 		backgroundColor : '#1abbee',
@@ -45,7 +45,7 @@ function Menu() {
 
 	logo.add(imagen);
 	logo.add(texto);
-	
+
 	var mensaje = Ti.UI.createLabel({
 		text : 'Somos ciudadanos colaborando para mejorar las ciudades! Colabora tu también',
 		left : '15dp',
@@ -57,7 +57,6 @@ function Menu() {
 		},
 		color : 'black'
 	});
-
 
 	var volver = Ti.UI.createButton({
 		title : 'Volver',
@@ -82,7 +81,8 @@ function Menu() {
 	tutorial_button.addEventListener('click', function() {
 
 		////  EVENTO TUTORIAL
-
+		var Tutorial = require('ui/common/Tutorial');
+		Tutorial.play('L1rH1teIgxs');
 	});
 
 	var acerca_nos_button = Ti.UI.createButton({
@@ -92,28 +92,25 @@ function Menu() {
 		left : '15dp',
 		top : '10dp'
 	});
-acerca_nos_button.addEventListener('click', function() {
+	acerca_nos_button.addEventListener('click', function() {
 		var AcercaDeWindow = require('ui/common/AcercaDe');
 		var wtbo = new AcercaDeWindow();
 		wtbo.open();
 	});
-	
-	
-var texto2 = Ti.UI.createLabel({
+
+	var texto2 = Ti.UI.createLabel({
 		text : 'Una iniciativa de',
-		left:'10dp',
+		left : '10dp',
 		color : 'black',
 		textAlign : 'left',
 		font : {
 			fontSize : '16dp',
 			fontWeight : 'bold'
 		},
-		top:'290 dp'
-	});	
-	
+		top : '290 dp'
+	});
 
-	
-  var box2 = Ti.UI.createView({
+	var box2 = Ti.UI.createView({
 
 		backgroundColor : '#1abbee',
 		borderRadius : '5',
@@ -125,27 +122,25 @@ var texto2 = Ti.UI.createLabel({
 	});
 
 	var ciuds = Ti.UI.createImageView({
-		width :Ti.UI.FILL,
+		width : Ti.UI.FILL,
 		height : '30dp',
-		left:'10dp',
-		right:'10dp',
+		left : '10dp',
+		right : '10dp',
 		image : '/images/logo-ciudadanos.png'
 	});
 	box2.addEventListener('click', function() {
 
-	    
-		Titanium.Platform.openURL('http://www.ciudadanosactivos.com'); 
+		Titanium.Platform.openURL('http://www.ciudadanosactivos.com');
 
 	});
 	box2.add(ciuds);
-	
+
 	self.add(box);
 	self.add(mensaje);
 	self.add(texto2);
 	self.add(box2);
 	box.add(tutorial_button);
 	box.add(acerca_nos_button);
-	
 
 	self.add(logo);
 	self.add(volver);
