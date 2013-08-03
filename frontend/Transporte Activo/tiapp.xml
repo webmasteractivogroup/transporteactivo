@@ -2,7 +2,7 @@
 <ti:app xmlns:ti="http://ti.appcelerator.org">
 	<id>com.ciudsactivos.transporteactivo</id>
 	<name>Transporte Activo</name>
-	<version>1.0</version>
+	<version>1.1</version>
 	<publisher>matheof</publisher>
 	<url>http://ciudadanosactivos.com</url>
 	<description>not specified</description>
@@ -35,7 +35,8 @@
 		</orientations>
 	</iphone>
 	<android xmlns:android="http://schemas.android.com/apk/res/android">
-		<manifest>
+		<manifest android:versionCode="2" android:versionName="1.1">
+
 			<uses-sdk android:minSdkVersion="8" android:targetSdkVersion="8"/>
 			<uses-permission android:name="android.permission.INTERNET"/>
 			<!-- Allows the API to cache data -->
@@ -56,7 +57,8 @@
 				<!-- Replace "PASTE YOUR GOOGLE MAPS API KEY HERE" with the Google API key you obtained -->
 				<meta-data
 				android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyBJw6CJhb6ZIDCoj78jQZpnoDJx0QWEH_Q"/>
-				<!--   DEBUG  android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyDwY5ev4XBzJMC8taSlTtAiZ7G5qLrY8rc"/> -->
+				<!--  release 	android:name="com.google.android.maps.v2.API_KEY" android:value="AIzaSyDwY5ev4XBzJMC8taSlTtAiZ7G5qLrY8rc"/> -->
+
 			</application>
 		</manifest>
 	</android>

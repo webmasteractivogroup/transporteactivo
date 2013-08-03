@@ -2,7 +2,6 @@
  * @author Matheo Fiebiger
  */
 
-var container;
 var win;
 var shadow;
 var idForComment;
@@ -10,7 +9,7 @@ var isFavorito;
 
 exports.popup = function(current, id, nombre, latlng, tipo) {
 	idForComment = id;
-	container = current;
+	
 
 	isFavorite(id);
 

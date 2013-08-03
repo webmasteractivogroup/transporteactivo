@@ -69,6 +69,8 @@ function ApplicationWindow(title) {
 		// button was clicked
 		var MenuWindow = require('ui/common/Menu');
 		var wtbo = new MenuWindow();
+		Ti.App.sbTab1.blur();
+		// cierra el teclado de la searchbar de la tab 1
 		wtbo.open();
 	});
 

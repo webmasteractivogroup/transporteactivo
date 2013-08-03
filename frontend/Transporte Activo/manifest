@@ -1,9 +1,9 @@
-#appname: Transporte Activo
-#appid: com.ciudsactivos.transporteactivo
-#type: mobile
-#guid: 92eaaf20-960e-4fc9-b9ad-784d2f0ac451
-#version: 1.0
-#publisher: not specified
-#url: not specified
-#image: appicon.png
-#desc: not specified
+#appname:Transporte Activo
+#appid:com.ciudsactivos.transporteactivo
+#type:mobile
+#guid:92eaaf20-960e-4fc9-b9ad-784d2f0ac451
+#version:1.0
+#publisher:matheof
+#url:http://ciudadanosactivos.com
+#image:appicon.png
+#desc:not specified

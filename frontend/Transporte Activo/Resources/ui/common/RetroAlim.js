@@ -147,11 +147,14 @@ function RetroAlim(id, tipo, model) {
 			timeout : 5000
 		});
 
-		Ti.API.log('Eviando reporte');
-
-		xhr.open("POST", url);
-		xhr.send(params);
-		Ti.API.log('reporte request enviado');
+		if (texto.value.length > 0) {
+			Ti.API.log('Eviando reporte');
+			xhr.open("POST", url);
+			xhr.send(params);
+			Ti.API.log('reporte request enviado');
+		} else {
+			alert('Por favor escriba un comentario');
+		}
 	});
 
 	var json, com, i;

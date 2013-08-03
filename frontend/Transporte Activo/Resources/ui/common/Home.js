@@ -445,6 +445,8 @@ function Home() {
 						//
 						var MenuWindow = require('ui/common/Menu');
 						var wtbo = new MenuWindow();
+						
+						
 						wtbo.open();
 					});
 
